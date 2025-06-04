@@ -13,10 +13,12 @@ app.use(express.json());
 // routes
 
 const authRoutes = require("./routes/authRoutes");
+const sampleRoutes = require("./routes/sampleRoutes");
 
 // route links
 
 app.use("/api/auth/", authRoutes);
+app.use("/api/sample/", sampleRoutes);
 
 // connection
 mongoose

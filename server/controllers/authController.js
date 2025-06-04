@@ -62,9 +62,16 @@ exports.login = async (req, res) => {
       });
     }
 
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
     res.status(200).json({
       success: true,
       message: "Login Successful",
+      token,
     });
   } catch (error) {
     console.error("Login error: ", error);
