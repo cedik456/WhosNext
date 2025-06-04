@@ -26,7 +26,6 @@ const UserSchema = new Schema({
   role: {
     type: String,
     enum: ["jobSeeker", "recruiter"],
-    required: true,
   },
   avatar: String,
   createdAt: {
@@ -34,3 +33,5 @@ const UserSchema = new Schema({
     default: Date.now,
   },
 });
+
+module.exports = mongoose.model("User", UserSchema);
