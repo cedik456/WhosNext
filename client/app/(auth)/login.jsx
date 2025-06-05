@@ -1,4 +1,5 @@
 import {
+  Keyboard,
   Pressable,
   StyleSheet,
   Text,
@@ -7,13 +8,42 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
+import { router } from "expo-router";
+import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
-  const { email, setEmail } = useState("");
-  const { password, setPassword } = useState("");
+  const { login } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async () => {
+    if (!email || !password) {
+      setError("Email and password required");
+      return;
+    }
+    setError("");
+
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    const result = await login(email, password);
+
+    console.log("Login Result", result);
+
+    if (result.success) {
+      router.replace("/home");
+    } else {
+      setError("Login Failed");
+    }
+  };
 
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="flex-1  justify-center px-6 bg-white">
         <Text className="mb-4">Login to your account</Text>
         <View className="gap-2">
@@ -27,12 +57,15 @@ const Login = () => {
           />
           <TextInput
             className="p-4 border border-gray-300 rounded-md"
-            placeholder="Email"
+            placeholder="Password"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
           />
-          <Pressable className="p-4 border bg-black rounded-md">
+          <Pressable
+            className="p-4 border bg-black rounded-md"
+            onPress={handleSubmit}
+          >
             <Text className="text-white font-bold text-center">Submit</Text>
           </Pressable>
         </View>

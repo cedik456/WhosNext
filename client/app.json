@@ -3,6 +3,9 @@
     "scheme": "whosnext",
     "name": "client",
     "slug": "client",
+    "extra": {
+      "EXPO_PUBLIC_API_URL": "http://192.168.68.120:3000/api"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
