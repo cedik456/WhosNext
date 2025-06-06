@@ -22,11 +22,26 @@ export function AuthProvider({ children }) {
       return { success: true };
     } catch (error) {
       console.error("Error:", error);
-      return { success: false, error: error.message };
+      return { success: false, message: error.response.data.message };
     }
   }
 
-  async function register(email, password) {}
+  async function register(email, password) {
+    try {
+      const response = await api.post("/auth/register", { email, password });
+
+      const token = response.data.token;
+
+      await saveToken(token);
+
+      setUser({ email, token });
+
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error("Error:", error);
+      return { success: false, message: error.response.data.message };
+    }
+  }
 
   async function logout() {}
 
