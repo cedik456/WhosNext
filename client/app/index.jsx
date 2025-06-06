@@ -1,8 +1,32 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { router } from "expo-router";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useEffect } from "react";
+import { useRouter } from "expo-router";
+import { useAuth } from "../hooks/useAuth";
 
 const LadingPage = () => {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/home");
+    }
+  }, [user, loading]);
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 justify-center items-center bg-white">
       <Text className="text-red-500 mb-4">LadingPage</Text>
@@ -26,5 +50,3 @@ const LadingPage = () => {
 };
 
 export default LadingPage;
-
-const styles = StyleSheet.create({});

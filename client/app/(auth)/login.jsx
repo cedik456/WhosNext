@@ -1,18 +1,18 @@
 import {
   Keyboard,
   Pressable,
-  StyleSheet,
   Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { router } from "expo-router";
 import { useAuth } from "../../hooks/useAuth";
+import { useRouter } from "expo-router";
 
 const Login = () => {
   const { login } = useAuth();
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -68,6 +68,9 @@ const Login = () => {
           >
             <Text className="text-white font-bold text-center">Submit</Text>
           </Pressable>
+          {error ? (
+            <Text className="text-red-500 text-center mt-2">{error}</Text>
+          ) : null}
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -75,5 +78,3 @@ const Login = () => {
 };
 
 export default Login;
-
-const styles = StyleSheet.create({});
