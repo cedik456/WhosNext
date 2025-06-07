@@ -33,7 +33,7 @@ const Register = () => {
 
     const result = await register(email, password);
 
-    console.log("Register Result", result.message);
+    console.log("Register Result", result);
 
     if (result.success) {
       router.replace("/home");

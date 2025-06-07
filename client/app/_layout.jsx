@@ -4,11 +4,13 @@ import React from "react";
 import { Stack } from "expo-router";
 import "../global.css";
 import { AuthProvider } from "../contexts/AuthContext";
+import { StatusBar } from "expo-status-bar";
 
 const RootLayout = () => {
   return (
     <AuthProvider>
       <SafeAreaProvider>
+        <StatusBar style="dark" />
         <Stack
           screenOptions={{
             headerShown: false,
