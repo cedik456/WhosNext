@@ -3,84 +3,57 @@ import React, { useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useAuth } from "../hooks/useAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import LandingPageLogo from "../assets/landing-page-logo-black.png";
 
 const LandingPage = () => {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && user) {
+    if (user) {
       router.replace("/home");
     }
-  }, [user, loading]);
-
-  if (loading) {
-    return (
-      <View className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  }, [user]);
 
   return (
     <SafeAreaView className="flex-1 px-6 bg-white">
-      <View className="mt-14">
-        <View className="items-center">
-          <Image className="mb-16" source={LandingPageLogo} />
-          <Text className="text-2xl text-black font-semibold text-center mb-60">
+      <View className="mt-14 flex-1 justify-between">
+        <View className="items-center mb-16">
+          <Image source={LandingPageLogo} />
+          {/* <Text className="font-poppins-500 text-2xl text-black font-semibold text-center mb-72">
             Swipe, Match, Hire!
-          </Text>
+          </Text> */}
         </View>
 
-        <View className="mb-20">
-          <View className="gap-4 mb-10">
-            <Text className="text-black text-center ">
-              By signing up, you agree to our{" "}
-              <Text className="underline">Terms</Text>. See how we use your data
-              in our <Text className="underline">Privacy Policy</Text>
+        <View className="gap-4 mb-10">
+          <Text className="text-gray-500 text-center ">
+            By signing up, you agree to our{" "}
+            <Text className="underline">Terms</Text>. See how we use your data
+            in our <Text className="underline">Privacy Policy</Text>
+          </Text>
+
+          <Pressable
+            className="bg-black p-5 rounded-3xl"
+            onPress={() => router.replace("/login")}
+          >
+            <Text className="text-white text-center text-lg font-poppins-500">
+              Sign in
             </Text>
+          </Pressable>
 
-            <Pressable className="bg-black p-5 rounded-3xl">
-              <Text className="text-white text-center text-lg font-semibold">
-                Sign in with Google
-              </Text>
-            </Pressable>
+          <Pressable
+            className="bg-black p-5 rounded-3xl mb-4"
+            onPress={() => router.replace("/register")}
+          >
+            <Text className="text-white text-center text-lg font-poppins-500">
+              Create an account
+            </Text>
+          </Pressable>
 
-            <Pressable className="bg-[#1D70EE] p-5 rounded-3xl">
-              <Text className="text-white text-center text-lg font-semibold">
-                Sign in with Facebook
-              </Text>
-            </Pressable>
-
-            <Pressable className="bg-white p-5 rounded-3xl shadow-md ">
-              <Text className="text-black text-center text-lg font-semibold">
-                Sign in with phone number
-              </Text>
-            </Pressable>
-          </View>
-
-          <Text className="text-black text-center text-lg font-semibold">
+          <Text className="text-black text-center text-lg font-poppins-600">
             Trouble signing in?
           </Text>
         </View>
-
-        {/* <View className="gap-2">
-          <Pressable
-            className="p-2 bg-black rounded-md"
-            onPress={() => router.push("/(auth)/login")}
-          >
-            <Text className="text-white">Login</Text>
-          </Pressable>
-
-          <Pressable
-            className="p-2 bg-black rounded-md"
-            onPress={() => router.push("/(auth)/register")}
-          >
-            <Text className="text-white">Register</Text>
-          </Pressable>
-        </View> */}
       </View>
     </SafeAreaView>
   );
