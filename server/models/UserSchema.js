@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  name: {
-    type: String,
-  },
+  name: String,
   email: {
     type: String,
     required: true,
@@ -17,6 +15,9 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
+    required: function () {
+      return !this.googleId;
+    },
   },
   googleId: {
     type: String,
@@ -26,8 +27,27 @@ const UserSchema = new Schema({
   role: {
     type: String,
     enum: ["jobSeeker", "recruiter"],
+    required: true,
   },
   avatar: String,
+
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+
+  preferences: {
+    industry: String,
+    location: String,
+    skills: [String],
+  },
+
+  profile: {
+    experience: String,
+    education: String,
+    bio: String,
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
