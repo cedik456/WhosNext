@@ -1,4 +1,5 @@
 import {
+  Image,
   Keyboard,
   Pressable,
   Text,
@@ -9,6 +10,9 @@ import {
 import React, { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import LandingPageLogo from "../../assets/landing-page-logo-black.png";
 
 const Login = () => {
   const { login } = useAuth();
@@ -44,35 +48,51 @@ const Login = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View className="flex-1  justify-center px-6 bg-white">
-        <Text className="mb-4">Login to your account</Text>
-        <View className="gap-2">
-          <TextInput
-            className="p-4 border border-gray-300 rounded-md"
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-          />
-          <TextInput
-            className="p-4 border border-gray-300 rounded-md"
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <Pressable
-            className="p-4 border bg-black rounded-md"
-            onPress={handleSubmit}
-          >
-            <Text className="text-white font-bold text-center">Submit</Text>
-          </Pressable>
-          {error ? (
-            <Text className="text-red-500 text-center mt-2">{error}</Text>
-          ) : null}
+      <SafeAreaView className="flex-1 px-6 bg-white">
+        <View className="justify-between flex-1 mt-14">
+          <View className="items-center mb-16">
+            <Image source={LandingPageLogo} />
+          </View>
+          <View className="gap-4">
+            <TextInput
+              className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+
+            <TextInput
+              className="p-5 rounded-full bg-[#F6F6F6] font-poppins-500"
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+            <Pressable
+              className="p-5 bg-black border rounded-full"
+              onPress={handleSubmit}
+            >
+              <Text className="text-center text-white font-poppins-700">
+                LOGIN
+              </Text>
+            </Pressable>
+
+            <Text className="text-center text-gray-500 font-poppins-500">
+              Forgot Password?
+            </Text>
+            {error ? (
+              <Text className="mt-2 text-center text-red-500">{error}</Text>
+            ) : null}
+          </View>
+
+          <Text className="text-center">
+            Don't have an account?
+            <Text onPress={() => router.replace("/register")}> Register</Text>
+          </Text>
         </View>
-      </View>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };

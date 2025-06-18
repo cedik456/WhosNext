@@ -8,7 +8,14 @@ module.exports = {
   ],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        poppins: ["Poppins_400Regular"],
+        "poppins-500": ["Poppins_500Medium"],
+        "poppins-600": ["Poppins_600SemiBold"],
+        "poppins-700": ["Poppins_700Bold"],
+      },
+    },
   },
   plugins: [],
 };

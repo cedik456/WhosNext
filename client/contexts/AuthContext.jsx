@@ -6,7 +6,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   async function login(email, password) {
     try {
@@ -49,24 +49,22 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
-  async function loadUser() {
-    const token = await getToken();
+  // async function loadUser() {
+  //   const token = await getToken();
 
-    if (token) {
-      setUser({ token });
-    }
+  //   if (token) {
+  //     setUser({ token });
+  //   }
 
-    setLoading(false);
-  }
+  //   setLoading(false);
+  // }
 
-  useEffect(() => {
-    loadUser();
-  }, []);
+  // useEffect(() => {
+  //   loadUser();
+  // }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, loading, login, register, logout }}
-    >
+    <AuthContext.Provider value={{ user, setUser, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
