@@ -27,11 +27,9 @@ exports.register = async (req, res) => {
 
     await user.save();
 
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.status(201).json({
       success: true,
@@ -70,11 +68,9 @@ exports.login = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.status(200).json({
       success: true,

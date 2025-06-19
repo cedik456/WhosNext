@@ -14,11 +14,13 @@ app.use(express.json());
 
 const authRoutes = require("./routes/authRoutes");
 const sampleRoutes = require("./routes/sampleRoutes");
+const onBoardingRoutes = require("./routes/onboardingRoutes");
 
 // route links
 
 app.use("/api/auth/", authRoutes);
 app.use("/api/sample/", sampleRoutes);
+app.use("/api/onboarding/", onBoardingRoutes);
 
 // connection
 mongoose
