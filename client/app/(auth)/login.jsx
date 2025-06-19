@@ -50,9 +50,7 @@ const Login = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 px-6 bg-white">
         <View className="justify-between flex-1 mt-14">
-          <View className="items-center mb-16">
-            <Image source={LandingPageLogo} />
-          </View>
+          <Text className="text-3xl font-poppins-700">Login your account</Text>
           <View className="gap-4">
             <TextInput
               className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
@@ -87,7 +85,7 @@ const Login = () => {
             ) : null}
           </View>
 
-          <Text className="text-center">
+          <Text className="text-center font-poppins-500">
             Don't have an account?
             <Text onPress={() => router.replace("/register")}> Register</Text>
           </Text>

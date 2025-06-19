@@ -1,11 +1,15 @@
 module.exports = (schema) => (req, res, next) => {
-  const { error } = schema.validate(req.body, { abortEarly: false });
+  const { error } = schema.validate(req.body, {
+    abortEarly: false,
+    allowUnknown: false, // Strict mode: only allow what's in schema
+  });
 
   if (error) {
     return res.status(400).json({
       success: false,
-      message: error.details.map((detail) => detail.message).join(","),
+      message: error.details.map((detail) => detail.message).join(", "),
     });
   }
+
   next();
 };

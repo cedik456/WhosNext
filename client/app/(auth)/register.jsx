@@ -9,6 +9,7 @@ import {
 import React, { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Register = () => {
   const { register } = useAuth();
@@ -20,7 +21,7 @@ const Register = () => {
 
   const handleSubmit = async () => {
     if (!email || !password) {
-      setError("Email and password required");
+      setError("All inputs are required");
       return;
     }
     setError("");
@@ -36,42 +37,53 @@ const Register = () => {
     console.log("Register Result", result);
 
     if (result.success) {
+      console.log("Registration successful, redirecting to /home");
       router.replace("/home");
     } else {
-      setError("Register Failed", result.message);
+      setError(result.message);
     }
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View className="flex-1  justify-center px-6 bg-white">
-        <Text className="mb-4">Create an account</Text>
-        <View className="gap-2">
-          <TextInput
-            className="p-4 border border-gray-300 rounded-md"
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-          />
-          <TextInput
-            className="p-4 border border-gray-300 rounded-md"
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <Pressable
-            className="p-4 border bg-black rounded-md"
-            onPress={handleSubmit}
-          >
-            <Text className="text-white font-bold text-center">Submit</Text>
-          </Pressable>
-          {error ? (
-            <Text className="text-red-500 text-center mt-2">{error}</Text>
-          ) : null}
+      <SafeAreaView className="flex-1 px-6 bg-white ">
+        <View className="justify-center flex-1 gap-4 mt-14">
+          <Text className="text-3xl font-poppins-700">Create your account</Text>
+          <View className="gap-4">
+            <TextInput
+              className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <TextInput
+              className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+            <Pressable
+              className="p-5 bg-black border rounded-full"
+              onPress={handleSubmit}
+            >
+              <Text className="font-bold text-center text-white">Submit</Text>
+            </Pressable>
+            <Text className="text-center font-poppins-500">
+              Already have an account?
+              <Text onPress={() => router.replace("/login")}> Click here</Text>
+            </Text>
+            <Text
+              className={`mt-2 text-center ${
+                error ? "text-red-500" : "text-transparent"
+              }`}
+            >
+              {error || "placeholder"}
+            </Text>
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };

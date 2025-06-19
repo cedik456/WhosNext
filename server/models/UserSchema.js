@@ -1,3 +1,4 @@
+// models/user.model.js
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -26,28 +27,18 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["jobSeeker", "recruiter"],
-    required: true,
+    enum: ["jobSeeker", "recruiter", "admin"],
+    default: null,
   },
-  avatar: String,
-
   isVerified: {
     type: Boolean,
     default: false,
   },
-
-  preferences: {
-    industry: String,
-    location: String,
-    skills: [String],
+  isOnboarded: {
+    type: Boolean,
+    default: false,
   },
-
-  profile: {
-    experience: String,
-    education: String,
-    bio: String,
-  },
-
+  avatar: String,
   createdAt: {
     type: Date,
     default: Date.now,
