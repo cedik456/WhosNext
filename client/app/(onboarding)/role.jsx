@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { saveUserRole } from "../../utils/secureUser";
 
 const Role = () => {
   const router = useRouter();
@@ -16,16 +17,14 @@ const Role = () => {
   const handleSubmitRole = async () => {
     try {
       if (!selectedRole) {
-        console.log("Selected Role:", role);
         Alert.alert("Error", "Please select a role before proceeding.");
         return;
       }
+      await saveUserRole(selectedRole);
 
       const token = await getToken();
-      console.log("Token retrieved:", token);
 
       if (!token) {
-        console.log("No token selected");
         Alert.alert("Error", "Token not found. Please login again.");
         return;
       }
@@ -40,11 +39,7 @@ const Role = () => {
         }
       );
 
-      console.log("Response from backend", response.data);
-
       const { success } = response.data;
-
-      console.log(success);
 
       if (success) {
         router.replace("/name");
@@ -52,7 +47,6 @@ const Role = () => {
         Alert.alert("Error selecting role", " Please try again.");
       }
     } catch (error) {
-      console.error("Error saving role:", error);
       Alert.alert("Error", "Something went wrong. Please try again.");
     }
   };
@@ -89,8 +83,8 @@ const Role = () => {
           }`}
         >
           <Text
-            className={`p-5 text-center ${
-              selectedRole ? "text-white" : "text-black"
+            className={`p-5 text-center font-poppins-600 ${
+              selectedRole ? "text-white" : "text-gray-400"
             }`}
           >
             Next

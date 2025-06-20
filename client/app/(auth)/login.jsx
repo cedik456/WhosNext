@@ -53,7 +53,7 @@ const Login = () => {
           <Text className="text-3xl font-poppins-700">Login your account</Text>
           <View className="gap-4">
             <TextInput
-              className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
+              className="p-5 bg-[#F6F6F6]  rounded-full font-poppins-500"
               placeholder="Email"
               value={email}
               onChangeText={setEmail}
