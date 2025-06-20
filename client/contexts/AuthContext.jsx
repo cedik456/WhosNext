@@ -11,18 +11,18 @@ export function AuthProvider({ children }) {
     try {
       const response = await api.post("/auth/login", { email, password });
 
-      const token = response.data.token;
+      const { token, user } = response.data;
 
       await saveToken(token);
 
       console.log(token);
 
-      setUser({ email, token });
+      setUser({ token, ...user });
 
-      return { success: true };
+      return { success: true, isOnboarded: user.isOnboarded };
     } catch (error) {
-      console.error("Error:", error);
-      return { success: false, message: error.response.data.message };
+      console.error("Login error:", error);
+      return { success: false, message: error?.response?.data?.message };
     }
   }
 
