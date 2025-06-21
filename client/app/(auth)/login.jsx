@@ -1,5 +1,5 @@
 import {
-  Image,
+  Alert,
   Keyboard,
   Pressable,
   Text,
@@ -12,26 +12,22 @@ import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import LandingPageLogo from "../../assets/landing-page-logo-black.png";
-
 const Login = () => {
   const { login } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
     if (!email || !password) {
-      setError("Email and password required");
+      Alert.alert("Email and password required");
       return;
     }
-    setError("");
 
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+      Alert.alert("Please enter a valid email address.");
       return;
     }
 
@@ -40,9 +36,13 @@ const Login = () => {
     console.log("Login Result", result);
 
     if (result.success) {
-      router.replace("/home");
+      if (result.isOnboarded) {
+        router.replace("/home");
+      } else {
+        router.replace("/role");
+      }
     } else {
-      setError("Login Failed");
+      Alert.alert("Login Failed", result.message || "Invalid credentials");
     }
   };
 
@@ -53,7 +53,7 @@ const Login = () => {
           <Text className="text-3xl font-poppins-700">Login your account</Text>
           <View className="gap-4">
             <TextInput
-              className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
+              className="p-5 bg-[#F6F6F6]  rounded-full font-poppins-500"
               placeholder="Email"
               value={email}
               onChangeText={setEmail}
@@ -80,9 +80,6 @@ const Login = () => {
             <Text className="text-center text-gray-500 font-poppins-500">
               Forgot Password?
             </Text>
-            {error ? (
-              <Text className="mt-2 text-center text-red-500">{error}</Text>
-            ) : null}
           </View>
 
           <Text className="text-center font-poppins-500">

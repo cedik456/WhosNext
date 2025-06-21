@@ -11,18 +11,18 @@ export function AuthProvider({ children }) {
     try {
       const response = await api.post("/auth/login", { email, password });
 
-      const token = response.data.token;
+      const { token, user } = response.data;
 
       await saveToken(token);
 
       console.log(token);
 
-      setUser({ email, token });
+      setUser({ token, ...user });
 
-      return { success: true };
+      return { success: true, isOnboarded: user.isOnboarded };
     } catch (error) {
-      console.error("Error:", error);
-      return { success: false, message: error.response.data.message };
+      console.error("Login error:", error);
+      return { success: false, message: error?.response?.data?.message };
     }
   }
 
@@ -33,16 +33,18 @@ export function AuthProvider({ children }) {
         password,
       });
 
-      const token = response.data.token;
+      console.log("Register Response:", response.data);
+
+      const { token, user } = response.data;
 
       await saveToken(token);
 
-      setUser({ email, token });
+      setUser({ token, ...user });
 
-      return { success: true, data: response.data };
+      return { success: true, isOnboarded: user.isOnboarded };
     } catch (error) {
       console.error("Error:", error);
-      return { success: false, message: error.response.data.message };
+      return { success: false, message: error?.response?.data?.message };
     }
   }
 

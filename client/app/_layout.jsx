@@ -13,6 +13,7 @@ import {
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
 import SplashScreen from "../components/SplashScreen";
+import { Provider as PaperProvider } from "react-native-paper";
 
 const RootLayout = () => {
   const [fontsLoaded] = useFonts({
@@ -29,17 +30,17 @@ const RootLayout = () => {
   return (
     <AuthProvider>
       <SafeAreaProvider>
-        <StatusBar style="dark" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        />
+        <PaperProvider>
+          <StatusBar style="dark" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          />
+        </PaperProvider>
       </SafeAreaProvider>
     </AuthProvider>
   );
 };
 
 export default RootLayout;
-
-const styles = StyleSheet.create({});

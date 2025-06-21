@@ -27,16 +27,20 @@ exports.register = async (req, res) => {
 
     await user.save();
 
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.status(201).json({
       success: true,
       message: "User registered successfully",
       token,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        isOnboarded: user.isOnboarded,
+      },
     });
   } catch (error) {
     console.error("Register error: ", error);
@@ -70,16 +74,22 @@ exports.login = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    console.log(token);
 
     res.status(200).json({
       success: true,
       message: "Login Successful",
       token,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        isOnboarded: user.isOnboarded,
+      },
     });
   } catch (error) {
     console.error("Login error: ", error);
