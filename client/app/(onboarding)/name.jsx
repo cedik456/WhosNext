@@ -82,12 +82,12 @@ const Name = () => {
         </View>
         <Pressable
           onPress={handleSubmitName}
-          className={` rounded-full ${
+          className={`p-5 rounded-full ${
             name.trim() ? "bg-black" : "bg-gray-300"
           }`}
         >
           <Text
-            className={`p-5 text-center font-poppins-600 ${
+            className={`text-center font-poppins-600 ${
               name.trim() ? "text-white" : "text-gray-400"
             }`}
           >
