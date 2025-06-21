@@ -10,5 +10,3 @@ const Location = () => {
 };
 
 export default Location;
-
-const styles = StyleSheet.create({});

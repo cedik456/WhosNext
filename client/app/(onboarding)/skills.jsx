@@ -66,7 +66,6 @@ const Skills = () => {
 
     try {
       const token = await getToken();
-      const role = await getUserRole();
 
       const endpoint =
         role === "recruiter"

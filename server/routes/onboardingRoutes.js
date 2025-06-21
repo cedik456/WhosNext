@@ -30,7 +30,7 @@ router.patch("/role", auth, async (req, res) => {
   }
 });
 
-router.patch("/name", auth, async (req, res) => {
+router.patch("/name/jobSeeker", auth, async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -46,7 +46,36 @@ router.patch("/name", auth, async (req, res) => {
 
     res.status(200).json({ success: true, message: "Name saved successfully" });
   } catch (error) {
-    console.error("Error saving name:", err);
+    console.error("Error saving name:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Server error while saving name." });
+  }
+});
+
+// company name
+
+router.patch("/name/recruiter", auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const { name } = req.body;
+
+    if (!name || name.trim() === "") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Name is required" });
+    }
+
+    await Recruiter.findOneAndUpdate(
+      { userId },
+      { companyName: name.trim() },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({ success: true, message: "Name saved successfully" });
+  } catch (error) {
+    console.error("Error saving name:", error);
     res
       .status(500)
       .json({ success: false, message: "Server error while saving name." });

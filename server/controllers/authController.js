@@ -35,6 +35,12 @@ exports.register = async (req, res) => {
       success: true,
       message: "User registered successfully",
       token,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        isOnboarded: user.isOnboarded,
+      },
     });
   } catch (error) {
     console.error("Register error: ", error);
