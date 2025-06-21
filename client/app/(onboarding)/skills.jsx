@@ -157,12 +157,12 @@ const Skills = () => {
 
       <Pressable
         onPress={handleSubmit}
-        className={`rounded-full mt-6 mb-10 ${
+        className={`rounded-full mt-6 mb-10 p-5 ${
           selectedSkills.length >= 3 ? "bg-black" : "bg-gray-300"
         }`}
       >
         <Text
-          className={`p-5 text-center font-poppins-600 ${
+          className={`text-center font-poppins-600 ${
             selectedSkills.length >= 3 ? "text-white" : "text-gray-400"
           }`}
         >
