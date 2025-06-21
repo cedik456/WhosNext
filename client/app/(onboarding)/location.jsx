@@ -39,7 +39,7 @@ const Location = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/last");
+        router.replace("/complete");
       } else {
         Alert.alert("Error", "Failed to save location");
       }

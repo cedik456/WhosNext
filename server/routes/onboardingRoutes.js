@@ -197,4 +197,22 @@ router.patch("/location/recruiter", auth, async (req, res) => {
   }
 });
 
+// complete
+
+router.patch("/complete", auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    await User.findByIdAndUpdate(userId, { isOnboarded: true });
+
+    res.status(200).json({ success: true, message: "Onboarding completed." });
+  } catch (error) {
+    console.error("Onboarding complete error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to complete onboarding.",
+    });
+  }
+});
+
 module.exports = router;
