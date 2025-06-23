@@ -99,3 +99,43 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+exports.phoneAuth = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+
+    if (!phoneNumber) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Phone number is required" });
+    }
+
+    let user = await User.findOne({ phoneNumber });
+
+    if (!user) {
+      user = await User.create({ phoneNumber });
+    }
+
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Login Successful",
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        isOnboarded: user.isOnboarded,
+      },
+    });
+  } catch (error) {
+    console.error("Phone login error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during phone login",
+    });
+  }
+};

@@ -5,8 +5,8 @@ const UserSchema = new Schema({
   name: String,
   email: {
     type: String,
-    required: true,
     unique: true,
+    sparse: true,
   },
   phoneNumber: {
     type: String,
@@ -16,7 +16,7 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: function () {
-      return !this.googleId;
+      return !this.googleId && !this.phoneNumber;
     },
   },
   googleId: {
