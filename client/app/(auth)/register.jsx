@@ -1,4 +1,5 @@
 import {
+  Alert,
   Keyboard,
   Pressable,
   Text,
@@ -17,18 +18,16 @@ const Register = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
     if (!email || !password) {
       setError("All inputs are required");
       return;
     }
-    setError("");
 
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+      Alert.alert("Please enter a valid email address.");
       return;
     }
 
@@ -38,7 +37,7 @@ const Register = () => {
       console.log("Registration successful, redirecting to /home");
       router.replace("/login");
     } else {
-      setError(result.message);
+      Alert.alert(result.message);
     }
   };
   return (
@@ -71,13 +70,6 @@ const Register = () => {
             <Text className="text-center font-poppins-500">
               Already have an account?
               <Text onPress={() => router.replace("/login")}> Click here</Text>
-            </Text>
-            <Text
-              className={`mt-2 text-center ${
-                error ? "text-red-500" : "text-transparent"
-              }`}
-            >
-              {error || "placeholder"}
             </Text>
           </View>
         </View>
