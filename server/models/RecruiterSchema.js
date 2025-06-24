@@ -22,7 +22,11 @@ const RecruiterSchema = new Schema({
     },
   },
   companyName: String,
-  bio: String, // optional description
+  companyLogo: {
+    type: String,
+    default: "",
+  },
+  bio: String,
   createdAt: {
     type: Date,
     default: Date.now,

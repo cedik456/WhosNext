@@ -30,13 +30,13 @@ const dummyJobs = [
     id: 1,
     companyName: "Pixel Corp",
     hiringCriteria: {
-      location: "Remote",
-      skills: ["React", "JavaScript", "TypeScript"],
+      location: "Legazpi",
+      skills: ["React", "JavaScript", "TypeScript", "ExpressJs", "Figma"],
     },
   },
   {
     id: 2,
-    companyName: "Designly",
+    companyName: "Ownly",
     hiringCriteria: {
       location: "Cebu",
       skills: ["Figma", "UX Research", "Wireframing"],
