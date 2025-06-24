@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 const ProfileCard = ({ card }) => {
   if (!card) return null;
   return (
-    <View className="p-5 bg-[#fbfbfb] rounded-2xl h-[85%] shadow">
+    <View className="p-5 bg-[#fbfbfb] rounded-2xl h-[85%] shadow-sm">
       <Image
         source={card.avatar}
         resizeMode="cover"

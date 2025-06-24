@@ -1,14 +1,29 @@
 import React from "react";
-import { Tabs } from "expo-router";
+import { Redirect, Tabs, useRouter } from "expo-router";
 import {
   AntDesign,
-  FontAwesome,
   FontAwesome6,
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { useAuth } from "../../hooks/useAuth";
+import { ActivityIndicator } from "react-native-paper";
 
 const TabsLayout = () => {
+  const { user } = useAuth();
+
+  if (user === undefined) {
+    return (
+      <View className="items-center justify-center flex-1 bg-white">
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return <Redirect href="login" />;
+  }
+
   return (
     <Tabs
       screenOptions={{
