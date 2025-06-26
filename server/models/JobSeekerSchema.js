@@ -8,6 +8,11 @@ const JobSeekerSchema = new Schema({
     required: true,
     unique: true,
   },
+  avatar: {
+    type: String,
+    default: "",
+  },
+
   skills: {
     type: [String],
     default: [],
@@ -22,6 +27,10 @@ const JobSeekerSchema = new Schema({
     workEnvironment: {
       type: String,
       enum: ["onsite", "remote", "hybrid"],
+    },
+    workType: {
+      type: String,
+      enum: ["full-time", "part-time", "internship"],
     },
   },
   createdAt: {

@@ -22,14 +22,20 @@ const ProfileCard = ({ card }) => {
       </View>
 
       {card.location && (
-        <Text className="mb-2 text-base text-gray-500">
+        <Text className="mb-1 text-base text-gray-500">
           Based in {card.location}
         </Text>
       )}
 
+      <Text className="mb-2 text-base text-gray-600 font-poppins-500">
+        {[card.preferences?.workEnvironment, card.preferences?.workType]
+          .filter(Boolean)
+          .join(" | ")}
+      </Text>
+
       <Text className="mb-1 text-base font-poppins-600">About me</Text>
-      <Text className="mb-5 text-sm text-gray-500 font-poppins-500">
-        A simple guy who loves creating new emerging technologies.
+      <Text className="mb-2 text-sm text-gray-500 font-poppins-500">
+        {card.bio}
       </Text>
 
       {card.skills?.length > 0 && (

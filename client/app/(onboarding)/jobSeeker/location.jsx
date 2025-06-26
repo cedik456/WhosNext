@@ -2,10 +2,10 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getReadableLocation } from "../../utils/locationHelper";
-import { getToken } from "../../utils/storage";
-import { getUserRole } from "../../utils/secureUser";
-import api from "../../utils/axiosInstance";
+import { getReadableLocation } from "../../../utils/locationHelper";
+import { getToken } from "../../../utils/storage";
+import { getUserRole } from "../../../utils/secureUser";
+import api from "../../../utils/axiosInstance";
 
 const Location = () => {
   const router = useRouter();
@@ -19,15 +19,9 @@ const Location = () => {
       if (!location) return setLoading(false);
 
       const token = await getToken();
-      const role = await getUserRole();
-
-      const endpoint =
-        role === "recruiter"
-          ? "/onboarding/location/recruiter"
-          : "/onboarding/location/jobSeeker";
 
       const response = await api.patch(
-        endpoint,
+        "/onboarding/location/jobSeeker",
         { location },
         {
           headers: {
@@ -57,7 +51,7 @@ const Location = () => {
             Enable Location
           </Text>
           <Text className="text-center text-gray-500 font-poppins-500">
-            We'll use your location to recommend jobs or candidates nearby
+            We'll use your location to recommend nearby jobs
           </Text>
         </View>
 

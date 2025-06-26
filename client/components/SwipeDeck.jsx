@@ -15,6 +15,11 @@ const dummyProfiles = [
     avatar: avatar5,
     location: "Legazpi",
     skills: ["React", "Figma", "Tailwind", "Express", "MongoDB", "Git"],
+    preferences: {
+      workEnvironment: "Remote",
+      workType: "Full-time",
+    },
+    bio: "A simple guy who loves learning new technologies.",
   },
   {
     id: 2,
@@ -22,6 +27,25 @@ const dummyProfiles = [
     avatar: avatar2,
     location: "Manila",
     skills: ["UI/UX", "Figma", "Adobe XD"],
+    preferences: {
+      workEnvironment: "Hybrid",
+      workType: "Part-time",
+    },
+    bio: "I want to work at a company that is top tier and learn at the same time.",
+  },
+  {
+    id: 3,
+    name: "Charles",
+    avatar: avatar2,
+    location: "Maroroy",
+    skills: ["UI/UX", "Figma", "Adobe XD"],
+  },
+  {
+    id: 4,
+    name: "Lou",
+    avatar: avatar2,
+    location: "Tagas",
+    skills: ["React", "NodeJs", "MongoDB"],
   },
 ];
 
