@@ -1,25 +1,26 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { useAuth } from "../../hooks/useAuth";
-import ProtectedRoutes from "../../components/ProtectedRoutes";
+import { Pressable, Text, View } from "react-native";
+// import { useAuth } from "../../hooks/useAuth";
+import SwipeDeck from "../../components/SwipeDeck";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 const Home = () => {
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
   return (
-    <ProtectedRoutes>
-      <View className="flex-1 justify-center px-6">
-        <Text className="mb-4">Home</Text>
+    <SafeAreaView className="flex-1">
+      <View className="px-5">
+        <View className="flex-row items-center justify-between">
+          <Text className="text-2xl font-poppins-700">Who's Next</Text>
 
-        <Text className="mb-4">Logout here</Text>
-
-        <Pressable className="p-3 bg-red-500 rounded-md w-32" onPress={logout}>
-          <Text className="text-white text-center">Logout</Text>
-        </Pressable>
+          <Ionicons name="options-outline" size={24} />
+        </View>
       </View>
-    </ProtectedRoutes>
+      {/* <Pressable className="w-32 p-3 bg-red-500 rounded-md" onPress={logout}>
+        <Text className="text-center text-white">Logout</Text>
+      </Pressable> */}
+      <SwipeDeck />
+    </SafeAreaView>
   );
 };
 
 export default Home;
-
-const styles = StyleSheet.create({});

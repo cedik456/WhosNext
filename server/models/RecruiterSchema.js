@@ -8,21 +8,40 @@ const RecruiterSchema = new Schema({
     required: true,
     unique: true,
   },
+  companyName: String,
+  companyPicture: {
+    type: String,
+    default: "",
+  },
+  jobDescription: String,
+  jobTitle: String,
+
   hiringCriteria: {
-    skills: {
+    requiredSkills: {
       type: [String],
       default: [],
     },
     location: String, // where they want to hire
+
     experienceLevel: String, // e.g., "entry", "mid", "senior"
+
     industry: String,
+
     workEnvironment: {
       type: String,
       enum: ["onsite", "remote", "hybrid"],
     },
+
+    workType: {
+      type: String,
+      enum: ["full-time", "part-time", "internship"],
+    },
+    salaryRange: {
+      min: Number,
+      max: Number,
+    },
   },
-  companyName: String,
-  bio: String, // optional description
+
   createdAt: {
     type: Date,
     default: Date.now,

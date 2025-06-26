@@ -43,7 +43,11 @@ const Name = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/skills");
+        if (role === "recruiter") {
+          router.replace("/complete");
+        } else {
+          router.replace("/jobSeeker/work");
+        }
       } else {
         Alert.alert("Error saving name", "Please try again.");
       }
@@ -56,7 +60,7 @@ const Name = () => {
     const fetchRole = async () => {
       const role = await getUserRole();
       if (!role) {
-        router.replace("onboarding/role");
+        router.replace("/role");
       } else {
         setRole(role);
       }

@@ -1,0 +1,113 @@
+import { Alert, Pressable, Text, View } from "react-native";
+import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Button from "../../../components/Button";
+import { getToken } from "../../../utils/storage";
+import api from "../../../utils/axiosInstance";
+
+const Work = () => {
+  const router = useRouter();
+
+  const [workEnvironment, setWorkEnvironment] = useState(null);
+  const [workType, setWorkType] = useState(null);
+
+  const environments = ["On-site", "Remote", "Hybrid"];
+  const types = ["Full-time", "Part-time", "Internship"];
+
+  const isValid = workEnvironment && workType;
+
+  const handleSubmit = async () => {
+    if (!workEnvironment || !workType) {
+      Alert.alert("Select Options", "Please select both fields");
+      return;
+    }
+
+    try {
+      const token = await getToken();
+
+      const response = await api.patch(
+        "onboarding/workPreferences/jobSeeker",
+        { workEnvironment, workType },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { success } = response.data;
+
+      if (success) {
+        router.replace("/jobSeeker/skills");
+      } else {
+        Alert.alert("Error", response.data.message || "Something went wrong");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to save preferences.");
+    }
+  };
+
+  return (
+    <SafeAreaView className="flex-1 px-6 bg-white">
+      <View className="justify-between flex-1 gap-6 mt-14">
+        <View>
+          <Text className="mb-2 text-3xl font-poppins-600">
+            What are your work preferences?
+          </Text>
+          <Text className="mb-10 text-base text-gray-600 font-poppins-500">
+            Select your preferred work setup and job type
+          </Text>
+
+          <Text className="mb-2 text-xl font-poppins-500">Work Type</Text>
+          <View className="flex-row flex-wrap gap-3 mb-4">
+            {types.map((type) => (
+              <Pressable
+                key={type}
+                onPress={() => setWorkType(type)}
+                className={`px-5 py-5 rounded-lg  ${
+                  workType === type ? "bg-black" : "bg-[#f6f6f6]"
+                }`}
+              >
+                <Text
+                  className={`font-poppins-500  ${
+                    workType === type ? "text-white" : "text-black"
+                  } `}
+                >
+                  {type}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+
+          <Text className="mb-2 text-xl font-poppins-500">
+            Work Environment
+          </Text>
+          <View className="flex-row flex-wrap gap-3 mb-4">
+            {environments.map((env) => (
+              <Pressable
+                key={env}
+                onPress={() => setWorkEnvironment(env)}
+                className={`px-5 py-5 rounded-lg  ${
+                  workEnvironment === env ? "bg-black" : "bg-[#f6f6f6]"
+                }`}
+              >
+                <Text
+                  className={`font-poppins-500  ${
+                    workEnvironment === env ? "text-white" : "text-black"
+                  } `}
+                >
+                  {env}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+
+        <Button title="Next" disabled={!isValid} onPress={handleSubmit} />
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default Work;
