@@ -58,5 +58,3 @@ const Complete = () => {
 };
 
 export default Complete;
-
-const styles = StyleSheet.create({});

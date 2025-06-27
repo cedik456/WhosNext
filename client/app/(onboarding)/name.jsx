@@ -76,7 +76,7 @@ const Name = () => {
         <View className="gap-4">
           <Text className="text-3xl font-poppins-600">
             {role === "recruiter"
-              ? "What’s your company or name?"
+              ? "What’s your company name?"
               : "What’s your name or alias?"}
           </Text>
           <TextInput
