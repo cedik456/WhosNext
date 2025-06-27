@@ -29,6 +29,37 @@ exports.saveRole = async (req, res) => {
   }
 };
 
+exports.saveJobTitle = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { jobTitle } = req.body;
+
+    if (!jobTitle || typeof jobTitle !== "string" || jobTitle.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Job title is required",
+      });
+    }
+
+    await Recruiter.findOneAndUpdate(
+      { userId },
+      { jobTitle: jobTitle.trim() },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Job title saved successfully",
+    });
+  } catch (error) {
+    console.error("Error saving job title:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while saving job title",
+    });
+  }
+};
+
 exports.completeOnboarding = async (req, res) => {
   try {
     const userId = req.user.id;

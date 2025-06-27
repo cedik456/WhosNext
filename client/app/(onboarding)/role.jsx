@@ -16,11 +16,12 @@ const Role = () => {
   };
 
   const handleSubmitRole = async () => {
+    if (!selectedRole) {
+      Alert.alert("Error", "Please select a role before proceeding.");
+      return;
+    }
+
     try {
-      if (!selectedRole) {
-        Alert.alert("Error", "Please select a role before proceeding.");
-        return;
-      }
       await saveUserRole(selectedRole);
 
       const token = await getToken();

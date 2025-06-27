@@ -47,7 +47,7 @@ const Name = () => {
 
       if (success) {
         if (role === "recruiter") {
-          router.replace("/complete");
+          router.replace("/recruiter/jobTitle");
         } else {
           router.replace("/jobSeeker/work");
         }

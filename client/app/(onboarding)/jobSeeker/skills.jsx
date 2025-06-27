@@ -53,6 +53,7 @@ const Skills = () => {
   const handleSubmit = async () => {
     if (selectedSkills.length < 3) {
       Alert.alert("Select more skills", "Please choose at least 3 skills");
+      return;
     }
 
     try {

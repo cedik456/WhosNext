@@ -9,6 +9,7 @@ const {
   saveLocation,
   saveWorkPreferencesJobSeekers,
   completeOnboarding,
+  saveJobTitle,
 } = require("../controllers/onboardingController");
 
 // Both
@@ -23,5 +24,6 @@ router.patch("/workPreferences/jobSeeker", auth, saveWorkPreferencesJobSeekers);
 
 // Recruiter
 router.patch("/name/recruiter", auth, saveCompanyName);
+router.patch("/jobTitle/recruiter", auth, saveJobTitle);
 
 module.exports = router;
