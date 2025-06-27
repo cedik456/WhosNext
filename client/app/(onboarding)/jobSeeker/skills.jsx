@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Chip } from "react-native-paper";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
+import Button from "../../../components/Button";
 
 const SKILL_SETS = {
   jobSeeker: [
@@ -119,24 +120,15 @@ const Skills = () => {
           </View>
         </View>
       </ScrollView>
-      <Text className="text-gray-500 font-poppins-500">
+      <Text className="mb-2 text-gray-500 font-poppins-500">
         This info will help you find your rightful job
       </Text>
 
-      <Pressable
+      <Button
+        title="Next"
         onPress={handleSubmit}
-        className={`rounded-full mt-6 mb-10 p-5 ${
-          selectedSkills.length >= 3 ? "bg-black" : "bg-gray-300"
-        }`}
-      >
-        <Text
-          className={`text-center font-poppins-600 ${
-            selectedSkills.length >= 3 ? "text-white" : "text-gray-400"
-          }`}
-        >
-          Next
-        </Text>
-      </Pressable>
+        disabled={selectedSkills.length < 3}
+      />
     </SafeAreaView>
   );
 };

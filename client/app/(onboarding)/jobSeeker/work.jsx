@@ -27,7 +27,7 @@ const Work = () => {
       const token = await getToken();
 
       const response = await api.patch(
-        "onboarding/workPreferences/jobSeeker",
+        "/onboarding/workPreferences/jobSeeker",
         { workEnvironment, workType },
         {
           headers: {
@@ -44,6 +44,7 @@ const Work = () => {
         Alert.alert("Error", response.data.message || "Something went wrong");
       }
     } catch (error) {
+      console.error(error);
       Alert.alert("Error", "Failed to save preferences.");
     }
   };
@@ -53,19 +54,21 @@ const Work = () => {
       <View className="justify-between flex-1 gap-6 mt-14">
         <View>
           <Text className="mb-2 text-3xl font-poppins-600">
-            What are your work preferences?
+            Let's talk about what you want, User.
           </Text>
           <Text className="mb-10 text-base text-gray-600 font-poppins-500">
             Select your preferred work setup and job type
           </Text>
 
-          <Text className="mb-2 text-xl font-poppins-500">Work Type</Text>
+          <Text className="mb-5 text-xl font-poppins-600">
+            What type of job do you want?
+          </Text>
           <View className="flex-row flex-wrap gap-3 mb-4">
             {types.map((type) => (
               <Pressable
                 key={type}
                 onPress={() => setWorkType(type)}
-                className={`px-5 py-5 rounded-lg  ${
+                className={`px-5 py-4 rounded-full  ${
                   workType === type ? "bg-black" : "bg-[#f6f6f6]"
                 }`}
               >
@@ -80,15 +83,17 @@ const Work = () => {
             ))}
           </View>
 
-          <Text className="mb-2 text-xl font-poppins-500">
-            Work Environment
+          <View className="border-b-[#ccc] border-b my-4" />
+
+          <Text className="mb-5 text-xl font-poppins-600">
+            What type of environment?
           </Text>
           <View className="flex-row flex-wrap gap-3 mb-4">
             {environments.map((env) => (
               <Pressable
                 key={env}
                 onPress={() => setWorkEnvironment(env)}
-                className={`px-5 py-5 rounded-lg  ${
+                className={`px-5 py-4 rounded-full  ${
                   workEnvironment === env ? "bg-black" : "bg-[#f6f6f6]"
                 }`}
               >
@@ -102,6 +107,12 @@ const Work = () => {
               </Pressable>
             ))}
           </View>
+
+          <View className="border-b-[#ccc] border-b my-4" />
+
+          <Text className="mb-10 text-sm text-gray-600 font-poppins-500">
+            This is how it'll appear in your profile
+          </Text>
         </View>
 
         <Button title="Next" disabled={!isValid} onPress={handleSubmit} />

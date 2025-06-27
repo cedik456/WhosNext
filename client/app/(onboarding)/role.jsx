@@ -5,6 +5,7 @@ import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { saveUserRole } from "../../utils/secureUser";
+import Button from "../../components/Button";
 
 const Role = () => {
   const router = useRouter();
@@ -75,21 +76,11 @@ const Role = () => {
             <Text className="text-gray-500 ">Recruiter</Text>
           </Pressable>
         </View>
-
-        <Pressable
+        <Button
+          title="Next"
           onPress={handleSubmitRole}
-          className={` rounded-full ${
-            selectedRole ? "bg-black" : "bg-gray-300"
-          }`}
-        >
-          <Text
-            className={`p-5 text-center font-poppins-600 ${
-              selectedRole ? "text-white" : "text-gray-400"
-            }`}
-          >
-            Next
-          </Text>
-        </Pressable>
+          disabled={!selectedRole}
+        />
       </View>
     </SafeAreaView>
   );

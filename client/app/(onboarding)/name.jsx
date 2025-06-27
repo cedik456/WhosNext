@@ -5,6 +5,7 @@ import { getToken } from "../../utils/storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../utils/axiosInstance";
 import { getUserRole } from "../../utils/secureUser";
+import Button from "../../components/Button";
 
 const Name = () => {
   const router = useRouter();
@@ -12,8 +13,10 @@ const Name = () => {
   const [role, setRole] = useState("jobSeeker");
 
   const handleSubmitName = async () => {
-    if (!name.trim()) {
-      Alert.alert("Error", "Please enter a name before proceeding.");
+    const trimmedName = name.trim();
+
+    if (trimmedName.length < 3) {
+      Alert.alert("Error", "Name must be at least 3 characters long");
       return;
     }
 
@@ -32,7 +35,7 @@ const Name = () => {
 
       const response = await api.patch(
         endpoint,
-        { name },
+        { name: trimmedName },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -84,20 +87,11 @@ const Name = () => {
             autoCapitalize="words"
           />
         </View>
-        <Pressable
+        <Button
+          title="Next"
           onPress={handleSubmitName}
-          className={`p-5 rounded-full ${
-            name.trim() ? "bg-black" : "bg-gray-300"
-          }`}
-        >
-          <Text
-            className={`text-center font-poppins-600 ${
-              name.trim() ? "text-white" : "text-gray-400"
-            }`}
-          >
-            Next
-          </Text>
-        </Pressable>
+          disabled={name.trim().length < 3}
+        />
       </View>
     </SafeAreaView>
   );

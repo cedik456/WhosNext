@@ -181,7 +181,7 @@ router.patch("/workPreferences/jobSeeker", auth, async (req, res) => {
     const { workEnvironment, workType } = req.body;
 
     const validEnvironments = ["On-site", "Remote", "Hybrid"];
-    const validTypes = ["Full-time", "Part-time"];
+    const validTypes = ["Full-time", "Part-time", "Internship"];
 
     if (
       !validEnvironments.includes(workEnvironment) ||

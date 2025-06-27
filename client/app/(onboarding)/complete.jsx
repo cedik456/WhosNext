@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
+import Button from "../../components/Button";
 
 const Complete = () => {
   const router = useRouter();
@@ -50,11 +51,7 @@ const Complete = () => {
       </Text>
 
       <View className="w-full">
-        <Pressable onPress={handleFinish} className="p-5 bg-black rounded-full">
-          <Text className="text-center text-white font-poppins-600">
-            Explore now
-          </Text>
-        </Pressable>
+        <Button title="Explore now" onPress={handleFinish} />
       </View>
     </SafeAreaView>
   );

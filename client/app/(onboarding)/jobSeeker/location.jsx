@@ -4,8 +4,8 @@ import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getReadableLocation } from "../../../utils/locationHelper";
 import { getToken } from "../../../utils/storage";
-import { getUserRole } from "../../../utils/secureUser";
 import api from "../../../utils/axiosInstance";
+import Button from "../../../components/Button";
 
 const Location = () => {
   const router = useRouter();
@@ -55,23 +55,11 @@ const Location = () => {
           </Text>
         </View>
 
-        <View className="mb-10">
-          <Pressable
-            onPress={handleLocationSubmit}
-            disabled={loading}
-            className={`p-5 rounded-full ${
-              loading ? "bg-gray-300" : "bg-black"
-            }`}
-          >
-            <Text
-              className={`text-center ${
-                loading ? "text-gray-400" : "text-white"
-              } font-poppins-600`}
-            >
-              Allow location
-            </Text>
-          </Pressable>
-        </View>
+        <Button
+          title="Allow Location"
+          onPress={handleLocationSubmit}
+          disabled={loading}
+        />
       </View>
     </SafeAreaView>
   );
