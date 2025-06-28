@@ -1,41 +1,41 @@
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Chip } from "react-native-paper";
-import { getToken } from "../../../utils/storage";
-import api from "../../../utils/axiosInstance";
-import Button from "../../../components/Button";
+import { getToken } from "../../utils/storage";
+import api from "../../utils/axiosInstance";
+import Button from "../../components/Button";
+import { getUserRole } from "../../utils/secureUser";
 
 const SKILL_SETS = {
-  jobSeeker: [
+  skills: [
     "JavaScript",
     "React",
-    "Python",
-    "Angular",
-    "PHP",
-    "HTML/CSS",
+    "Vue.js",
     "Node.js",
-    "SQL",
-    "Figma",
+    "Python",
+    "Django",
+    "PHP",
+    "Laravel",
     "UI/UX Design",
-    "Graphic Design",
-    "Video Editing",
+    "Figma",
+    "Photoshop",
     "Project Management",
-    "DevOps",
-    "Cybersecurity",
-    "Networking",
-    "Technical Support",
-    "Customer Service",
     "Sales",
-    "SEO",
-    "Marketing",
-    "Quality Assurance",
+    "DevOps",
+    "AWS",
+    "SQL",
+    "MongoDB",
+    "TypeScript",
+    "Customer Service",
+    "Other",
   ],
 };
 
 const Skills = () => {
   const router = useRouter();
+  const [role, setRole] = useState("jobSeeker");
   const [selectedSkills, setSelectedSkills] = useState([]);
 
   const toggleSkill = (skill) => {
@@ -59,8 +59,13 @@ const Skills = () => {
     try {
       const token = await getToken();
 
+      const endpoint =
+        role === "recruiter"
+          ? "/onboarding/skills/recruiter"
+          : "/onboarding/skills/jobSeeker";
+
       const response = await api.patch(
-        "/onboarding/skills/jobSeeker",
+        endpoint,
         { skills: selectedSkills },
         {
           headers: {
@@ -72,7 +77,11 @@ const Skills = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/jobSeeker/location");
+        if (role === "recruiter") {
+          router.replace("/recruiter/hiringLocation");
+        } else {
+          router.replace("/jobSeeker/location");
+        }
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong.");
       }
@@ -81,17 +90,32 @@ const Skills = () => {
     }
   };
 
-  const skillOptions = SKILL_SETS.jobSeeker;
+  useEffect(() => {
+    const fetchRole = async () => {
+      const role = await getUserRole();
+      if (!role) {
+        router.replace("onboarding/role");
+      } else {
+        setRole(role);
+      }
+    };
+    fetchRole();
+  }, []);
+
+  const skillOptions = SKILL_SETS.skills;
 
   return (
     <SafeAreaView className="flex-1 px-6 bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="gap-4 mt-14">
           <Text className="text-3xl font-poppins-600">
-            What are your skills?
+            {role === "recruiter"
+              ? "What are you looking for?"
+              : "What are your skills?"}
           </Text>
           <Text className="text-base text-gray-600 font-poppins-500">
-            Select 3 to 8 professional skills that match your expertise.
+            Select 3 to 8 skills that match your{" "}
+            {role === "recruiter" ? "requirements" : "expertise "}
           </Text>
 
           <View className="flex-row flex-wrap mb-5">
@@ -121,9 +145,6 @@ const Skills = () => {
           </View>
         </View>
       </ScrollView>
-      <Text className="mb-2 text-gray-500 font-poppins-500">
-        This info will help you find your rightful job
-      </Text>
 
       <Button
         title="Next"

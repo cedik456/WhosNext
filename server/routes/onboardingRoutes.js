@@ -3,16 +3,21 @@ const router = express.Router();
 const auth = require("../middlewares/authMiddleware");
 const {
   saveRole,
+  completeOnboarding,
+} = require("../controllers/onboarding/sharedController");
+const {
   saveName,
-  saveCompanyName,
   saveSkills,
   saveLocation,
   saveWorkPreferencesJobSeekers,
-  completeOnboarding,
+} = require("../controllers/onboarding/jobSeekerController");
+const {
+  saveCompanyName,
   saveJobTitle,
-} = require("../controllers/onboardingController");
+  saveRequirements,
+} = require("../controllers/onboarding/recruiterController");
 
-// Both
+// Shared
 router.patch("/role", auth, saveRole);
 router.patch("/complete", auth, completeOnboarding);
 
@@ -25,5 +30,6 @@ router.patch("/workPreferences/jobSeeker", auth, saveWorkPreferencesJobSeekers);
 // Recruiter
 router.patch("/name/recruiter", auth, saveCompanyName);
 router.patch("/jobTitle/recruiter", auth, saveJobTitle);
+router.patch("/skills/recruiter", auth, saveRequirements);
 
 module.exports = router;

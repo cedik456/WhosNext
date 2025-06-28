@@ -8,16 +8,14 @@ import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 
 const JOB_TITLES = [
-  "Frontend Dev",
-  "Backend Dev",
-  "Full Stack Dev",
+  "Frontend Developer",
+  "Backend Developer",
+  "Full Stack Developer",
   "UI/UX Designer",
-  "Product Manager",
+  "Mobile Developer",
   "Data Analyst",
   "DevOps Engineer",
   "QA Engineer",
-  "Mobile Dev",
-  "Software Engineer",
   "Other",
 ];
 
@@ -51,7 +49,7 @@ const JobTitle = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/recruiter/requirements");
+        router.replace("/skills");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong.");
       }
@@ -70,14 +68,15 @@ const JobTitle = () => {
             Select one job title from the list below.
           </Text>
 
-          <View className="flex-row flex-wrap mt-4 mb-5">
+          <View className="mb-5 ">
             {JOB_TITLES.map((title) => (
               <Chip
                 key={title}
                 onPress={() => toggleSelect(title)}
                 style={{
                   margin: 4,
-                  padding: 4,
+                  paddingHorizontal: 4,
+                  paddingVertical: 6,
                   backgroundColor:
                     selectedJobTitle === title ? "#000" : "#F6F6F6",
 

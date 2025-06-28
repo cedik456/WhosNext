@@ -39,7 +39,7 @@ const Work = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/jobSeeker/skills");
+        router.replace("/skills");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong");
       }
