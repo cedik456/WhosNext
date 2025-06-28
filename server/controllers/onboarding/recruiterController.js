@@ -91,7 +91,7 @@ exports.saveHiringLocation = async (req, res) => {
     if (!location || location.trim() === "") {
       return res
         .status(400)
-        .json({ success: false, message: "Location is required" });
+        .json({ success: false, message: "Hiring Location is required" });
     }
 
     await Recruiter.findOneAndUpdate(
