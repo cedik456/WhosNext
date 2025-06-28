@@ -15,6 +15,7 @@ const {
   saveCompanyName,
   saveJobTitle,
   saveRequirements,
+  saveHiringLocation,
 } = require("../controllers/onboarding/recruiterController");
 
 // Shared
@@ -31,5 +32,6 @@ router.patch("/workPreferences/jobSeeker", auth, saveWorkPreferencesJobSeekers);
 router.patch("/name/recruiter", auth, saveCompanyName);
 router.patch("/jobTitle/recruiter", auth, saveJobTitle);
 router.patch("/skills/recruiter", auth, saveRequirements);
+router.patch("/hiringLocation/recruiter", auth, saveHiringLocation);
 
 module.exports = router;

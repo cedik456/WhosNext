@@ -5,6 +5,7 @@ import Button from "../../../components/Button";
 import { TextInput } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { getToken } from "../../../utils/storage";
+import api from "../../../utils/axiosInstance";
 
 const HiringLocation = () => {
   const router = useRouter();
@@ -18,7 +19,27 @@ const HiringLocation = () => {
 
     try {
       const token = await getToken();
-    } catch (error) {}
+
+      const response = await api.patch(
+        "/onboarding/hiringLocation/recruiter",
+        { location: location.trim() },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { success } = response.data;
+
+      if (success) {
+        router.replace("/complete");
+      } else {
+        Alert.alert("Recruiter location error:", error);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong. Please try again.");
+    }
   };
 
   return (
