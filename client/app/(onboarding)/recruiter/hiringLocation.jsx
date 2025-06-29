@@ -62,6 +62,8 @@ const HiringLocation = () => {
         </View>
         <Button
           title="Next"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
           onPress={handleSubmit}
           disabled={location.trim() === ""}
         />

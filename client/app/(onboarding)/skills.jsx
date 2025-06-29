@@ -107,11 +107,13 @@ const Skills = () => {
   return (
     <SafeAreaView className="flex-1 px-6 bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="gap-4 mt-14">
+        <View className="gap-3 mt-14">
           <Text className="text-3xl font-poppins-600">
+            Let's talk about
             {role === "recruiter"
               ? "What are you looking for?"
-              : "What are your skills?"}
+              : " your \nskills"}
+            , User
           </Text>
           <Text className="text-base text-gray-600 font-poppins-500">
             Select 3 to 8 skills that match your{" "}
@@ -148,6 +150,8 @@ const Skills = () => {
 
       <Button
         title="Next"
+        className="mb-10 rounded-full"
+        textClassName="text-center"
         onPress={handleSubmit}
         disabled={selectedSkills.length < 3}
       />

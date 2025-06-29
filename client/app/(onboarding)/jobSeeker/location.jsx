@@ -57,6 +57,8 @@ const Location = () => {
 
         <Button
           title="Allow Location"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
           onPress={handleLocationSubmit}
           disabled={loading}
         />

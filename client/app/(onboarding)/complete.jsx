@@ -51,7 +51,12 @@ const Complete = () => {
       </Text>
 
       <View className="w-full">
-        <Button title="Explore now" onPress={handleFinish} />
+        <Button
+          title="Explore now"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
+          onPress={handleFinish}
+        />
       </View>
     </SafeAreaView>
   );

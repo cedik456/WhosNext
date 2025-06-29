@@ -97,6 +97,8 @@ const JobTitle = () => {
 
       <Button
         title="Next"
+        className="mb-10 rounded-full"
+        textClassName="text-center"
         disabled={!selectedJobTitle}
         onPress={handleSubmit}
       />

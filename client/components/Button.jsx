@@ -8,11 +8,11 @@ const Button = ({
   className = "",
   textClassName = "",
 }) => {
-  const baseStyles = "p-5 rounded-full mb-10";
+  const baseStyles = "p-5";
   const enabledStyles = "bg-black";
   const disabledStyles = "bg-gray-300";
 
-  const baseTextStyles = "font-poppins-600 text-center";
+  const baseTextStyles = "font-poppins-600";
   const enabledTextStyles = "text-white";
   const disabledTextStyles = "text-gray-400";
 

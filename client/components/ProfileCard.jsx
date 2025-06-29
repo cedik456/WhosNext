@@ -1,18 +1,23 @@
 import { Image, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AvatarPlaceholder from "../assets/Avatar3.png";
+import { getSkillColor } from "../utils/getSkillColor";
 
-const ProfileCard = ({ card }) => {
+const ProfileCard = ({ card, color }) => {
   if (!card) return null;
   return (
-    <View className="p-5 bg-[#fbfbfb] rounded-2xl h-[85%] shadow-sm">
+    <View
+      className="p-5 rounded-2xl h-[90%] shadow-sm "
+      style={{ backgroundColor: color || "#fbfbfb" }}
+    >
       <Image
-        source={card.avatar}
+        source={AvatarPlaceholder}
         resizeMode="cover"
-        className="self-center mt-10 mb-12 rounded-full w-72 h-72"
+        className="self-center mt-10 mb-10 rounded-full w-72 h-72"
       />
 
       <View className="flex-row items-center mb-1">
-        <Text className="text-2xl font-poppins-600">{card.name}</Text>
+        <Text className="text-2xl font-poppins-600">{card.userId?.name}</Text>
         <Ionicons
           name="checkmark-circle"
           size={20}
@@ -22,21 +27,27 @@ const ProfileCard = ({ card }) => {
       </View>
 
       {card.location && (
-        <Text className="mb-1 text-base text-gray-500">
-          Based in {card.location}
-        </Text>
+        <Text className="mb-1 text-base text-gray-500">{card.location}</Text>
       )}
 
-      <Text className="mb-2 text-base text-gray-600 font-poppins-500">
-        {[card.preferences?.workEnvironment, card.preferences?.workType]
-          .filter(Boolean)
-          .join(" | ")}
-      </Text>
+      {card.preferences?.workEnvironment || card.preferences?.workType ? (
+        <Text className="mb-1 text-base text-gray-600 font-poppins-500">
+          {[card.preferences?.workEnvironment, card.preferences?.workType]
+            .filter(Boolean)
+            .join(" | ")}
+        </Text>
+      ) : null}
 
-      <Text className="mb-1 text-base font-poppins-600">About me</Text>
-      <Text className="mb-2 text-sm text-gray-500 font-poppins-500">
-        {card.bio}
-      </Text>
+      <Text className="mb-1 text-base text-gray-500">1 year of experience</Text>
+
+      {card.bio?.trim() && (
+        <>
+          <Text className="mb-1 text-base font-poppins-600">About me</Text>
+          <Text className="mb-2 text-sm text-gray-500 font-poppins-500">
+            {card.bio}
+          </Text>
+        </>
+      )}
 
       {card.skills?.length > 0 && (
         <View className="mb-10">
@@ -44,8 +55,19 @@ const ProfileCard = ({ card }) => {
 
           <View className="flex-row flex-wrap gap-2 max-w-[280px]">
             {card.skills?.map((skill, index) => (
-              <View key={index} className="px-3 py-1 bg-gray-100 rounded-full">
-                <Text className="text-sm text-black">{skill}</Text>
+              <View
+                key={index}
+                className={`px-3 py-2 rounded-full ${getSkillColor(skill)}`}
+              >
+                <Text
+                  className={`text-sm text-black ${
+                    getSkillColor(skill) === "bg-black"
+                      ? "text-white"
+                      : "text-black"
+                  }`}
+                >
+                  {skill}
+                </Text>
               </View>
             ))}
           </View>
