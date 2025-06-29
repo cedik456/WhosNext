@@ -16,11 +16,12 @@ const Role = () => {
   };
 
   const handleSubmitRole = async () => {
+    if (!selectedRole) {
+      Alert.alert("Error", "Please select a role before proceeding.");
+      return;
+    }
+
     try {
-      if (!selectedRole) {
-        Alert.alert("Error", "Please select a role before proceeding.");
-        return;
-      }
       await saveUserRole(selectedRole);
 
       const token = await getToken();
@@ -56,28 +57,38 @@ const Role = () => {
     <SafeAreaView className="flex-1 px-6 bg-white">
       <View className="justify-between flex-1 mt-14">
         <View className="gap-4">
-          <Text className="text-3xl font-poppins-600">I am a</Text>
+          <Text className="text-3xl font-poppins-600">What is your role?</Text>
+          <Text className="mb-3 text-gray-600">
+            Tell us what type of user you are and how you plan to use our
+            application.
+          </Text>
 
-          <Pressable
+          <Button
+            title="Job Seeker"
             onPress={() => handleSelectRole("jobSeeker")}
-            className={`p-5 border rounded-md ${
-              selectedRole === "jobSeeker" ? "border-black" : "border-gray-300"
+            textClassName={`font-poppins-500 ${
+              selectedRole === "jobSeeker" ? "text-white" : "text-gray-300"
             }`}
-          >
-            <Text className="text-gray-500 ">Job Seeker</Text>
-          </Pressable>
+            className={`rounded-lg border border-[#ccc]  ${
+              selectedRole === "jobSeeker" ? "bg-black" : "bg-white"
+            }`}
+          />
 
-          <Pressable
+          <Button
+            title="Recruiter"
             onPress={() => handleSelectRole("recruiter")}
-            className={`p-5 border rounded-md ${
-              selectedRole === "recruiter" ? "border-black" : "border-gray-300"
+            textClassName={`font-poppins-500 ${
+              selectedRole === "recruiter" ? "text-white" : "text-gray-300"
             }`}
-          >
-            <Text className="text-gray-500 ">Recruiter</Text>
-          </Pressable>
+            className={`rounded-lg border border-[#ccc] ${
+              selectedRole === "recruiter" ? "bg-black" : "bg-white"
+            }`}
+          />
         </View>
         <Button
           title="Next"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
           onPress={handleSubmitRole}
           disabled={!selectedRole}
         />

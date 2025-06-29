@@ -1,238 +1,37 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/UserSchema");
 const auth = require("../middlewares/authMiddleware");
-const JobSeeker = require("../models/JobSeekerSchema");
-const Recruiter = require("../models/RecruiterSchema");
+const {
+  saveRole,
+  completeOnboarding,
+} = require("../controllers/onboarding/sharedController");
+const {
+  saveName,
+  saveSkills,
+  saveLocation,
+  saveWorkPreferencesJobSeekers,
+} = require("../controllers/onboarding/jobSeekerController");
+const {
+  saveCompanyName,
+  saveJobTitle,
+  saveRequirements,
+  saveHiringLocation,
+} = require("../controllers/onboarding/recruiterController");
 
-router.patch("/role", auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
+// Shared
+router.patch("/role", auth, saveRole);
+router.patch("/complete", auth, completeOnboarding);
 
-    const { role } = req.body;
+// Job Seeker
+router.patch("/name/jobSeeker", auth, saveName);
+router.patch("/skills/jobSeeker", auth, saveSkills);
+router.patch("/location/jobSeeker", auth, saveLocation);
+router.patch("/workPreferences/jobSeeker", auth, saveWorkPreferencesJobSeekers);
 
-    const allowedRoles = ["jobSeeker", "recruiter"];
-
-    if (!allowedRoles.includes(role)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid role selected" });
-    }
-
-    await User.findByIdAndUpdate(userId, { role });
-
-    res.status(200).json({ success: true, message: "Role saved successfully" });
-  } catch (error) {
-    console.error("Error saving role:", err);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error while saving role." });
-  }
-});
-
-// name
-
-router.patch("/name/jobSeeker", auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-
-    const { name } = req.body;
-
-    if (!name || name.trim() === "") {
-      return res
-        .status(400)
-        .json({ success: false, message: "Name is required" });
-    }
-
-    await User.findByIdAndUpdate(userId, { name: name.trim() });
-
-    res.status(200).json({ success: true, message: "Name saved successfully" });
-  } catch (error) {
-    console.error("Error saving name:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error while saving name." });
-  }
-});
-
-// company name
-
-router.patch("/name/recruiter", auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-
-    const { name } = req.body;
-
-    if (!name || name.trim() === "") {
-      return res
-        .status(400)
-        .json({ success: false, message: "Name is required" });
-    }
-
-    await Recruiter.findOneAndUpdate(
-      { userId },
-      { companyName: name.trim() },
-      { upsert: true, new: true }
-    );
-
-    res.status(200).json({ success: true, message: "Name saved successfully" });
-  } catch (error) {
-    console.error("Error saving name:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error while saving name." });
-  }
-});
-
-// skills
-
-router.patch("/skills/jobSeeker", auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-
-    const { skills } = req.body;
-
-    if (!Array.isArray(skills) || skills.length < 1) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Skills must be a non-empty array" });
-    }
-
-    await JobSeeker.findOneAndUpdate(
-      { userId },
-      { $set: { skills } },
-      { new: true, upsert: true }
-    );
-
-    res
-      .status(200)
-      .json({ success: true, message: "Skills saved successfully" });
-  } catch (error) {
-    console.error("Error saving skills:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error while saving skills." });
-  }
-});
-
-// router.patch("/skills/recruiter", auth, async (req, res) => {
-//   try {
-//     const userId = req.user.id;
-//     const { skills } = req.body;
-
-//     if (!Array.isArray(skills) || skills.length < 1) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "Skills must be a non-empty array" });
-//     }
-
-//     await Recruiter.findOneAndUpdate(
-//       { userId },
-//       { $set: { "hiringCriteria.skills": skills } },
-//       { new: true, upsert: true }
-//     );
-
-//     res
-//       .status(200)
-//       .json({ success: true, message: "Skills saved successfully" });
-//   } catch (error) {
-//     console.error("Error saving recruiter skills:", err);
-//     res
-//       .status(500)
-//       .json({ success: false, message: "Server error while saving skills" });
-//   }
-// });
-
-// location
-
-router.patch("/location/jobSeeker", auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const { location } = req.body;
-
-    if (!location || location.trim() === "") {
-      return res
-        .status(400)
-        .json({ success: false, message: "Location is required" });
-    }
-
-    await JobSeeker.findOneAndUpdate(
-      { userId },
-      { location: location.trim() },
-      { new: true, upsert: true }
-    );
-
-    res
-      .status(200)
-      .json({ success: true, message: "Location saved successfully" });
-  } catch (error) {
-    console.error("JobSeeker location error:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error while saving location" });
-  }
-});
-
-// work preferences
-
-router.patch("/workPreferences/jobSeeker", auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const { workEnvironment, workType } = req.body;
-
-    const validEnvironments = ["On-site", "Remote", "Hybrid"];
-    const validTypes = ["Full-time", "Part-time", "Internship"];
-
-    if (
-      !validEnvironments.includes(workEnvironment) ||
-      !validTypes.includes(workType)
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid or missing work preference",
-      });
-    }
-
-    await JobSeeker.findOneAndUpdate(
-      { userId },
-      {
-        $set: {
-          "preferences.workEnvironment": workEnvironment,
-          "preferences.workType": workType,
-        },
-      },
-      { new: true, upsert: true }
-    );
-
-    res
-      .status(200)
-      .json({ success: true, message: "Work Preferences saved successfully" });
-  } catch (error) {
-    console.error("Error saving work preferences", error);
-
-    res.status(500).json({
-      success: false,
-      message: "Server error while saving work preferences",
-    });
-  }
-});
-
-// complete
-
-router.patch("/complete", auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-
-    await User.findByIdAndUpdate(userId, { isOnboarded: true });
-
-    res.status(200).json({ success: true, message: "Onboarding completed." });
-  } catch (error) {
-    console.error("Onboarding complete error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to complete onboarding.",
-    });
-  }
-});
+// Recruiter
+router.patch("/name/recruiter", auth, saveCompanyName);
+router.patch("/jobTitle/recruiter", auth, saveJobTitle);
+router.patch("/skills/recruiter", auth, saveRequirements);
+router.patch("/hiringLocation/recruiter", auth, saveHiringLocation);
 
 module.exports = router;

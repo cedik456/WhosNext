@@ -47,7 +47,7 @@ const Name = () => {
 
       if (success) {
         if (role === "recruiter") {
-          router.replace("/complete");
+          router.replace("/recruiter/jobTitle");
         } else {
           router.replace("/jobSeeker/work");
         }
@@ -76,19 +76,27 @@ const Name = () => {
         <View className="gap-4">
           <Text className="text-3xl font-poppins-600">
             {role === "recruiter"
-              ? "What’s your company or name?"
-              : "What’s your name or alias?"}
+              ? "What’s your\ncompany name?"
+              : "What’s your\nfirst name?"}
           </Text>
           <TextInput
-            className="p-5 bg-[#F6F6F6] font-poppins-500"
-            placeholder="Enter your first name or alias"
+            className="py-4 border-b-2 border-gray-300 font-poppins"
+            placeholder="Enter your first name"
             value={name}
             onChangeText={setName}
             autoCapitalize="words"
           />
+          <Text className="text-gray-400 font-poppins">
+            This is how it will appear on your profile
+          </Text>
+          <Text className="font-semibold text-black font-poppins-500">
+            It cannot be changed later.
+          </Text>
         </View>
         <Button
           title="Next"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
           onPress={handleSubmitName}
           disabled={name.trim().length < 3}
         />

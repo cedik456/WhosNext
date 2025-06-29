@@ -1,21 +1,12 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import Company1 from "../assets/Company1.png";
 import { Ionicons } from "@expo/vector-icons";
 
 const JobCard = ({ data }) => {
   if (!data) return null;
 
-  const criteria = data.hiringCriteria || {};
-
-  //   const logo = data.companyLogo;
-  //   const initials =
-  //     data.companyName
-  //       ?.split("")
-  //       .map((w) => w[0])
-  //       .join("") || "?";
-
   return (
-    <View className=" p-5 bg-[#fbfbfb] overflow-hidden rounded-2xl h-[85%] shadow-sm">
+    <View className=" p-5 bg-[#fbfbfb] overflow-hidden rounded-2xl h-[90%] shadow-sm">
       <Image
         source={Company1}
         resizeMode="cover"
@@ -32,36 +23,42 @@ const JobCard = ({ data }) => {
         />
       </View>
 
-      <Text className="mb-2 text-lg text-gray-700 font-poppins-500">
-        Full Stack Developer
-      </Text>
+      {data.jobTitle && (
+        <Text className="mb-2 text-lg text-gray-700 font-poppins-500">
+          {data.jobTitle}
+        </Text>
+      )}
 
       <Text className="mb-2 text-xl text-blue-600 font-poppins-500">
         ₱25-30K/mo
       </Text>
 
-      <Text className="mb-2 text-gray-500 text-ba">
-        Based in {criteria.location}
-      </Text>
+      {data.hiringCriteria.location && (
+        <Text className="mb-2 text-gray-500 text-ba">
+          Based in {data.hiringCriteria.location}
+        </Text>
+      )}
 
-      {/* <Text className="mb-1 text-base text-gray-600 font-poppins-500">
+      <Text className="mb-1 text-base text-gray-600 font-poppins-500">
         1-3 years of experience
-      </Text> */}
+      </Text>
 
       <Text className="mb-2 text-base font-poppins-600">Skills</Text>
 
-      <View className="flex-row flex-wrap gap-2 mb-3">
-        {criteria.skills?.map((skill, index) => (
-          <View key={index} className="px-3 py-1 bg-gray-100 rounded-full">
-            <Text className="text-sm text-gray-800">{skill}</Text>
-          </View>
-        ))}
-      </View>
+      {data.hiringCriteria.requiredSkills?.length > 0 && (
+        <View className="flex-row flex-wrap gap-2 mb-3">
+          {data.hiringCriteria.requiredSkills?.map((skill, index) => (
+            <View key={index} className="px-3 py-1 bg-gray-100 rounded-full">
+              <Text className="text-sm text-gray-800">{skill}</Text>
+            </View>
+          ))}
+        </View>
+      )}
 
       <Text className="mb-1 text-base font-poppins-600">Job Description</Text>
 
       <Text className="mb-5 text-sm text-gray-500 font-poppins-500">
-        A simple guy who loves creating new emerging technologies.
+        Looking for a good and kind employee. Willing to learn.
       </Text>
     </View>
   );

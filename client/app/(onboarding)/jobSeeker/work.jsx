@@ -39,7 +39,7 @@ const Work = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/jobSeeker/skills");
+        router.replace("/skills");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong");
       }
@@ -53,14 +53,16 @@ const Work = () => {
     <SafeAreaView className="flex-1 px-6 bg-white">
       <View className="justify-between flex-1 gap-6 mt-14">
         <View>
-          <Text className="mb-2 text-3xl font-poppins-600">
-            Let's talk about what you want, User.
+          <Text className="mb-3 text-3xl font-poppins-600">
+            Let's talk about what{"\n"}you want, User.
           </Text>
-          <Text className="mb-10 text-base text-gray-600 font-poppins-500">
+          <Text className="text-base text-gray-600 font-poppins">
             Select your preferred work setup and job type
           </Text>
 
-          <Text className="mb-5 text-xl font-poppins-600">
+          <View className="border-b-[#ccc] border-b my-4" />
+
+          <Text className="mb-5 text-lg font-poppins-600">
             What type of job do you want?
           </Text>
           <View className="flex-row flex-wrap gap-3 mb-4">
@@ -68,7 +70,7 @@ const Work = () => {
               <Pressable
                 key={type}
                 onPress={() => setWorkType(type)}
-                className={`px-5 py-4 rounded-full  ${
+                className={`px-4 py-2 rounded-full  ${
                   workType === type ? "bg-black" : "bg-[#f6f6f6]"
                 }`}
               >
@@ -85,7 +87,7 @@ const Work = () => {
 
           <View className="border-b-[#ccc] border-b my-4" />
 
-          <Text className="mb-5 text-xl font-poppins-600">
+          <Text className="mb-5 text-lg font-poppins-600">
             What type of environment?
           </Text>
           <View className="flex-row flex-wrap gap-3 mb-4">
@@ -93,7 +95,7 @@ const Work = () => {
               <Pressable
                 key={env}
                 onPress={() => setWorkEnvironment(env)}
-                className={`px-5 py-4 rounded-full  ${
+                className={`px-4 py-2 rounded-full  ${
                   workEnvironment === env ? "bg-black" : "bg-[#f6f6f6]"
                 }`}
               >
@@ -110,12 +112,18 @@ const Work = () => {
 
           <View className="border-b-[#ccc] border-b my-4" />
 
-          <Text className="mb-10 text-sm text-gray-600 font-poppins-500">
+          <Text className="mb-10 text-sm text-gray-400 font-poppins">
             This is how it'll appear in your profile
           </Text>
         </View>
 
-        <Button title="Next" disabled={!isValid} onPress={handleSubmit} />
+        <Button
+          title="Next"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
+          disabled={!isValid}
+          onPress={handleSubmit}
+        />
       </View>
     </SafeAreaView>
   );
