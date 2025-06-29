@@ -81,7 +81,7 @@ const Name = () => {
           </Text>
           <TextInput
             className="py-4 border-b-2 border-gray-300 font-poppins"
-            placeholder="Enter your first name"
+            placeholder="Enter your name"
             value={name}
             onChangeText={setName}
             autoCapitalize="words"

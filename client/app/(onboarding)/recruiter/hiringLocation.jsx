@@ -45,20 +45,23 @@ const HiringLocation = () => {
   return (
     <SafeAreaView className="flex-1 px-6 bg-white">
       <View className="justify-between flex-1 mt-14">
-        <View className="gap-4">
+        <View className="gap-3">
           <Text className="text-3xl font-poppins-600">
             Where are you hiring?
           </Text>
           <Text className="text-base text-gray-600 font-poppins-500">
-            Enter the city, region, or area you're looking to hire in.
+            Enter the city, region, or area you're looking{"\n"}to hire in.
           </Text>
           <TextInput
-            placeholder="e.g. Quezon City, Metro Manila"
+            placeholder="Enter your location"
             value={location}
             onChangeText={setLocation}
-            className="py-3 text-black bg-white border-b border-gray-300 font-poppins-500"
+            className="py-3 text-sm text-black bg-white border-b border-gray-300 font-poppins"
             placeholderTextColor="#888"
           />
+          <Text className="text-sm text-blue-700 font-poppins">
+            Learn about our privacy and policy
+          </Text>
         </View>
         <Button
           title="Next"

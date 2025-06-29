@@ -111,9 +111,8 @@ const Skills = () => {
           <Text className="text-3xl font-poppins-600">
             Let's talk about
             {role === "recruiter"
-              ? "What are you looking for?"
+              ? " your\nskill requirements"
               : " your \nskills"}
-            , User
           </Text>
           <Text className="text-base text-gray-600 font-poppins-500">
             Select 3 to 8 skills that match your{" "}

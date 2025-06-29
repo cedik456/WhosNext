@@ -69,7 +69,7 @@ const Role = () => {
             textClassName={`font-poppins-500 ${
               selectedRole === "jobSeeker" ? "text-white" : "text-gray-300"
             }`}
-            className={`rounded-lg border border-[#ccc]  ${
+            className={`rounded-lg border  border-[#ccc]  ${
               selectedRole === "jobSeeker" ? "bg-black" : "bg-white"
             }`}
           />
