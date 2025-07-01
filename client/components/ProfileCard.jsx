@@ -1,16 +1,15 @@
 import { Image, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import AvatarPlaceholder from "../assets/Avatar3.png";
 
 const ProfileCard = ({ card, color }) => {
   if (!card) return null;
   return (
     <View
-      className="p-5 rounded-2xl h-[90%] shadow-sm"
+      className="p-5 rounded-2xl h-[89%] shadow-sm"
       style={{ backgroundColor: color || "#fbfbfb" }}
     >
       <Image
-        source={AvatarPlaceholder}
+        source={{ uri: card.userId?.avatar }}
         resizeMode="cover"
         className="self-center mt-10 mb-10 rounded-full w-72 h-72"
       />

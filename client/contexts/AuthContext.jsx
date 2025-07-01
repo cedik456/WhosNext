@@ -15,8 +15,6 @@ export function AuthProvider({ children }) {
 
       await saveToken(token);
 
-      console.log(token);
-
       setUser({ token, ...user });
 
       return { success: true, isOnboarded: user.isOnboarded };

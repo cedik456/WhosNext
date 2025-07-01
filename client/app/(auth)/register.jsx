@@ -34,7 +34,6 @@ const Register = () => {
     const result = await register(email, password);
 
     if (result.success) {
-      console.log("Registration successful, redirecting to /home");
       router.replace("/login");
     } else {
       Alert.alert(result.message);

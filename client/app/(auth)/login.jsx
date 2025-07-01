@@ -33,8 +33,6 @@ const Login = () => {
 
     const result = await login(email, password);
 
-    console.log("Login Result", result);
-
     if (result.success) {
       if (result.isOnboarded) {
         router.replace("/home");

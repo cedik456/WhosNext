@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Tabs, useRouter } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import {
   AntDesign,
   FontAwesome6,
@@ -28,10 +28,15 @@ const TabsLayout = () => {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
+        tabBarActiveTintColor: "black",
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontFamily: "Poppins-Medium",
+        },
         tabBarStyle: {
           position: "absolute",
-          bottom: 10,
+          bottom: 20,
           left: 0,
           right: 0,
           height: 60,
@@ -47,53 +52,49 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name="person"
-              size={24}
-              color="black"
-              className="text-black"
-            />
-          ),
+          tabBarLabel: "Profile",
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name="person" size={24} color="black" />
+            ) : (
+              <Ionicons name="person" size={24} color="#9ca3af" />
+            ),
         }}
       />
       <Tabs.Screen
         name="home"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <FontAwesome6
-              name="bars-staggered"
-              size={24}
-              color="black"
-              className="text-black"
-            />
-          ),
+          tabBarLabel: "People",
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <FontAwesome6 name="bars-staggered" size={24} color="black" />
+            ) : (
+              <FontAwesome6 name="bars-staggered" size={24} color="#9ca3af" />
+            ),
         }}
       />
       <Tabs.Screen
         name="matches"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="like1"
-              size={24}
-              color="black"
-              className="text-black"
-            />
-          ),
+          tabBarLabel: "Liked you",
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <AntDesign name="like1" size={24} color="black" />
+            ) : (
+              <AntDesign name="like1" size={24} color="#9ca3af" />
+            ),
         }}
       />
       <Tabs.Screen
         name="messages"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="message"
-              size={24}
-              color="black"
-              className="text-black"
-            />
-          ),
+          tabBarLabel: "Chats",
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name="chatbubble-sharp" size={24} color="black" />
+            ) : (
+              <Ionicons name="chatbubble-sharp" size={24} color="#9ca3af" />
+            ),
         }}
       />
     </Tabs>

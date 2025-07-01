@@ -63,27 +63,35 @@ const Role = () => {
             application.
           </Text>
 
-          <Button
-            title="Job Seeker"
+          <Pressable
             onPress={() => handleSelectRole("jobSeeker")}
-            textClassName={`font-poppins-500 ${
-              selectedRole === "jobSeeker" ? "text-white" : "text-gray-300"
-            }`}
-            className={`rounded-lg border  border-[#ccc]  ${
+            className={`rounded-lg border border-[#ccc] p-5 ${
               selectedRole === "jobSeeker" ? "bg-black" : "bg-white"
             }`}
-          />
+          >
+            <Text
+              className={`font-poppins-500 ${
+                selectedRole === "jobSeeker" ? "text-white" : "text-gray-400"
+              }`}
+            >
+              Job Seeker
+            </Text>
+          </Pressable>
 
-          <Button
-            title="Recruiter"
+          <Pressable
             onPress={() => handleSelectRole("recruiter")}
-            textClassName={`font-poppins-500 ${
-              selectedRole === "recruiter" ? "text-white" : "text-gray-300"
-            }`}
-            className={`rounded-lg border border-[#ccc] ${
+            className={`rounded-lg border border-[#ccc] p-5 ${
               selectedRole === "recruiter" ? "bg-black" : "bg-white"
             }`}
-          />
+          >
+            <Text
+              className={`font-poppins-500 ${
+                selectedRole === "recruiter" ? "text-white" : "text-gray-400"
+              }`}
+            >
+              Recruiter
+            </Text>
+          </Pressable>
         </View>
         <Button
           title="Next"

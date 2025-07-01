@@ -6,7 +6,7 @@ const JobCard = ({ data }) => {
   if (!data) return null;
 
   return (
-    <View className=" p-5 bg-[#fbfbfb] overflow-hidden rounded-2xl h-[90%] shadow-sm">
+    <View className=" p-5 bg-[#fbfbfb] overflow-hidden rounded-2xl h-[89%] shadow-sm">
       <Image
         source={Company1}
         resizeMode="cover"

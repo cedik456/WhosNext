@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/UserSchema");
+const getRandomAvatar = require("../utils/avatarHelper");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -23,6 +24,7 @@ exports.register = async (req, res) => {
     const user = new User({
       email,
       password: hashedPassword,
+      avatar: getRandomAvatar(),
     });
 
     await user.save();
@@ -40,6 +42,7 @@ exports.register = async (req, res) => {
         email: user.email,
         role: user.role,
         isOnboarded: user.isOnboarded,
+        avatar: user.avatar,
       },
     });
   } catch (error) {

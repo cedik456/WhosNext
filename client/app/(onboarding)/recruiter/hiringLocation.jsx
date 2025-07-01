@@ -56,8 +56,7 @@ const HiringLocation = () => {
             placeholder="Enter your location"
             value={location}
             onChangeText={setLocation}
-            className="py-3 text-sm text-black bg-white border-b border-gray-300 font-poppins"
-            placeholderTextColor="#888"
+            className="py-4 bg-white border-b-2 border-gray-300 font-poppins"
           />
           <Text className="text-sm text-blue-700 font-poppins">
             Learn about our privacy and policy

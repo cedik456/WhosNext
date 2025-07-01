@@ -62,7 +62,7 @@ const JobTitle = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="gap-4 mt-14">
           <Text className="text-3xl font-poppins-600">
-            What role are you hiring for?
+            What job are you hiring for?
           </Text>
           <Text className="text-base text-gray-600 font-poppins-500">
             Select one job title from the list below.

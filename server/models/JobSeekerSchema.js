@@ -8,10 +8,6 @@ const JobSeekerSchema = new Schema({
     required: true,
     unique: true,
   },
-  avatar: {
-    type: String,
-    default: "",
-  },
 
   skills: {
     type: [String],

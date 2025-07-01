@@ -14,7 +14,9 @@ exports.getAllRecruiters = async (req, res) => {
 
 exports.getAllJobSeekers = async (req, res) => {
   try {
-    const jobSeekers = await JobSeeker.find().populate("userId", "name").lean();
+    const jobSeekers = await JobSeeker.find()
+      .populate("userId", "name avatar")
+      .lean();
 
     res.status(200).json({ success: true, data: jobSeekers });
   } catch (error) {
