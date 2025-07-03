@@ -38,10 +38,7 @@ const SwipeDeck = () => {
         const token = await getToken();
         if (!token) return;
 
-        const endpoint =
-          role === "recruiter" ? "/card/jobSeeker" : "/card/recruiter"; // make sure this is correct
-
-        const response = await api.get(endpoint, {
+        const response = await api.get("/card/recommendations", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -84,7 +81,7 @@ const SwipeDeck = () => {
             />
           )
         }
-        stackSize={4}
+        stackSize={3}
         cardIndex={0}
         backgroundColor="transparent"
         verticalSwipe={false}

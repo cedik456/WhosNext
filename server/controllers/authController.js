@@ -33,7 +33,7 @@ exports.register = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "User registered successfully",
       token,

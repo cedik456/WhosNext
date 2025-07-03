@@ -55,7 +55,7 @@ const ProfileCard = ({ card, color }) => {
             {card.skills?.map((skill, index) => (
               <View
                 key={index}
-                className={`px-3 py-2 rounded-full ${getSkillColor(skill)}`}
+                className={`px-3 py-1 rounded-full ${getSkillColor(skill)}`}
               >
                 <Text
                   className={`text-sm text-black ${
