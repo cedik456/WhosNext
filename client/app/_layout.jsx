@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import React from "react";
 import { Stack } from "expo-router";

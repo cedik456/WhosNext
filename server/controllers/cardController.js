@@ -101,7 +101,9 @@ exports.getRecommendations = async (req, res) => {
             },
           },
         ],
-      }).populate("userId", "name avatar");
+      })
+        .populate("userId", "name avatar")
+        .lean();
 
       return res.status(200).json({ success: true, data: matches });
     }

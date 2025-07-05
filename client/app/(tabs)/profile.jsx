@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useAuth } from "../../hooks/useAuth";
+import Button from "../../components/Button";
 
 const Profile = () => {
+  const { logout } = useAuth();
   return (
-    <View className="flex-1 justify-center items-center">
-      <Text>Profile</Text>
+    <View className="items-center justify-center flex-1">
+      <Button onPress={logout} title="Logout" className="rounded-full" />
     </View>
   );
 };

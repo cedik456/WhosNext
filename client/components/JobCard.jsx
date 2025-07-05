@@ -3,7 +3,7 @@ import Company1 from "../assets/linkedin.png";
 import { Ionicons } from "@expo/vector-icons";
 
 const JobCard = ({ data }) => {
-  if (!data) return null;
+  // if (!data) return null;
 
   return (
     <View className="bg-white overflow-hidden rounded-2xl h-[89%] shadow-sm">
@@ -30,7 +30,7 @@ const JobCard = ({ data }) => {
           ₱25-30K/mo
         </Text>
 
-        {data.hiringCriteria.location && (
+        {data.hiringCriteria?.location && (
           <Text className="mb-2 text-gray-700 text-ba">
             Based in {data.hiringCriteria.location}
           </Text>
@@ -38,7 +38,7 @@ const JobCard = ({ data }) => {
 
         <Text className="mb-2 text-base font-poppins-600">Required Skills</Text>
 
-        {data.hiringCriteria.requiredSkills?.length > 0 && (
+        {data.hiringCriteria?.requiredSkills.length > 0 && (
           <View className="flex-row flex-wrap gap-2 mb-3">
             {data.hiringCriteria.requiredSkills?.map((skill, index) => (
               <View key={index} className="px-3 py-1 bg-gray-100 rounded-full">
@@ -47,12 +47,6 @@ const JobCard = ({ data }) => {
             ))}
           </View>
         )}
-
-        {/* <Text className="mb-1 text-base font-poppins-600">Job Description</Text>
-
-        <Text className="mb-5 text-sm text-gray-500 font-poppins-500">
-          Looking for a good and kind employee. Willing to learn.
-        </Text> */}
       </View>
     </View>
   );

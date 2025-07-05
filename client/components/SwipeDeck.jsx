@@ -47,7 +47,8 @@ const SwipeDeck = () => {
         const { success, data } = response.data;
 
         if (success) {
-          setCards(shuffleArray(data));
+          const shuffledCards = shuffleArray(data);
+          setCards(shuffledCards);
         }
       } catch (error) {
         console.error("Failed to fetch cards:", error.message);
@@ -70,17 +71,28 @@ const SwipeDeck = () => {
   return (
     <View className="justify-center flex-1">
       <Swiper
+        key={`deck-${role}-${cards.length}`}
         cards={cards}
-        renderCard={(card, index) =>
-          role === "jobSeeker" ? (
-            <JobCard data={card} />
-          ) : (
-            <ProfileCard
-              card={card}
-              color={bgColors[index % bgColors.length]}
-            />
-          )
-        }
+        renderCard={(card, index) => {
+          if (card.companyName) {
+            return <JobCard data={card} />;
+          } else if (card.userId) {
+            return (
+              <ProfileCard
+                card={card}
+                color={bgColors[index % bgColors.length]}
+              />
+            );
+          } else {
+            return (
+              <View className="items-center justify-center flex-1">
+                <Text className="text-lg text-gray-500 font-poppins-500">
+                  Invalid card data
+                </Text>
+              </View>
+            );
+          }
+        }}
         stackSize={3}
         cardIndex={0}
         backgroundColor="transparent"

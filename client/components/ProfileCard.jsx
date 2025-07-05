@@ -2,7 +2,7 @@ import { Image, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const ProfileCard = ({ card, color }) => {
-  if (!card) return null;
+  // if (!card) return null;
   return (
     <View
       className="p-5 rounded-2xl h-[89%] shadow-sm"

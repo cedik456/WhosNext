@@ -14,5 +14,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
-const styles = StyleSheet.create({});
