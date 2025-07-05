@@ -58,6 +58,30 @@ const SwipeDeck = () => {
     fetchCards();
   }, []);
 
+  const handleSwipe = async (targetId, action) => {
+    try {
+      const token = await getToken();
+      if (!token) return;
+
+      const response = await api.post(
+        "/swipe",
+        { targetId, action },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.match) {
+        console.log("It's a match");
+      }
+    } catch (error) {
+      console.error("Swipe:", error);
+      Alert.alert("Something went wrong.");
+    }
+  };
+
   if (!cards.length) {
     return (
       <View className="items-center justify-center flex-1">
@@ -97,6 +121,12 @@ const SwipeDeck = () => {
         cardIndex={0}
         backgroundColor="transparent"
         verticalSwipe={false}
+        onSwipedRight={(cardIndex) =>
+          handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "like")
+        }
+        onSwipedLeft={(cardIndex) =>
+          handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "nope")
+        }
         disableTopSwipe
         disableBottomSwipe
       />
