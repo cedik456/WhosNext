@@ -1,5 +1,6 @@
-// const JobSeeker = require("../models/JobSeekerSchema");
-// const Recruiter = require("../models/RecruiterSchema");
+const JobSeeker = require("../models/JobSeekerSchema");
+const Match = require("../models/MatchSchema");
+const Recruiter = require("../models/RecruiterSchema");
 const Swipe = require("../models/SwipeSchema");
 const User = require("../models/UserSchema");
 
@@ -50,50 +51,53 @@ exports.handleSwipe = async (req, res) => {
 
     await Swipe.create({ userId, targetId, action });
 
-    // let isMatch = false;
-    // let mutual = null;
+    let isMatch = false;
+    let mutual = null;
+    let jobSeekerId = null;
+    let recruiterId = null;
 
-    // if (action === "like") {
-    //   mutual = await Swipe.findOne({
-    //     userId: targetId,
-    //     targetId: userId,
-    //     action: "like",
-    //   });
-    // }
+    if (action === "like") {
+      mutual = await Swipe.findOne({
+        userId: targetId,
+        targetId: userId,
+        action: "like",
+      });
+    }
 
-    // if (mutual) {
-    //   isMatch = true;
+    if (mutual) {
+      isMatch = true;
 
-    //   const currentUser = await User.findById(userId);
-    //   const targetUser = await User.findById(targetId);
+      if (currentUser.role === "jobSeeker" && targetUser.role === "recruiter") {
+        const jobSeeker = await JobSeeker.findOne({ userId: currentUser._id });
+        const recruiter = await Recruiter.findOne({ userId: targetUser._id });
+        if (jobSeeker && recruiter) {
+          jobSeekerId = jobSeeker._id;
+          recruiterId = recruiter._id;
+        }
+      } else if (
+        currentUser.role === "recruiter" &&
+        targetUser.role === "jobSeeker"
+      ) {
+        const recruiter = await Recruiter.findOne({ userId: currentUser._id });
+        const jobSeeker = await JobSeeker.findOne({ userId: targetUser._id });
+        if (recruiter && jobSeeker) {
+          recruiterId = recruiter._id;
+          jobSeekerId = jobSeeker._id;
+        }
+      }
+    }
 
-    //   let jobSeekerId = null;
-    //   let recruiterId = null;
-
-    //   if (currentUser.role === "jobSeeker" && targetUser.role === "recruiter") {
-    //     const jobSeeker = await JobSeeker.findOne({ userId: currentUser._id });
-    //     const recruiter = await Recruiter.findOne({ userId: targetUser._id });
-    //     if (jobSeeker && recruiter) {
-    //       jobSeekerId = jobSeeker._id;
-    //       recruiterId = recruiter._id;
-    //     }
-    //   } else if (
-    //     currentUser.role === "recruiter" &&
-    //     targetUser.role === "jobSeeker"
-    //   ) {
-    //     const recruiter = await Recruiter.findOne({ userId: currentUser._id });
-    //     const jobSeeker = await JobSeeker.findOne({ userId: targetUser._id });
-    //     if (recruiter && jobSeeker) {
-    //       recruiterId = recruiter._id;
-    //       jobSeekerId = jobSeeker._id;
-    //     }
-    //   }
-    // }
+    if (jobSeekerId && recruiterId) {
+      const matchExists = await Match.findOne({ jobSeekerId, recruiterId });
+      if (!matchExists) {
+        await Match.create({ jobSeekerId, recruiterId });
+      }
+    }
 
     return res.status(201).json({
       success: true,
       message: "Swipe recorded successfully",
-      //   match: isMatch,
+      match: isMatch,
     });
   } catch (error) {
     console.error("Swipe error:", error.message);
