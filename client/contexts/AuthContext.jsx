@@ -31,9 +31,9 @@ export function AuthProvider({ children }) {
         password,
       });
 
-      console.log("Register Response:", response.data);
-
       const { token, user } = response.data;
+
+      console.log("Registered successfully!");
 
       await saveToken(token);
 
@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
 
       return { success: true, isOnboarded: user.isOnboarded };
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Register error:", error);
       return { success: false, message: error?.response?.data?.message };
     }
   }
