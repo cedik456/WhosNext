@@ -1,0 +1,73 @@
+const JobSeeker = require("../models/JobSeekerSchema");
+const Match = require("../models/MatchSchema");
+const Recruiter = require("../models/RecruiterSchema");
+const User = require("../models/UserSchema");
+
+exports.getMatches = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (!user || !user.role) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized or incomplete profile",
+      });
+    }
+
+    let matches;
+
+    if (user.role === "jobSeeker") {
+      const jobSeeker = await JobSeeker.findOne({ userId });
+
+      if (!jobSeeker) {
+        return res.status(404).json({
+          success: false,
+          message: "JobSeeker profile not found ",
+        });
+      }
+
+      matches = await Match.find({ jobSeekerId: jobSeeker._id })
+        .populate({
+          path: "recruiterId",
+          populate: {
+            path: "userId",
+            select: "name avatar",
+          },
+        })
+        .sort({ createdAt: -1 });
+    }
+
+    if (user.role === "recruiter") {
+      const recruiter = await Recruiter.findOne({ userId });
+      if (!recruiter) {
+        return res.status(404).json({
+          success: false,
+          message: "Recruiter profile not found",
+        });
+      }
+
+      matches = await Match.find({ recruiterId: recruiter._id })
+        .populate({
+          path: "jobSeekerId",
+          populate: {
+            path: "userId",
+            select: "name avatar",
+          },
+        })
+        .sort({ createdAt: -1 });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: matches,
+    });
+  } catch (error) {
+    console.error("Get matches error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while retrieving matches.",
+      error: error.message,
+    });
+  }
+};
