@@ -47,7 +47,8 @@ const SwipeDeck = () => {
         const { success, data } = response.data;
 
         if (success) {
-          setCards(shuffleArray(data));
+          const shuffledCards = shuffleArray(data);
+          setCards(shuffledCards);
         }
       } catch (error) {
         console.error("Failed to fetch cards:", error.message);
@@ -56,6 +57,30 @@ const SwipeDeck = () => {
 
     fetchCards();
   }, []);
+
+  const handleSwipe = async (targetId, action) => {
+    try {
+      const token = await getToken();
+      if (!token) return;
+
+      const response = await api.post(
+        "/swipe",
+        { targetId, action },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.match) {
+        console.log("It's a match");
+      }
+    } catch (error) {
+      console.error("Swipe:", error);
+      Alert.alert("Something went wrong.");
+    }
+  };
 
   if (!cards.length) {
     return (
@@ -70,21 +95,38 @@ const SwipeDeck = () => {
   return (
     <View className="justify-center flex-1">
       <Swiper
+        key={`deck-${role}-${cards.length}`}
         cards={cards}
-        renderCard={(card, index) =>
-          role === "jobSeeker" ? (
-            <JobCard data={card} />
-          ) : (
-            <ProfileCard
-              card={card}
-              color={bgColors[index % bgColors.length]}
-            />
-          )
-        }
+        renderCard={(card, index) => {
+          if (card.companyName) {
+            return <JobCard data={card} />;
+          } else if (card.userId) {
+            return (
+              <ProfileCard
+                card={card}
+                color={bgColors[index % bgColors.length]}
+              />
+            );
+          } else {
+            return (
+              <View className="items-center justify-center flex-1">
+                <Text className="text-lg text-gray-500 font-poppins-500">
+                  Invalid card data
+                </Text>
+              </View>
+            );
+          }
+        }}
         stackSize={3}
         cardIndex={0}
         backgroundColor="transparent"
         verticalSwipe={false}
+        onSwipedRight={(cardIndex) =>
+          handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "like")
+        }
+        onSwipedLeft={(cardIndex) =>
+          handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "nope")
+        }
         disableTopSwipe
         disableBottomSwipe
       />

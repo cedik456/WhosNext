@@ -1,14 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Text, View } from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Messages = () => {
   return (
-    <View className="flex-1 justify-center items-center">
-      <Text>Messages</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>Hello</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 
 export default Messages;
-
-const styles = StyleSheet.create({});

@@ -1,5 +1,6 @@
 const JobSeeker = require("../models/JobSeekerSchema");
 const Recruiter = require("../models/RecruiterSchema");
+const Swipe = require("../models/SwipeSchema");
 const User = require("../models/UserSchema");
 
 exports.getAllRecruiters = async (req, res) => {
@@ -52,6 +53,9 @@ exports.getRecommendations = async (req, res) => {
       });
     }
 
+    const swipes = await Swipe.find({ userId });
+    const swipeIds = swipes.map((swipe) => swipe.targetId.toString());
+
     if (user.role === "jobSeeker") {
       const jobSeeker = await JobSeeker.findOne({ userId });
 
@@ -63,6 +67,7 @@ exports.getRecommendations = async (req, res) => {
       }
 
       const matches = await Recruiter.find({
+        userId: { $nin: swipeIds },
         $or: [
           {
             "hiringCriteria.requiredSkills": { $in: jobSeeker.skills },
@@ -90,6 +95,7 @@ exports.getRecommendations = async (req, res) => {
       }
 
       const matches = await JobSeeker.find({
+        userId: { $nin: swipeIds },
         $or: [
           {
             skills: { $in: recruiter.hiringCriteria.requiredSkills },
@@ -101,7 +107,9 @@ exports.getRecommendations = async (req, res) => {
             },
           },
         ],
-      }).populate("userId", "name avatar");
+      })
+        .populate("userId", "name avatar")
+        .lean();
 
       return res.status(200).json({ success: true, data: matches });
     }
