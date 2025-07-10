@@ -85,8 +85,8 @@ const TabsLayout = () => {
             ),
         }}
       />
-      <Tabs.Screen
-        name="messages"
+      {/* <Tabs.Screen
+        name="chat"
         options={{
           tabBarLabel: "Chats",
           tabBarIcon: ({ focused }) =>
@@ -96,7 +96,7 @@ const TabsLayout = () => {
               <Ionicons name="chatbubble-sharp" size={24} color="#9ca3af" />
             ),
         }}
-      />
+      /> */}
     </Tabs>
   );
 };

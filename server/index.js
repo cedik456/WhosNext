@@ -17,6 +17,7 @@ const onBoardingRoutes = require("./routes/onboardingRoutes");
 const cardRoutes = require("./routes/cardRoutes");
 const swipeRoutes = require("./routes/swipeRoutes");
 const matchRoutes = require("./routes/matchRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 
 // route links
 
@@ -25,6 +26,7 @@ app.use("/api/onboarding/", onBoardingRoutes);
 app.use("/api/card/", cardRoutes);
 app.use("/api/swipe/", swipeRoutes);
 app.use("/api/matches/", matchRoutes);
+app.use("/api/messages/", messageRoutes);
 
 // connection
 mongoose
