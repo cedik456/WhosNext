@@ -76,12 +76,12 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="matches"
         options={{
-          tabBarLabel: "Liked you",
+          tabBarLabel: "Matches",
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <AntDesign name="like1" size={24} color="black" />
+              <Ionicons name="chatbubble-sharp" size={24} color="black" />
             ) : (
-              <AntDesign name="like1" size={24} color="#9ca3af" />
+              <Ionicons name="chatbubble-sharp" size={24} color="#9ca3af" />
             ),
         }}
       />

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList, Text, View, Image, Pressable } from "react-native";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -15,50 +15,58 @@ const Matches = () => {
 
   const router = useRouter();
 
+  const fetchMatches = async () => {
+    try {
+      const token = await getToken();
+
+      const response = await api.get("/matches", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { success, data } = response.data;
+
+      if (success) {
+        setMatches(data);
+      }
+    } catch (error) {
+      console.error("Error fetching matches:", error.message);
+    }
+  };
+
+  const fetchConversations = async () => {
+    try {
+      const token = await getToken();
+
+      const response = await api.get("/messages/conversations", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { success, data } = response.data;
+
+      if (success) {
+        const sorted = data.sort(
+          (a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt)
+        );
+        setMessages(sorted);
+      }
+    } catch (error) {
+      console.error("Error fetching conversations:", error.message);
+    }
+  };
   useEffect(() => {
-    const fetchMatches = async () => {
-      try {
-        const token = await getToken();
-
-        const response = await api.get("/matches", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const { success, data } = response.data;
-
-        if (success) {
-          setMatches(data);
-        }
-      } catch (error) {
-        console.error("Error fetching matches:", error.message);
-      }
-    };
-
-    const fetchConversations = async () => {
-      try {
-        const token = await getToken();
-
-        const response = await api.get("/messages/conversations", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const { success, data } = response.data;
-
-        if (success) {
-          setMessages(data);
-        }
-      } catch (error) {
-        console.error("Error fetching conversations:", error.message);
-      }
-    };
-
     fetchMatches();
     fetchConversations();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchConversations();
+    }, [])
+  );
 
   const renderMatches = ({ item }) => {
     const user = item.jobSeekerId?.userId || item.recruiterId?.userId;
@@ -109,7 +117,8 @@ const Matches = () => {
             <FlatList
               data={messages}
               renderItem={({ item }) => {
-                const { user, lastMessage, matchId, lastMessageAt } = item;
+                const { user, lastMessage, matchId, lastMessageAt, isUnread } =
+                  item;
 
                 return (
                   <Pressable
@@ -134,8 +143,14 @@ const Matches = () => {
                           <Text className="text-base text-gray-600 font-poppins-600">
                             {user.name}
                           </Text>
-                          <Text className="text-sm text-gray-500">
-                            {lastMessage ?? "Say hi!"}
+                          <Text
+                            className={`text-sm ${
+                              isUnread > 0
+                                ? "font-poppins-600 text-black"
+                                : "text-gray-500"
+                            }`}
+                          >
+                            {lastMessage ?? "Start a conversation !"}
                           </Text>
                         </View>
                       </View>

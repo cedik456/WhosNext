@@ -48,7 +48,22 @@ const Chat = () => {
       }
     };
 
+    const markAsRead = async () => {
+      try {
+        const token = await getToken();
+
+        await api.patch(`/messages/markAsRead/${matchId}`, null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        console.error("Reading messages error:", error.message);
+      }
+    };
+
     if (matchId) {
+      markAsRead();
       fetchMessages();
       fetchCurrentUser();
     }
@@ -148,6 +163,11 @@ const Chat = () => {
               }
               contentContainerStyle={{ padding: 16, flexGrow: 1 }}
               keyboardShouldPersistTaps="handled"
+              onContentSizeChange={() => {
+                if (flatListRef.current) {
+                  flatListRef.current.scrollToEnd({ animated: true });
+                }
+              }}
             />
             <View className="flex-row items-center gap-4 p-4 bg-white">
               <Pressable>

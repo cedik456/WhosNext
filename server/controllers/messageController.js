@@ -39,6 +39,12 @@ exports.getConversations = async (req, res) => {
 
         const user = match.jobSeekerId?.userId || match.recruiterId?.userId;
 
+        const unreadCount = await Message.countDocuments({
+          matchId: match._id,
+          sender: { $ne: userId },
+          isRead: false,
+        });
+
         return {
           matchId: match._id,
           user: {
@@ -47,6 +53,7 @@ exports.getConversations = async (req, res) => {
           },
           lastMessage: lastMsg ? lastMsg.text : null,
           lastMessageAt: lastMsg ? lastMsg.createdAt : null,
+          isUnread: unreadCount,
         };
       })
     );
@@ -112,6 +119,31 @@ exports.sendMessages = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Something went wrong while sending the message",
+      error: error.message,
+    });
+  }
+};
+
+exports.markMessagesAsRead = async (req, res) => {
+  try {
+    const { matchId } = req.params;
+    const userId = req.user._id;
+
+    const result = await Message.updateMany(
+      {
+        matchId,
+        isRead: false,
+        sender: { $ne: userId },
+      },
+      { $set: { isRead: true } }
+    );
+
+    res.status(200).json({ success: true, updatedCount: result.modifiedCount });
+  } catch (error) {
+    console.error("Error marking messages as read:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while reading the message",
       error: error.message,
     });
   }
