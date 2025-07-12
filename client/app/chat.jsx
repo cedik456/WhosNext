@@ -13,10 +13,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
-import Avatar1 from "../assets/Avatar2.png";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { getToken } from "../utils/storage";
 import api from "../utils/axiosInstance";
+import socket from "../utils/socket";
 
 const Chat = () => {
   const router = useRouter();
@@ -62,11 +62,24 @@ const Chat = () => {
       }
     };
 
+    const handleNewMessage = (message) => {
+      if (message.matchId === matchId) {
+        setMessages((prev) => [...prev, message]);
+      }
+    };
+
+    socket.emit("join", matchId);
+    socket.on("newMessage", handleNewMessage);
+
     if (matchId) {
       markAsRead();
       fetchMessages();
       fetchCurrentUser();
     }
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
   }, [matchId]);
 
   useEffect(() => {
@@ -93,6 +106,7 @@ const Chat = () => {
       const { success, data } = response.data;
 
       if (success) {
+        socket.emit("sendMessage", { matchId, message: data });
         setMessages((prev) => [...prev, response.data.data]);
         setText("");
       }

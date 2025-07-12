@@ -80,7 +80,7 @@ const Matches = () => {
       <View className="items-center mr-4">
         <Image
           source={{ uri: user.avatar }}
-          className="w-20 h-20 border border-gray-500 rounded-full"
+          className="w-20 h-20 border border-gray-400 rounded-full "
         />
         <Text className="mt-1 text-base text-gray-800 font-poppins-500">
           {displayName}
@@ -140,24 +140,36 @@ const Matches = () => {
                           className="w-16 h-16 mr-3 border border-gray-500 rounded-full"
                         />
                         <View>
-                          <Text className="text-base text-gray-600 font-poppins-600">
+                          <Text className="text-lg text-gray-600 font-poppins-600">
                             {user.name}
                           </Text>
-                          <Text
-                            className={`text-sm ${
-                              isUnread > 0
-                                ? "font-poppins-600 text-black"
-                                : "text-gray-500"
-                            }`}
-                          >
-                            {lastMessage ?? "Start a conversation !"}
-                          </Text>
+                          <View className="flex-row items-center gap-4">
+                            <Text
+                              className={`text-base ${
+                                isUnread > 0
+                                  ? "font-poppins-600 text-black"
+                                  : "text-gray-500"
+                              }`}
+                            >
+                              {lastMessage ?? "Start a conversation !"}
+                            </Text>
+
+                            <Text className="text-xs text-gray-400">
+                              {lastMessageAt
+                                ? dayjs(lastMessageAt).fromNow()
+                                : ""}
+                            </Text>
+                          </View>
                         </View>
                       </View>
 
-                      <Text className="text-xs text-gray-400">
-                        {lastMessageAt ? dayjs(lastMessageAt).fromNow() : ""}
-                      </Text>
+                      <View className="flex-row items-center gap-10">
+                        {isUnread > 0 ? (
+                          <View className="w-2 h-2 bg-blue-600 rounded-full"></View>
+                        ) : (
+                          <View></View>
+                        )}
+                      </View>
                     </View>
                   </Pressable>
                 );

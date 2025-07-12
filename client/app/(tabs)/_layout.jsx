@@ -67,9 +67,9 @@ const TabsLayout = () => {
           tabBarLabel: "People",
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <FontAwesome6 name="bars-staggered" size={24} color="black" />
+              <FontAwesome6 name="bars-staggered" size={25} color="black" />
             ) : (
-              <FontAwesome6 name="bars-staggered" size={24} color="#9ca3af" />
+              <FontAwesome6 name="bars-staggered" size={25} color="#9ca3af" />
             ),
         }}
       />
