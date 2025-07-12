@@ -50,8 +50,14 @@ const Work = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 px-6 bg-white">
-      <View className="justify-between flex-1 gap-6 mt-14">
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
+        <View
+          className="h-1 bg-black rounded-r-full "
+          style={{ width: `${(3 / 5) * 100}%` }}
+        />
+      </View>
+      <View className="justify-between flex-1 gap-6 px-6 mt-14">
         <View>
           <Text className="mb-3 text-3xl font-poppins-600">
             Let's talk about what{"\n"}you want, User.

@@ -105,55 +105,64 @@ const Skills = () => {
   const skillOptions = SKILL_SETS.skills;
 
   return (
-    <SafeAreaView className="flex-1 px-6 bg-white">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="gap-3 mt-14">
-          <Text className="text-3xl font-poppins-600">
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
+        <View
+          className="h-1 bg-black rounded-r-full "
+          style={{ width: `${(4 / 5) * 100}%` }}
+        />
+      </View>
+
+      <View className="justify-between flex-1 px-6 mt-14">
+        <View>
+          <Text className="mb-2 text-3xl font-poppins-600">
             Let's talk about
             {role === "recruiter"
               ? " your\nskill requirements"
               : " your \nskills"}
           </Text>
-          <Text className="text-base text-gray-600 font-poppins-500">
+          <Text className="mb-4 text-base text-gray-600 font-poppins-500">
             Select 3 to 8 skills that match your{" "}
             {role === "recruiter" ? "requirements" : "expertise "}
           </Text>
 
-          <View className="flex-row flex-wrap mb-5">
-            {skillOptions.map((skill) => (
-              <View key={skill}>
-                <Chip
-                  onPress={() => toggleSkill(skill)}
-                  style={{
-                    margin: 4,
-                    padding: 4,
-                    backgroundColor: selectedSkills.includes(skill)
-                      ? "#000"
-                      : "#F6F6F6",
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View className="flex-row flex-wrap mb-5">
+              {skillOptions.map((skill) => (
+                <View key={skill}>
+                  <Chip
+                    onPress={() => toggleSkill(skill)}
+                    style={{
+                      margin: 4,
+                      padding: 4,
+                      backgroundColor: selectedSkills.includes(skill)
+                        ? "#000"
+                        : "#F6F6F6",
 
-                    borderWidth: 1,
-                    borderColor: "#ccc",
-                  }}
-                  textStyle={{
-                    color: selectedSkills.includes(skill) ? "#fff" : "#000",
-                    fontFamily: "Poppins_500Medium",
-                  }}
-                >
-                  {skill}
-                </Chip>
-              </View>
-            ))}
-          </View>
+                      borderWidth: 1,
+                      borderColor: "#ccc",
+                    }}
+                    textStyle={{
+                      color: selectedSkills.includes(skill) ? "#fff" : "#000",
+                      fontFamily: "Poppins_500Medium",
+                    }}
+                  >
+                    {skill}
+                  </Chip>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
 
-      <Button
-        title="Next"
-        className="mb-10 rounded-full"
-        textClassName="text-center"
-        onPress={handleSubmit}
-        disabled={selectedSkills.length < 3}
-      />
+        <Button
+          title="Next"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
+          onPress={handleSubmit}
+          disabled={selectedSkills.length < 3}
+        />
+      </View>
     </SafeAreaView>
   );
 };

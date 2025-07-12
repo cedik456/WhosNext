@@ -1,8 +1,7 @@
-import { View, Text, Alert } from "react-native";
-import React, { useState } from "react";
+import { View, Text, Alert, TextInput } from "react-native";
+import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../../components/Button";
-import { TextInput } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
@@ -43,8 +42,14 @@ const HiringLocation = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 px-6 bg-white">
-      <View className="justify-between flex-1 mt-14">
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
+        <View
+          className="h-1 bg-black rounded-r-full "
+          style={{ width: `${(4 / 4) * 100}%` }}
+        />
+      </View>
+      <View className="justify-between flex-1 px-6 mt-14">
         <View className="gap-3">
           <Text className="text-3xl font-poppins-600">
             Where are you hiring?
@@ -56,9 +61,9 @@ const HiringLocation = () => {
             placeholder="Enter your location"
             value={location}
             onChangeText={setLocation}
-            className="py-4 bg-white border-b-2 border-gray-300 font-poppins"
+            className="py-4 border-b-2 border-gray-300 font-poppins-500"
           />
-          <Text className="text-sm text-blue-700 font-poppins">
+          <Text className="text-base text-blue-700 font-poppins">
             Learn about our privacy and policy
           </Text>
         </View>

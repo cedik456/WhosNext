@@ -44,8 +44,14 @@ const Location = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 px-6 bg-white">
-      <View className="justify-between flex-1 mt-14">
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
+        <View
+          className="h-1 bg-black rounded-r-full "
+          style={{ width: `${(5 / 5) * 100}%` }}
+        />
+      </View>
+      <View className="justify-between flex-1 px-6 mt-14">
         <View className="items-center mt-20 ">
           <Text className="mb-4 text-3xl text-center font-poppins-600">
             Enable Location

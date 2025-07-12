@@ -58,50 +58,57 @@ const JobTitle = () => {
     }
   };
   return (
-    <SafeAreaView className="flex-1 px-6 bg-white">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="gap-4 mt-14">
-          <Text className="text-3xl font-poppins-600">
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
+        <View
+          className="h-1 bg-black rounded-r-full "
+          style={{ width: `${(3 / 5) * 100}%` }}
+        />
+      </View>
+      <View className="justify-between flex-1 px-6 mt-14">
+        <View>
+          <Text className="mb-2 text-3xl font-poppins-600">
             What job are you hiring for?
           </Text>
-          <Text className="text-base text-gray-600 font-poppins-500">
+          <Text className="mb-4 text-base text-gray-600 font-poppins-500">
             Select one job title from the list below.
           </Text>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View className="mb-5 ">
+              {JOB_TITLES.map((title) => (
+                <Chip
+                  key={title}
+                  onPress={() => toggleSelect(title)}
+                  style={{
+                    margin: 4,
+                    paddingHorizontal: 4,
+                    paddingVertical: 6,
+                    backgroundColor:
+                      selectedJobTitle === title ? "#000" : "#F6F6F6",
 
-          <View className="mb-5 ">
-            {JOB_TITLES.map((title) => (
-              <Chip
-                key={title}
-                onPress={() => toggleSelect(title)}
-                style={{
-                  margin: 4,
-                  paddingHorizontal: 4,
-                  paddingVertical: 6,
-                  backgroundColor:
-                    selectedJobTitle === title ? "#000" : "#F6F6F6",
-
-                  borderWidth: 1,
-                  borderColor: "#ccc",
-                }}
-                textStyle={{
-                  color: selectedJobTitle === title ? "#fff" : "#000",
-                  fontFamily: "Poppins_500Medium",
-                }}
-              >
-                {title}
-              </Chip>
-            ))}
-          </View>
+                    borderWidth: 1,
+                    borderColor: "#ccc",
+                  }}
+                  textStyle={{
+                    color: selectedJobTitle === title ? "#fff" : "#000",
+                    fontFamily: "Poppins_500Medium",
+                  }}
+                >
+                  {title}
+                </Chip>
+              ))}
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
 
-      <Button
-        title="Next"
-        className="mb-10 rounded-full"
-        textClassName="text-center"
-        disabled={!selectedJobTitle}
-        onPress={handleSubmit}
-      />
+        <Button
+          title="Next"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
+          disabled={!selectedJobTitle}
+          onPress={handleSubmit}
+        />
+      </View>
     </SafeAreaView>
   );
 };
