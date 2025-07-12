@@ -1,11 +1,13 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text, Modal, Image, Pressable } from "react-native";
+import { useEffect, useState } from "react";
 import { getUserRole } from "../utils/secureUser";
 import JobCard from "./JobCard";
 import ProfileCard from "./ProfileCard";
 import Swiper from "react-native-deck-swiper";
 import { getToken } from "../utils/storage";
 import api from "../utils/axiosInstance";
+import Button from "../components/Button";
+import { useRouter } from "expo-router";
 
 const shuffleArray = (array) => {
   const shuffled = [...array];
@@ -19,6 +21,11 @@ const shuffleArray = (array) => {
 const SwipeDeck = () => {
   const [role, setRole] = useState(null);
   const [cards, setCards] = useState([]);
+
+  const [matchModalVisible, setMatchModalVisible] = useState(false);
+  const [matchedUser, setMatchedUser] = useState(null);
+
+  const router = useRouter();
 
   const bgColors = [
     "#fefce8",
@@ -74,7 +81,27 @@ const SwipeDeck = () => {
       );
 
       if (response.data.match) {
-        console.log("It's a match");
+        console.log("🎯 MATCH DETECTED:", response.data.match);
+        const matchedCard = cards.find(
+          (c) => c.userId === targetId || c._id === targetId
+        );
+
+        console.log("Matched Card:", matchedCard);
+
+        setMatchedUser({
+          name:
+            matchedCard?.userId?.name ||
+            matchedCard?.companyName ||
+            "Matched User",
+          avatar:
+            matchedCard?.userId?.avatar ||
+            matchedCard?.avatar ||
+            matchedCard?.companyPicture ||
+            "",
+          matchId: response.data.match,
+        });
+
+        setMatchModalVisible(true);
       }
     } catch (error) {
       console.error("Swipe:", error);
@@ -130,6 +157,53 @@ const SwipeDeck = () => {
         disableTopSwipe
         disableBottomSwipe
       />
+
+      {matchedUser && (
+        <Modal
+          visible={matchModalVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setMatchModalVisible(false)}
+        >
+          <View className="items-center justify-center flex-1 bg-white">
+            <View className="items-center w-11/12 p-6 bg-white rounded-xl">
+              <Text className="gap-6 mb-4 text-3xl text-center font-poppins-700">
+                It's a match!
+              </Text>
+
+              <Text className="mb-2 text-lg text-center font-poppins-500">
+                You and {matchedUser.name} liked each other!
+              </Text>
+
+              <View className="flex-row gap-4">
+                <Button
+                  title="Start Chat"
+                  className="rounded-full"
+                  onPress={() => {
+                    setMatchModalVisible(false);
+                    router.push({
+                      pathname: "/chat",
+                      params: {
+                        matchId: matchedUser.matchId,
+                        name: matchedUser.name,
+                        avatar: matchedUser.avatar,
+                      },
+                    });
+                  }}
+                />
+              </View>
+
+              <Button
+                title="Continue"
+                onPress={() => {
+                  setMatchModalVisible(false);
+                }}
+                className="px-6 py-3 bg-gray-300 rounded-full"
+              />
+            </View>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 };

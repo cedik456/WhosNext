@@ -87,17 +87,22 @@ exports.handleSwipe = async (req, res) => {
       }
     }
 
+    let createdMatch = null;
+
     if (jobSeekerId && recruiterId) {
-      const matchExists = await Match.findOne({ jobSeekerId, recruiterId });
-      if (!matchExists) {
-        await Match.create({ jobSeekerId, recruiterId });
+      let match = await Match.findOne({ jobSeekerId, recruiterId });
+
+      if (!match) {
+        match = await Match.create({ jobSeekerId, recruiterId });
       }
+
+      createdMatch = match;
     }
 
     return res.status(201).json({
       success: true,
       message: "Swipe recorded successfully",
-      match: isMatch,
+      match: createdMatch?._id,
     });
   } catch (error) {
     console.error("Swipe error:", error.message);

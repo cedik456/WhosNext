@@ -116,6 +116,8 @@ const Matches = () => {
           {messages.length > 0 ? (
             <FlatList
               data={messages}
+              className="h-[490px]"
+              showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {
                 const { user, lastMessage, matchId, lastMessageAt, isUnread } =
                   item;
