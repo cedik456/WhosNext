@@ -148,3 +148,5 @@ exports.markMessagesAsRead = async (req, res) => {
     });
   }
 };
+
+exports.deleteConversation;

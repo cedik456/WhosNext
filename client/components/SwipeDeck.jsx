@@ -96,8 +96,7 @@ const SwipeDeck = () => {
           avatar:
             matchedCard?.userId?.avatar ||
             matchedCard?.avatar ||
-            matchedCard?.companyPicture ||
-            "",
+            matchedCard?.companyPicture,
           matchId: response.data.match,
         });
 
@@ -167,7 +166,7 @@ const SwipeDeck = () => {
         >
           <View className="items-center justify-center flex-1 bg-white">
             <View className="items-center w-11/12 p-6 bg-white rounded-xl">
-              <Text className="gap-6 mb-4 text-3xl text-center font-poppins-700">
+              <Text className="gap-6 mb-2 text-3xl text-center font-poppins-700">
                 It's a match!
               </Text>
 
@@ -175,10 +174,11 @@ const SwipeDeck = () => {
                 You and {matchedUser.name} liked each other!
               </Text>
 
-              <View className="flex-row gap-4">
+              <View className="w-full gap-3">
                 <Button
                   title="Start Chat"
-                  className="rounded-full"
+                  className="w-full rounded-full"
+                  textClassName="text-center"
                   onPress={() => {
                     setMatchModalVisible(false);
                     router.push({
@@ -191,15 +191,15 @@ const SwipeDeck = () => {
                     });
                   }}
                 />
+                <Button
+                  title="Skip for now"
+                  onPress={() => {
+                    setMatchModalVisible(false);
+                  }}
+                  className="w-full bg-gray-300 rounded-full"
+                  textClassName="text-center"
+                />
               </View>
-
-              <Button
-                title="Continue"
-                onPress={() => {
-                  setMatchModalVisible(false);
-                }}
-                className="px-6 py-3 bg-gray-300 rounded-full"
-              />
             </View>
           </View>
         </Modal>
