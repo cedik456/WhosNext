@@ -1,4 +1,6 @@
 const Recruiter = require("../../models/RecruiterSchema");
+const cloudinary = require("../../config/cloudinary");
+const streamifier = require("streamifier");
 
 exports.saveCompanyName = async (req, res) => {
   try {
@@ -57,6 +59,7 @@ exports.saveJobTitle = async (req, res) => {
     });
   }
 };
+
 exports.saveRequirements = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -110,5 +113,43 @@ exports.saveHiringLocation = async (req, res) => {
       success: false,
       message: "Server error while saving hiring location",
     });
+  }
+};
+
+exports.uploadCompanyLogo = async (req, res) => {
+  const userId = req.user.id;
+  const file = req.file;
+
+  if (!file) {
+    return res
+      .status(400)
+      .json({ success: false, message: "No file uploaded" });
+  }
+
+  try {
+    const base64Image = `data:${file.mimetype};base64,${file.buffer.toString(
+      "base64"
+    )}`;
+
+    const result = await cloudinary.uploader.upload(base64Image, {
+      folder: "whos-next/company-pictures",
+      public_id: `logo_${userId}`,
+      overwrite: true,
+    });
+
+    const recruiter = await Recruiter.findOneAndUpdate(
+      { userId },
+      { companyPicture: result.secure_url },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Company logo uploaded",
+      url: result.secure_url,
+    });
+  } catch (error) {
+    console.error("Logo upload server error:", error);
+    res.status(500).json({ success: false, message: "Server error." });
   }
 };

@@ -78,7 +78,7 @@ const Skills = () => {
 
       if (success) {
         if (role === "recruiter") {
-          router.replace("/recruiter/hiringLocation");
+          router.replace("/recruiter/companyPicture");
         } else {
           router.replace("/jobSeeker/location");
         }

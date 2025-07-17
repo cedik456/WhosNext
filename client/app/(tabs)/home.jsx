@@ -7,7 +7,7 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 const Home = () => {
   // const { logout } = useAuth();
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       <View className="px-5">
         <View className="absolute z-10 top-5 left-5 right-5 ">
           <View className="flex-row items-center justify-between">

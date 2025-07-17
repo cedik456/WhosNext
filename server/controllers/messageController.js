@@ -37,7 +37,21 @@ exports.getConversations = async (req, res) => {
           })
           .lean();
 
-        const user = match.jobSeekerId?.userId || match.recruiterId?.userId;
+        const isJobSeeker = !!jobSeeker;
+
+        const user = isJobSeeker
+          ? {
+              name:
+                match.recruiterId?.userId?.name ||
+                match.recruiterId?.companyName ||
+                "Unknown",
+              avatar: match.recruiterId?.userId?.avatar || "",
+              companyPicture: match.recruiterId?.companyPicture || "",
+            }
+          : {
+              name: match.jobSeekerId?.userId?.name || "Unknown",
+              avatar: match.jobSeekerId?.userId?.avatar || "",
+            };
 
         const unreadCount = await Message.countDocuments({
           matchId: match._id,
@@ -47,10 +61,7 @@ exports.getConversations = async (req, res) => {
 
         return {
           matchId: match._id,
-          user: {
-            name: user?.name || match.recruiterId?.companyName || "Unknown",
-            avatar: user?.avatar || "",
-          },
+          user,
           lastMessage: lastMsg ? lastMsg.text : null,
           lastMessageAt: lastMsg ? lastMsg.createdAt : null,
           isUnread: unreadCount,
@@ -148,5 +159,3 @@ exports.markMessagesAsRead = async (req, res) => {
     });
   }
 };
-
-exports.deleteConversation;

@@ -69,17 +69,20 @@ const Matches = () => {
   );
 
   const renderMatches = ({ item }) => {
+    const isJobSeeker = !!item.recruiterId;
     const user = item.jobSeekerId?.userId || item.recruiterId?.userId;
     const companyName = item.recruiterId?.companyName;
 
     const displayName = user?.name || companyName || "Recruiter";
 
-    if (!user) return null;
+    const profileImage = item.recruiterId?.companyPicture || user?.avatar;
+
+    if (!profileImage) return null;
 
     return (
       <View className="items-center mr-4">
         <Image
-          source={{ uri: user.avatar }}
+          source={{ uri: profileImage }}
           className="w-20 h-20 border border-gray-400 rounded-full "
         />
         <Text className="mt-1 text-base text-gray-800 font-poppins-500">
@@ -91,7 +94,7 @@ const Matches = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="px-5">
+      <View className="px-5 mt-5">
         <View className="mb-5">
           <Text className="mb-3 text-2xl font-poppins-600">Matches</Text>
 
@@ -122,6 +125,8 @@ const Matches = () => {
                 const { user, lastMessage, matchId, lastMessageAt, isUnread } =
                   item;
 
+                const profileImage = user.companyPicture || user.avatar;
+
                 return (
                   <Pressable
                     onPress={() =>
@@ -130,7 +135,7 @@ const Matches = () => {
                         params: {
                           matchId,
                           name: user.name,
-                          avatar: user.avatar,
+                          avatar: profileImage,
                         },
                       })
                     }
@@ -138,8 +143,8 @@ const Matches = () => {
                     <View className="flex-row items-center justify-between">
                       <View className="flex-row items-center mb-4">
                         <Image
-                          source={{ uri: user.avatar }}
-                          className="w-16 h-16 mr-3 border border-gray-500 rounded-full"
+                          source={{ uri: profileImage }}
+                          className="w-16 h-16 mr-3 rounded-full"
                         />
                         <View>
                           <Text className="text-lg text-gray-600 font-poppins-600">

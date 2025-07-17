@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/authMiddleware");
+
+// upload middlewares
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 const {
   saveRole,
   completeOnboarding,
@@ -16,6 +22,7 @@ const {
   saveJobTitle,
   saveRequirements,
   saveHiringLocation,
+  uploadCompanyLogo,
 } = require("../controllers/onboarding/recruiterController");
 
 // Shared
@@ -33,5 +40,6 @@ router.patch("/name/recruiter", auth, saveCompanyName);
 router.patch("/jobTitle/recruiter", auth, saveJobTitle);
 router.patch("/skills/recruiter", auth, saveRequirements);
 router.patch("/hiringLocation/recruiter", auth, saveHiringLocation);
+router.post("/logo/recruiter", auth, upload.single("logo"), uploadCompanyLogo);
 
 module.exports = router;

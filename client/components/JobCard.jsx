@@ -7,7 +7,19 @@ const JobCard = ({ data }) => {
 
   return (
     <View className="bg-white overflow-hidden rounded-2xl h-[89%] shadow-sm">
-      <Image source={Company1} resizeMode="cover" className="w-full h-[60%]" />
+      {data.companyPicture ? (
+        <Image
+          source={{ uri: data.companyPicture }}
+          resizeMode="cover"
+          className="w-full h-[60%]"
+        />
+      ) : (
+        <View className="w-full h-[60%] bg-gray-100 items-center justify-center">
+          <Text className="text-lg text-gray-400 font-poppins-500">
+            No Company Logo
+          </Text>
+        </View>
+      )}
 
       <View className="p-4">
         <View className="flex-row items-center mb-1">
