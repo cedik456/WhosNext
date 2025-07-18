@@ -6,10 +6,8 @@ import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import {
   AntDesign,
-  Feather,
   FontAwesome,
   FontAwesome5,
-  FontAwesome6,
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
@@ -47,8 +45,12 @@ const Profile = () => {
           <View className="items-center">
             <View className="relative">
               <Image
-                source={{ uri: profile?.avatar || profile?.companyPicture }}
-                className="w-[100px] h-[100px] rounded-full border"
+                source={
+                  profile?.role === "jobSeeker"
+                    ? { uri: profile?.avatar }
+                    : { uri: profile?.companyPicture }
+                }
+                className="w-[100px] h-[100px] rounded-full "
               />
               {/* <TouchableOpacity className="absolute bottom-0 right-0">
             <FontAwesome name="camera" size={20} />
@@ -83,7 +85,9 @@ const Profile = () => {
           <View className="px-6 mt-8 ">
             <View className="p-5 rounded-xl bg-gray-50">
               <ProfileItem
-                label="Work Preferences"
+                label={`${
+                  profile?.role === "jobSeeker" ? "Work" : "Hiring"
+                } Preferences`}
                 value=""
                 icon="suitcase"
                 iconSet={FontAwesome}
@@ -130,6 +134,7 @@ const Profile = () => {
           <View className="px-6 mt-8 ">
             <Button
               title="Logout"
+              onPress={logout}
               className="px-2 py-4 bg-red-500 rounded-xl "
               textClassName="text-center"
             />

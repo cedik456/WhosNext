@@ -32,6 +32,13 @@ exports.getMatches = async (req, res) => {
           path: "recruiterId",
           populate: {
             path: "userId",
+            select: "name avatar companyName companyPicture",
+          },
+        })
+        .populate({
+          path: "jobSeekerId",
+          populate: {
+            path: "userId",
             select: "name avatar",
           },
         })
