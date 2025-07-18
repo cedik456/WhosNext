@@ -40,7 +40,7 @@ const TabsLayout = () => {
           left: 0,
           right: 0,
           height: 60,
-          backgroundColor: "transparent",
+          backgroundColor: "#F3F3F3",
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,

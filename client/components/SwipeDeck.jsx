@@ -166,6 +166,9 @@ const SwipeDeck = () => {
         >
           <View className="items-center justify-center flex-1 bg-white">
             <View className="items-center w-11/12 p-6 bg-white rounded-xl">
+              {/* <View className="flex-row items-center justify-center mb-6">
+            
+            </View> */}
               <Text className="gap-6 mb-2 text-3xl text-center font-poppins-700">
                 It's a match!
               </Text>
