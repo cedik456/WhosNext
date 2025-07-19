@@ -86,11 +86,14 @@ const CompanyPicture = () => {
       </View>
       <View className="flex-1 px-6 mt-14">
         <View>
-          <Text className="mb-4 text-3xl font-poppins-600">
+          <Text className="mb-2 text-3xl font-poppins-600">
             Upload your Company Logo
           </Text>
+          <Text className="mb-4 text-gray-400 font-poppins">
+            This is how it will appear on your profile
+          </Text>
           <View
-            className={`relative items-center w-full h-[80%] ${
+            className={`relative items-center w-full h-[75%] ${
               image ? "" : "border-2 border-gray-300 border-dashed"
             } rounded-xl`}
           >
@@ -107,7 +110,7 @@ const CompanyPicture = () => {
                     height: "100%",
                     borderRadius: 16,
                   }}
-                  resizeMode="cover"
+                  resizeMode="contain"
                   pointerEvents="none"
                 />
               ) : (

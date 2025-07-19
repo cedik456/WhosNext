@@ -99,11 +99,11 @@ const getSkillColor = (skill) => {
     case "php":
       return "bg-indigo-100";
     case "laravel":
-      return "bg-red-100";
+      return "bg-purple-100";
     case "ui/ux design":
       return "bg-pink-100";
     case "figma":
-      return "bg-pink-100";
+      return "bg-orange-100";
     case "photoshop":
       return "bg-rose-100";
     case "project management":

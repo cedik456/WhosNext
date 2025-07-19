@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getUserRole } from "../utils/secureUser";
 import JobCard from "./JobCard";
 import ProfileCard from "./ProfileCard";
+import FallBackCard from "./FallBackCard";
 import Swiper from "react-native-deck-swiper";
 import { getToken } from "../utils/storage";
 import api from "../utils/axiosInstance";
@@ -109,13 +110,7 @@ const SwipeDeck = () => {
   };
 
   if (!cards.length) {
-    return (
-      <View className="items-center justify-center flex-1">
-        <Text className="text-lg text-gray-500 font-poppins-500">
-          No available profiles yet.
-        </Text>
-      </View>
-    );
+    return <FallBackCard />;
   }
 
   return (

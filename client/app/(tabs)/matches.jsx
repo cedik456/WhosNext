@@ -65,6 +65,7 @@ const Matches = () => {
   useFocusEffect(
     useCallback(() => {
       fetchConversations();
+      fetchMatches();
     }, [])
   );
 
@@ -73,7 +74,7 @@ const Matches = () => {
     const user = item.jobSeekerId?.userId || item.recruiterId?.userId;
     const companyName = item.recruiterId?.companyName;
 
-    const displayName = user?.name || companyName || "Recruiter";
+    const displayName = companyName || "Recruiter";
 
     const profileImage = item.recruiterId?.companyPicture || user?.avatar;
 
@@ -85,7 +86,7 @@ const Matches = () => {
           source={{ uri: profileImage }}
           className="w-20 h-20 border border-gray-400 rounded-full "
         />
-        <Text className="mt-1 text-base text-gray-800 font-poppins-500">
+        <Text className="mt-1 text-base text-gray-700 font-poppins-500">
           {displayName}
         </Text>
       </View>
@@ -107,7 +108,7 @@ const Matches = () => {
               showsHorizontalScrollIndicator={false}
             />
           ) : (
-            <Text className="mt-10 text-center text-gray-400">
+            <Text className="mt-10 text-sm text-center text-gray-400">
               No matches yet.
             </Text>
           )}
@@ -152,13 +153,11 @@ const Matches = () => {
                           </Text>
                           <View className="flex-row items-center gap-4">
                             <Text
-                              className={`text-base ${
-                                isUnread > 0
-                                  ? "font-poppins-600 text-black"
-                                  : "text-gray-500"
+                              className={`font-poppins ${
+                                isUnread > 0 ? " text-black" : "text-gray-500"
                               }`}
                             >
-                              {lastMessage ?? "Start a conversation !"}
+                              {lastMessage ?? "Start a conversation!"}
                             </Text>
 
                             <Text className="text-xs text-gray-400">
