@@ -1,0 +1,254 @@
+import {
+  AntDesign,
+  Feather,
+  FontAwesome,
+  FontAwesome6,
+  Ionicons,
+} from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import PreferredJobTitleModal from "../../modals/PreferredJobTitleModal";
+import ExperienceLevelModal from "../../modals/ExperienceLevelModal";
+import PreferredLocationModal from "../../modals/PreferredLocationModal";
+import PreferredSkillsModal from "../../modals/PreferredSkillsModal";
+
+const RecruiterFilters = () => {
+  const router = useRouter();
+
+  // job title
+  const [isJobModalOpen, setIsJobModalOpen] = useState(false);
+  const [selectedJobTitle, setSelectedJobTitle] = useState("");
+
+  // experience level
+  const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
+  const [selectedExperienceLevel, setSelectedExperienceLevel] = useState(null);
+
+  // location
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
+  // work type
+  const [selectedWorkType, setSelectedWorkType] = useState(null);
+  const workTypes = ["Remote", "Hybrid", "On-site"];
+
+  // skills
+  const [isSkillsModalOpen, setIsSkillsModalOpen] = useState(false);
+  const [preferredSkills, setPreferredSkills] = useState([]);
+
+  // salary
+  const [expectedSalary, setExpectedSalary] = useState("");
+
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="flex-row items-center p-5">
+        <Pressable onPress={() => router.back()} className="mr-16">
+          <FontAwesome6 name="chevron-left" size={24} />
+        </Pressable>
+        <Text className="text-2xl font-poppins-600">Narrow your search</Text>
+      </View>
+      <View className="h-px bg-gray-200" />
+
+      <ScrollView className="flex-1">
+        <View className="gap-4 p-5">
+          <View>
+            <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
+              Preferred Skills
+            </Text>
+            <View className="relative flex-row flex-wrap gap-2 p-4 border border-gray-200 h-36 rounded-xl">
+              {preferredSkills.map((skill, index) => (
+                <View
+                  key={index}
+                  className={`px-3 py-1 rounded-full ${getSkillColor(skill)}`}
+                >
+                  <Text className="text-sm text-gray-800">{skill}</Text>
+                </View>
+              ))}
+              <Pressable
+                // className="absolute p-2 bottom-2 right-2"
+                onPress={() => setIsSkillsModalOpen(true)}
+              >
+                <FontAwesome6 name="plus" size={20} />
+              </Pressable>
+            </View>
+          </View>
+
+          <View>
+            <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
+              Preferred Location
+            </Text>
+            <Pressable
+              onPress={() => setIsLocationModalOpen(true)}
+              className="flex-row items-center justify-between p-4 border border-gray-200 rounded-full"
+            >
+              <Text className="text-base font-poppins-500">
+                {selectedLocation || "Select"}
+              </Text>
+              <AntDesign name="right" size={20} />
+            </Pressable>
+          </View>
+
+          <View>
+            <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
+              Preferred Job Title
+            </Text>
+            <Pressable
+              onPress={() => setIsJobModalOpen(true)}
+              className="flex-row items-center justify-between p-4 border border-gray-200 rounded-full"
+            >
+              <Text className="text-base font-poppins-500">
+                {selectedJobTitle || "Preferred Job Title"}
+              </Text>
+              <AntDesign name="right" size={20} />
+            </Pressable>
+          </View>
+
+          <View>
+            <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
+              Work Type
+            </Text>
+
+            <View className="gap-4 p-4 border border-gray-200 rounded-xl">
+              {workTypes.map((type) => (
+                <Pressable
+                  key={type}
+                  onPress={() => setSelectedWorkType(type)}
+                  className="flex-row justify-between"
+                >
+                  <Text className="font-poppins-500">{type}</Text>
+                  <FontAwesome
+                    name={
+                      selectedWorkType === type ? "check-square" : "square-o"
+                    }
+                    size={24}
+                    color={selectedWorkType === type ? "black" : "gray"}
+                  />
+                </Pressable>
+              ))}
+            </View>
+          </View>
+
+          <View>
+            <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
+              Experience Level
+            </Text>
+            <Pressable
+              onPress={() => setIsExperienceModalOpen(true)}
+              className="flex-row items-center justify-between p-4 border border-gray-200 rounded-full"
+            >
+              <Text className="text-base font-poppins-500">
+                {selectedExperienceLevel || "Select"}
+              </Text>
+              <AntDesign name="right" size={20} />
+            </Pressable>
+          </View>
+
+          <View>
+            <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
+              Expected Monthly Salary
+            </Text>
+            <View className="flex-row items-center justify-between p-4 border border-gray-200 rounded-full">
+              <TextInput
+                className="flex-1 mr-2"
+                placeholder="Enter amount (e.g. 40000)"
+                keyboardType="numeric"
+                value={expectedSalary}
+                onChangeText={setExpectedSalary}
+              />
+              <Text className="text-gray-500">PHP</Text>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Modals */}
+      <PreferredJobTitleModal
+        isVisible={isJobModalOpen}
+        onClose={() => setIsJobModalOpen(false)}
+        onSelect={(role) => setSelectedJobTitle(role)}
+        selected={selectedJobTitle}
+      />
+
+      <ExperienceLevelModal
+        isVisible={isExperienceModalOpen}
+        onClose={() => setIsExperienceModalOpen(false)}
+        onSelect={(level) => setSelectedExperienceLevel(level)}
+        selected={selectedExperienceLevel}
+      />
+
+      <PreferredLocationModal
+        isVisible={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+        onSelect={(level) => setSelectedLocation(level)}
+        selected={selectedLocation}
+      />
+
+      <PreferredSkillsModal
+        isVisible={isSkillsModalOpen}
+        onClose={() => setIsSkillsModalOpen(false)}
+        selected={preferredSkills}
+        onUpdate={setPreferredSkills}
+      />
+    </SafeAreaView>
+  );
+};
+
+export default RecruiterFilters;
+
+const getSkillColor = (skill) => {
+  switch (skill.toLowerCase()) {
+    case "javascript":
+      return "bg-yellow-100";
+    case "typescript":
+      return "bg-blue-100";
+    case "react":
+      return "bg-blue-100";
+    case "vue.js":
+    case "vue":
+      return "bg-green-100";
+    case "node.js":
+    case "nodejs":
+    case "node":
+      return "bg-green-100";
+    case "python":
+      return "bg-blue-100";
+    case "django":
+      return "bg-emerald-100";
+    case "php":
+      return "bg-indigo-100";
+    case "laravel":
+      return "bg-purple-100";
+    case "ui/ux design":
+      return "bg-pink-100";
+    case "figma":
+      return "bg-orange-100";
+    case "photoshop":
+      return "bg-rose-100";
+    case "project management":
+      return "bg-orange-100";
+    case "sales":
+      return "bg-yellow-100";
+    case "devops":
+      return "bg-gray-100";
+    case "aws":
+      return "bg-orange-100";
+    case "sql":
+      return "bg-indigo-100";
+    case "mongodb":
+      return "bg-green-100";
+    case "customer service":
+      return "bg-sky-100";
+    case "other":
+      return "bg-gray-300";
+    default:
+      return "bg-gray-200";
+  }
+};

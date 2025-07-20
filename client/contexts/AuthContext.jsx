@@ -1,6 +1,7 @@
 import api from "../utils/axiosInstance";
 import { createContext, useState } from "react";
 import { removeToken, saveToken } from "../utils/storage";
+import { removeUserRole, saveUserRole } from "../utils/secureUser";
 
 const AuthContext = createContext();
 
@@ -14,6 +15,7 @@ export function AuthProvider({ children }) {
       const { token, user } = response.data;
 
       await saveToken(token);
+      await saveUserRole(user.role);
 
       setUser({ token, ...user });
 
@@ -36,6 +38,7 @@ export function AuthProvider({ children }) {
       console.log("Registered successfully!");
 
       await saveToken(token);
+      await saveUserRole(user.role);
 
       setUser({ token, ...user });
 
@@ -48,6 +51,7 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     await removeToken();
+    await removeUserRole();
     setUser(null);
   }
 
