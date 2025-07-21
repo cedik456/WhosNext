@@ -15,7 +15,14 @@ export function AuthProvider({ children }) {
       const { token, user } = response.data;
 
       await saveToken(token);
-      await saveUserRole(user.role);
+
+      if (user.role) {
+        await saveUserRole(
+          typeof user.role === "string"
+            ? user.role
+            : user.role?.name || String(user.role)
+        );
+      }
 
       setUser({ token, ...user });
 
@@ -38,7 +45,14 @@ export function AuthProvider({ children }) {
       console.log("Registered successfully!");
 
       await saveToken(token);
-      await saveUserRole(user.role);
+
+      if (user.role) {
+        await saveUserRole(
+          typeof user.role === "string"
+            ? user.role
+            : user.role?.name || String(user.role)
+        );
+      }
 
       setUser({ token, ...user });
 

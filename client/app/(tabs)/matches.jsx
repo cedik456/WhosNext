@@ -154,7 +154,9 @@ const Matches = () => {
                           <View className="flex-row items-center gap-4">
                             <Text
                               className={`font-poppins ${
-                                isUnread > 0 ? " text-black" : "text-gray-500"
+                                isUnread > 0
+                                  ? "text-black font-poppins-500"
+                                  : "text-gray-500"
                               }`}
                             >
                               {lastMessage ?? "Start a conversation!"}

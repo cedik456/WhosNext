@@ -7,44 +7,38 @@ import {
 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PreferredJobTitleModal from "../../modals/PreferredJobTitleModal";
 import ExperienceLevelModal from "../../modals/ExperienceLevelModal";
 import PreferredLocationModal from "../../modals/PreferredLocationModal";
 import PreferredSkillsModal from "../../modals/PreferredSkillsModal";
+import getSkillColor from "../../utils/getSkillColor";
 
 const RecruiterFilters = () => {
   const router = useRouter();
+
+  // Skills
+  const [isSkillsModalOpen, setIsSkillsModalOpen] = useState(false);
+  const [preferredSkills, setPreferredSkills] = useState([]);
+
+  // Location
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
   // job title
   const [isJobModalOpen, setIsJobModalOpen] = useState(false);
   const [selectedJobTitle, setSelectedJobTitle] = useState("");
 
-  // experience level
+  // Experience Level
   const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
   const [selectedExperienceLevel, setSelectedExperienceLevel] = useState(null);
 
-  // location
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-
-  // work type
+  // Work Type
   const [selectedWorkType, setSelectedWorkType] = useState(null);
-  const workTypes = ["Remote", "Hybrid", "On-site"];
+  const workTypes = ["Full-time", "Part-time", "Internship"];
 
-  // skills
-  const [isSkillsModalOpen, setIsSkillsModalOpen] = useState(false);
-  const [preferredSkills, setPreferredSkills] = useState([]);
-
-  // salary
+  // Expected Salary
   const [expectedSalary, setExpectedSalary] = useState("");
 
   return (
@@ -202,53 +196,3 @@ const RecruiterFilters = () => {
 };
 
 export default RecruiterFilters;
-
-const getSkillColor = (skill) => {
-  switch (skill.toLowerCase()) {
-    case "javascript":
-      return "bg-yellow-100";
-    case "typescript":
-      return "bg-blue-100";
-    case "react":
-      return "bg-blue-100";
-    case "vue.js":
-    case "vue":
-      return "bg-green-100";
-    case "node.js":
-    case "nodejs":
-    case "node":
-      return "bg-green-100";
-    case "python":
-      return "bg-blue-100";
-    case "django":
-      return "bg-emerald-100";
-    case "php":
-      return "bg-indigo-100";
-    case "laravel":
-      return "bg-purple-100";
-    case "ui/ux design":
-      return "bg-pink-100";
-    case "figma":
-      return "bg-orange-100";
-    case "photoshop":
-      return "bg-rose-100";
-    case "project management":
-      return "bg-orange-100";
-    case "sales":
-      return "bg-yellow-100";
-    case "devops":
-      return "bg-gray-100";
-    case "aws":
-      return "bg-orange-100";
-    case "sql":
-      return "bg-indigo-100";
-    case "mongodb":
-      return "bg-green-100";
-    case "customer service":
-      return "bg-sky-100";
-    case "other":
-      return "bg-gray-300";
-    default:
-      return "bg-gray-200";
-  }
-};

@@ -160,7 +160,7 @@ const Chat = () => {
                 </Pressable>
                 <Image
                   source={{ uri: avatar }}
-                  className="w-10 h-10 mr-2 border border-gray-500 rounded-full"
+                  className="w-10 h-10 mr-2 border border-gray-300 rounded-full"
                 />
                 <Text className="text-2xl font-poppins-600 ">{name}</Text>
               </View>
