@@ -23,6 +23,7 @@ const swipeRoutes = require("./routes/swipeRoutes");
 const matchRoutes = require("./routes/matchRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const preferenceRoutes = require("./routes/preferenceRoutes");
 
 //
 const { default: mongoose } = require("mongoose");
@@ -36,6 +37,7 @@ app.use("/api/swipe/", swipeRoutes);
 app.use("/api/matches/", matchRoutes);
 app.use("/api/messages/", messageRoutes);
 app.use("/api/profile/", profileRoutes);
+app.use("/api/preferences/", preferenceRoutes);
 
 // socket.io setup
 

@@ -1,12 +1,22 @@
 import { AntDesign, FontAwesome, FontAwesome6 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PreferredSkillsModal from "../../modals/PreferredSkillsModal";
 import getSkillColor from "../../utils/getSkillColor";
 import PreferredLocationModal from "../../modals/PreferredLocationModal";
 import ExperienceLevelModal from "../../modals/ExperienceLevelModal";
+import api from "../../utils/axiosInstance";
+import Button from "../../components/Button";
+import { getToken } from "../../utils/storage";
 
 const JobSeekerFilters = () => {
   const router = useRouter();
@@ -33,6 +43,59 @@ const JobSeekerFilters = () => {
 
   // Salary Range (Minimum Salary)
   const [minSalary, setMinSalary] = useState("");
+
+  const handleSavePreferences = async () => {
+    console.log("🚀 handleSavePreferences() called");
+
+    try {
+      const payload = {
+        preferences: {
+          preferredSkills,
+          preferredLocation: selectedLocation,
+          preferredExperienceLevel: selectedExperienceLevel,
+          preferredWorkType: selectedWorkType,
+          preferredWorkEnvironment: selectedWorkEnv,
+          preferredSalary: {
+            min: parseInt(minSalary) || 0,
+            max: null,
+          },
+        },
+      };
+
+      const token = await getToken();
+
+      if (!token) {
+        Alert.alert("Error", "Token not found. Please login again.");
+        return;
+      }
+
+      const response = await api.patch("/preferences/jobSeeker", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("Preferences Saved", response.data);
+      Alert.alert("Success", "Your preferences have been saved.");
+    } catch (error) {
+      console.error(
+        "❌ Error saving preferences:",
+        error.response?.data || error.message
+      );
+      Alert.alert("Error", "Failed to save preferences.");
+    }
+  };
+
+  const handleSaveConfirmation = async () => {
+    Alert.alert(
+      "Confirm Save",
+      "Are you sure you want to save these preferences",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Save", onPress: handleSavePreferences },
+      ]
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -164,6 +227,13 @@ const JobSeekerFilters = () => {
               ))}
             </View>
           </View>
+
+          <Button
+            title="Save Preferences"
+            className="w-auto rounded-full"
+            textClassName="text-center"
+            onPress={handleSaveConfirmation}
+          />
         </View>
       </ScrollView>
 
