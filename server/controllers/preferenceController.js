@@ -1,5 +1,6 @@
 const JobSeeker = require("../models/JobSeekerSchema");
 
+// Job Seeker
 exports.updatePreferences = async (req, res) => {
   try {
     const preferences = req.body.preferences;
@@ -32,3 +33,22 @@ exports.updatePreferences = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+exports.getPreferences = async (req, res) => {
+  try {
+    const jobSeeker = await JobSeeker.findOne({ userId: req.user.id });
+
+    if (!jobSeeker) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Job Seeker not found" });
+    }
+
+    res.status(200).json({ success: true, data: jobSeeker.preferences || {} });
+  } catch (error) {
+    console.error("Error fetching preferences:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Recruiter

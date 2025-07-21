@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome, FontAwesome6 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Pressable,
@@ -96,6 +96,38 @@ const JobSeekerFilters = () => {
       ]
     );
   };
+
+  useEffect(() => {
+    const fetchPreferences = async () => {
+      try {
+        const token = await getToken();
+
+        const response = await api.get("/preferences/jobSeeker", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const prefs = response.data.data;
+
+        if (prefs) {
+          setPreferredSkills(prefs.preferredSkills || []);
+          setSelectedLocation(prefs.preferredLocation || null);
+          setSelectedExperienceLevel(prefs.preferredExperienceLevel || null);
+          setSelectedWorkType(prefs.preferredWorkType || null);
+          setSelectedWorkEnv(prefs.preferredWorkEnvironment || null);
+          setMinSalary(prefs.preferredSalary?.min?.toString() || "");
+        }
+      } catch (error) {
+        console.error(
+          "❌ Failed to load preferences:",
+          error.response?.data || error.message
+        );
+      }
+    };
+
+    fetchPreferences();
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
