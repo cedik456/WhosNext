@@ -15,7 +15,8 @@ const {
   saveName,
   saveSkills,
   saveLocation,
-  saveWorkPreferencesJobSeekers,
+  saveWorkType,
+  saveWorkEnvironment,
 } = require("../controllers/onboarding/jobSeekerController");
 const {
   saveCompanyName,
@@ -33,7 +34,8 @@ router.patch("/complete", auth, completeOnboarding);
 router.patch("/name/jobSeeker", auth, saveName);
 router.patch("/skills/jobSeeker", auth, saveSkills);
 router.patch("/location/jobSeeker", auth, saveLocation);
-router.patch("/workPreferences/jobSeeker", auth, saveWorkPreferencesJobSeekers);
+router.patch("/workType/jobSeeker", auth, saveWorkType);
+router.patch("/workEnvironment/jobSeeker", auth, saveWorkEnvironment);
 
 // Recruiter
 router.patch("/name/recruiter", auth, saveCompanyName);

@@ -38,8 +38,9 @@ const RecruiterFilters = () => {
   const [selectedWorkType, setSelectedWorkType] = useState(null);
   const workTypes = ["Full-time", "Part-time", "Internship"];
 
-  // Expected Salary
-  const [expectedSalary, setExpectedSalary] = useState("");
+  // Work Environment
+  const [selectedWorkEnv, setSelectedWorkEnv] = useState(null);
+  const workEnvironments = ["Remote", "Hybrid", "Onsite"];
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -147,17 +148,23 @@ const RecruiterFilters = () => {
 
           <View>
             <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
-              Expected Monthly Salary
+              Work Environment
             </Text>
-            <View className="flex-row items-center justify-between p-4 border border-gray-200 rounded-full">
-              <TextInput
-                className="flex-1 mr-2"
-                placeholder="Enter amount (e.g. 40000)"
-                keyboardType="numeric"
-                value={expectedSalary}
-                onChangeText={setExpectedSalary}
-              />
-              <Text className="text-gray-500">PHP</Text>
+            <View className="gap-4 p-4 border border-gray-200 rounded-xl">
+              {workEnvironments.map((env) => (
+                <Pressable
+                  key={env}
+                  onPress={() => setSelectedWorkEnv(env)}
+                  className="flex-row justify-between"
+                >
+                  <Text className="font-poppins-500">{env}</Text>
+                  <FontAwesome
+                    name={selectedWorkEnv === env ? "check-square" : "square-o"}
+                    size={24}
+                    color={selectedWorkEnv === env ? "black" : "gray"}
+                  />
+                </Pressable>
+              ))}
             </View>
           </View>
         </View>

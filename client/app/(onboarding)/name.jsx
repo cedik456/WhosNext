@@ -49,7 +49,7 @@ const Name = () => {
         if (role === "recruiter") {
           router.replace("/recruiter/jobTitle");
         } else {
-          router.replace("/jobSeeker/work");
+          router.replace("/jobSeeker/workType");
         }
       } else {
         Alert.alert("Error saving name", "Please try again.");

@@ -109,17 +109,17 @@ const Skills = () => {
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
         <View
           className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(4 / 5) * 100}%` }}
+          style={{ width: `${(5 / 6) * 100}%` }}
         />
       </View>
 
       <View className="justify-between flex-1 px-6 mt-14">
         <View>
           <Text className="mb-2 text-3xl font-poppins-600">
-            Let's talk about
+            What are your
             {role === "recruiter"
-              ? " your\nskill requirements"
-              : " your \nskills"}
+              ? " your\npreferred skills?"
+              : " your \nskills?"}
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins-500">
             Select 3 to 8 skills that match your{" "}

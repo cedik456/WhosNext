@@ -127,7 +127,7 @@ const JobSeekerFilters = () => {
           {/* Minimum Salary */}
           <View>
             <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
-              Expected Monthly Salary
+              Preferred Salary
             </Text>
             <View className="flex-row items-center justify-between p-4 border border-gray-200 rounded-full">
               <TextInput

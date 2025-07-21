@@ -81,21 +81,17 @@ exports.saveLocation = async (req, res) => {
   }
 };
 
-exports.saveWorkPreferencesJobSeekers = async (req, res) => {
+exports.saveWorkType = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { workEnvironment, workType } = req.body;
+    const { workType } = req.body;
 
-    const validEnvironments = ["On-site", "Remote", "Hybrid"];
     const validTypes = ["Full-time", "Part-time", "Internship"];
 
-    if (
-      !validEnvironments.includes(workEnvironment) ||
-      !validTypes.includes(workType)
-    ) {
+    if (!validTypes.includes(workType)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid or missing work preference",
+        message: "Invalid or missing work type",
       });
     }
 
@@ -103,8 +99,42 @@ exports.saveWorkPreferencesJobSeekers = async (req, res) => {
       { userId },
       {
         $set: {
-          "preferences.workEnvironment": workEnvironment,
-          "preferences.workType": workType,
+          workType,
+        },
+      },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({ success: true, message: "Work saved successfully" });
+  } catch (error) {
+    console.error("Error saving work type", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error while saving work type",
+    });
+  }
+};
+
+exports.saveWorkEnvironment = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { workEnvironment } = req.body;
+
+    const validEnvironments = ["On-site", "Remote", "Hybrid"];
+
+    if (!validEnvironments.includes(workEnvironment)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing work environment",
+      });
+    }
+
+    await JobSeeker.findOneAndUpdate(
+      { userId },
+      {
+        $set: {
+          workEnvironment,
         },
       },
       { new: true, upsert: true }
@@ -112,13 +142,13 @@ exports.saveWorkPreferencesJobSeekers = async (req, res) => {
 
     res
       .status(200)
-      .json({ success: true, message: "Work Preferences saved successfully" });
+      .json({ success: true, message: "Work environment saved successfully" });
   } catch (error) {
-    console.error("Error saving work preferences", error);
+    console.error("Error saving work environment", error);
 
     res.status(500).json({
       success: false,
-      message: "Server error while saving work preferences",
+      message: "Server error while saving work environment",
     });
   }
 };
