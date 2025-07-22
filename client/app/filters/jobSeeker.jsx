@@ -44,8 +44,15 @@ const JobSeekerFilters = () => {
   // Salary Range (Minimum Salary)
   const [minSalary, setMinSalary] = useState("");
 
+  const [originalPreferences, setOriginalPreferences] = useState(null);
+
   const handleSavePreferences = async () => {
-    console.log("🚀 handleSavePreferences() called");
+    const token = await getToken();
+
+    if (!token) {
+      Alert.alert("Error", "Token not found. Please login again.");
+      return;
+    }
 
     try {
       const payload = {
@@ -62,13 +69,6 @@ const JobSeekerFilters = () => {
         },
       };
 
-      const token = await getToken();
-
-      if (!token) {
-        Alert.alert("Error", "Token not found. Please login again.");
-        return;
-      }
-
       const response = await api.patch("/preferences/jobSeeker", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -76,6 +76,7 @@ const JobSeekerFilters = () => {
       });
 
       console.log("Preferences Saved", response.data);
+      setOriginalPreferences(payload.preferences);
       Alert.alert("Success", "Your preferences have been saved.");
     } catch (error) {
       console.error(
@@ -84,6 +85,21 @@ const JobSeekerFilters = () => {
       );
       Alert.alert("Error", "Failed to save preferences.");
     }
+  };
+
+  const isPreferencesChanged = () => {
+    if (!originalPreferences) return false;
+
+    return (
+      JSON.stringify(originalPreferences.preferredSkills) !==
+        JSON.stringify(preferredSkills) ||
+      originalPreferences.preferredLocation !== selectedLocation ||
+      originalPreferences.preferredExperienceLevel !==
+        selectedExperienceLevel ||
+      originalPreferences.preferredWorkType !== selectedWorkType ||
+      originalPreferences.preferredWorkEnvironment !== selectedWorkEnv ||
+      originalPreferences.preferredSalary.min !== (parseInt(minSalary) || 0)
+    );
   };
 
   const handleSaveConfirmation = async () => {
@@ -117,10 +133,22 @@ const JobSeekerFilters = () => {
           setSelectedWorkType(prefs.preferredWorkType || null);
           setSelectedWorkEnv(prefs.preferredWorkEnvironment || null);
           setMinSalary(prefs.preferredSalary?.min?.toString() || "");
+
+          setOriginalPreferences({
+            preferredSkills: prefs.preferredSkills || [],
+            preferredLocation: prefs.preferredLocation || null,
+            preferredExperienceLevel: prefs.preferredExperienceLevel || null,
+            preferredWorkType: prefs.preferredWorkType || null,
+            preferredWorkEnvironment: prefs.preferredWorkEnvironment || null,
+            preferredSalary: {
+              min: prefs.preferredSalary?.min || 0,
+              max: null,
+            },
+          });
         }
       } catch (error) {
         console.error(
-          "❌ Failed to load preferences:",
+          "Failed to load job seeker preferences:",
           error.response?.data || error.message
         );
       }
@@ -265,6 +293,7 @@ const JobSeekerFilters = () => {
             className="w-auto rounded-full"
             textClassName="text-center"
             onPress={handleSaveConfirmation}
+            disabled={!isPreferencesChanged()}
           />
         </View>
       </ScrollView>
