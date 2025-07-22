@@ -1,5 +1,5 @@
 import { View, Text, Modal, Image, Pressable } from "react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getUserRole } from "../utils/secureUser";
 import JobCard from "./JobCard";
 import ProfileCard from "./ProfileCard";
@@ -8,7 +8,7 @@ import Swiper from "react-native-deck-swiper";
 import { getToken } from "../utils/storage";
 import api from "../utils/axiosInstance";
 import Button from "../components/Button";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 
 const shuffleArray = (array) => {
   const shuffled = [...array];
@@ -37,34 +37,36 @@ const SwipeDeck = () => {
     "#fff7ed",
   ];
 
-  useEffect(() => {
-    const fetchCards = async () => {
-      try {
-        const role = await getUserRole();
-        setRole(role);
+  const fetchCards = async () => {
+    try {
+      const role = await getUserRole();
+      setRole(role);
 
-        const token = await getToken();
-        if (!token) return;
+      const token = await getToken();
+      if (!token) return;
 
-        const response = await api.get("/card/recommendations", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const response = await api.get("/card/recommendations/v2", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const { success, data } = response.data;
+      const { success, data } = response.data;
 
-        if (success) {
-          const shuffledCards = shuffleArray(data);
-          setCards(shuffledCards);
-        }
-      } catch (error) {
-        console.error("Failed to fetch cards:", error.message);
+      if (success) {
+        const shuffledCards = shuffleArray(data);
+        setCards(shuffledCards);
       }
-    };
+    } catch (error) {
+      console.error("Failed to fetch cards:", error.message);
+    }
+  };
 
-    fetchCards();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchCards();
+    }, [])
+  );
 
   const handleSwipe = async (targetId, action) => {
     try {

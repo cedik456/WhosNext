@@ -5,6 +5,7 @@ const {
   getAllRecruiters,
   getAllJobSeekers,
   getRecommendations,
+  getRecommendationsv2,
 } = require("../controllers/cardController");
 
 // Recruiter card
@@ -15,5 +16,8 @@ router.get("/jobSeeker", auth, getAllJobSeekers);
 
 // Recommendation card
 router.get("/recommendations", auth, getRecommendations);
+
+// Recommendation CARD V2
+router.get("/recommendations/v2", auth, getRecommendationsv2);
 
 module.exports = router;

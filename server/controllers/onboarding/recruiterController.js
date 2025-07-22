@@ -6,6 +6,13 @@ exports.saveCompanyName = async (req, res) => {
   try {
     const userId = req.user.id;
 
+    if (req.user.role !== "recruiter") {
+      return res.status(403).json({
+        success: false,
+        message: "Only recruiters can perform this action.",
+      });
+    }
+
     const { name } = req.body;
 
     if (!name || name.trim() === "") {
@@ -32,6 +39,14 @@ exports.saveCompanyName = async (req, res) => {
 exports.saveJobTitle = async (req, res) => {
   try {
     const userId = req.user.id;
+
+    if (req.user.role !== "recruiter") {
+      return res.status(403).json({
+        success: false,
+        message: "Only recruiters can perform this action.",
+      });
+    }
+
     const { jobTitle } = req.body;
 
     if (!jobTitle || typeof jobTitle !== "string" || jobTitle.trim() === "") {
@@ -63,6 +78,14 @@ exports.saveJobTitle = async (req, res) => {
 exports.saveRequirements = async (req, res) => {
   try {
     const userId = req.user.id;
+
+    if (req.user.role !== "recruiter") {
+      return res.status(403).json({
+        success: false,
+        message: "Only recruiters can perform this action.",
+      });
+    }
+
     const { skills } = req.body;
 
     if (!Array.isArray(skills) || skills.length < 1) {
@@ -89,6 +112,14 @@ exports.saveRequirements = async (req, res) => {
 exports.saveHiringLocation = async (req, res) => {
   try {
     const userId = req.user.id;
+
+    if (req.user.role !== "recruiter") {
+      return res.status(403).json({
+        success: false,
+        message: "Only recruiters can perform this action.",
+      });
+    }
+
     const { location } = req.body;
 
     if (!location || location.trim() === "") {
@@ -109,7 +140,7 @@ exports.saveHiringLocation = async (req, res) => {
     });
   } catch (error) {
     console.error("Hiring location error:", error);
-    es.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Server error while saving hiring location",
     });
@@ -118,6 +149,14 @@ exports.saveHiringLocation = async (req, res) => {
 
 exports.uploadCompanyLogo = async (req, res) => {
   const userId = req.user.id;
+
+  if (req.user.role !== "recruiter") {
+    return res.status(403).json({
+      success: false,
+      message: "Only recruiters can perform this action.",
+    });
+  }
+
   const file = req.file;
 
   if (!file) {
@@ -151,5 +190,54 @@ exports.uploadCompanyLogo = async (req, res) => {
   } catch (error) {
     console.error("Logo upload server error:", error);
     res.status(500).json({ success: false, message: "Server error." });
+  }
+};
+
+exports.saveRecruiterExperience = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    if (req.user.role !== "recruiter") {
+      return res.status(403).json({
+        success: false,
+        message: "Only recruiters can perform this action.",
+      });
+    }
+
+    const { experience } = req.body;
+
+    const validLevels = [
+      "Entry-level",
+      "Junior",
+      "Mid-level",
+      "Senior",
+      "Lead",
+      "Director",
+      "Executive",
+    ];
+
+    if (!validLevels.includes(experience)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing experience level",
+      });
+    }
+
+    await Recruiter.findOneAndUpdate(
+      { userId },
+      { $set: { experience } },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Experience level saved successfully",
+    });
+  } catch (error) {
+    console.error("Error saving experience level:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while saving experience level",
+    });
   }
 };
