@@ -16,7 +16,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import PreferredJobTitleModal from "../../modals/PreferredJobTitleModal";
 import ExperienceLevelModal from "../../modals/ExperienceLevelModal";
 import PreferredLocationModal from "../../modals/PreferredLocationModal";
 import PreferredSkillsModal from "../../modals/PreferredSkillsModal";
@@ -38,10 +37,6 @@ const RecruiterFilters = () => {
   // Location
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-
-  // job title
-  const [isJobModalOpen, setIsJobModalOpen] = useState(false);
-  const [selectedJobTitle, setSelectedJobTitle] = useState("");
 
   // Experience Level
   const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
@@ -70,7 +65,6 @@ const RecruiterFilters = () => {
         filters: {
           filterSkills: preferredSkills,
           filterLocation: selectedLocation,
-          filterJobTitle: selectedJobTitle,
           filterExperienceLevel: selectedExperienceLevel,
           filterWorkType: selectedWorkType,
           filterWorkEnvironment: selectedWorkEnv,
@@ -102,7 +96,6 @@ const RecruiterFilters = () => {
       JSON.stringify(originalFilters.filterSkills) !==
         JSON.stringify(preferredSkills) ||
       originalFilters.filterLocation !== selectedLocation ||
-      originalFilters.filterJobTitle !== selectedJobTitle ||
       originalFilters.filterExperienceLevel !== selectedExperienceLevel ||
       originalFilters.filterWorkType !== selectedWorkType ||
       originalFilters.filterWorkEnvironment !== selectedWorkEnv
@@ -136,7 +129,6 @@ const RecruiterFilters = () => {
         if (filters) {
           setPreferredSkills(filters?.filterSkills || []);
           setSelectedLocation(filters?.filterLocation || null);
-          setSelectedJobTitle(filters?.filterJobTitle || "");
           setSelectedExperienceLevel(filters?.filterExperienceLevel || null);
           setSelectedWorkType(filters?.filterWorkType || null);
           setSelectedWorkEnv(filters?.filterWorkEnvironment || null);
@@ -144,7 +136,6 @@ const RecruiterFilters = () => {
           setOriginalFilters({
             filterSkills: filters.filterSkills || [],
             filterLocation: filters.filterLocation || null,
-            filterJobTitle: filters.filterJobTitle || "",
             filterExperienceLevel: filters.filterExperienceLevel || null,
             filterWorkType: filters.filterWorkType || null,
             filterWorkEnvironment: filters.filterWorkEnvironment || null,
@@ -205,21 +196,6 @@ const RecruiterFilters = () => {
             >
               <Text className="text-base font-poppins-500">
                 {selectedLocation || "Select"}
-              </Text>
-              <AntDesign name="right" size={20} />
-            </Pressable>
-          </View>
-
-          <View>
-            <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
-              Preferred Job Title
-            </Text>
-            <Pressable
-              onPress={() => setIsJobModalOpen(true)}
-              className="flex-row items-center justify-between p-4 border border-gray-200 rounded-full"
-            >
-              <Text className="text-base font-poppins-500">
-                {selectedJobTitle || "Preferred Job Title"}
               </Text>
               <AntDesign name="right" size={20} />
             </Pressable>
@@ -298,12 +274,6 @@ const RecruiterFilters = () => {
       </ScrollView>
 
       {/* Modals */}
-      <PreferredJobTitleModal
-        isVisible={isJobModalOpen}
-        onClose={() => setIsJobModalOpen(false)}
-        onSelect={(role) => setSelectedJobTitle(role)}
-        selected={selectedJobTitle}
-      />
 
       <ExperienceLevelModal
         isVisible={isExperienceModalOpen}

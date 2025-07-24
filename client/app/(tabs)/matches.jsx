@@ -46,6 +46,7 @@ const Matches = () => {
       });
 
       const { success, data } = response.data;
+      console.log("Conversations data:", JSON.stringify(data, null, 2));
 
       if (success) {
         const sorted = data.sort(
@@ -73,10 +74,18 @@ const Matches = () => {
     const isJobSeeker = !!item.recruiterId;
     const user = item.jobSeekerId?.userId || item.recruiterId?.userId;
     const companyName = item.recruiterId?.companyName;
-
-    const displayName = companyName || "Recruiter";
-
     const profileImage = item.recruiterId?.companyPicture || user?.avatar;
+
+    let displayName;
+    if (item.recruiterId && companyName) {
+      displayName = companyName;
+    } else if (item.jobSeekerId && item.jobSeekerId.userId?.name) {
+      displayName = item.jobSeekerId.userId.name;
+    } else if (user?.name) {
+      displayName = user.name;
+    } else {
+      displayName = "Recruiter";
+    }
 
     if (!profileImage) return null;
 

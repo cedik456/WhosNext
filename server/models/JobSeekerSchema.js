@@ -44,6 +44,7 @@ const JobSeekerSchema = new Schema({
       min: Number,
       max: Number,
     },
+    preferredJobTitle: String,
   },
 
   createdAt: {

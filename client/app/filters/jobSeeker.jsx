@@ -14,6 +14,7 @@ import PreferredSkillsModal from "../../modals/PreferredSkillsModal";
 import getSkillColor from "../../utils/getSkillColor";
 import PreferredLocationModal from "../../modals/PreferredLocationModal";
 import ExperienceLevelModal from "../../modals/ExperienceLevelModal";
+import PreferredJobTitleModal from "../../modals/PreferredJobTitleModal";
 import api from "../../utils/axiosInstance";
 import Button from "../../components/Button";
 import { getToken } from "../../utils/storage";
@@ -31,6 +32,10 @@ const JobSeekerFilters = () => {
   // Location
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
+  // job title
+  const [isJobModalOpen, setIsJobModalOpen] = useState(false);
+  const [selectedJobTitle, setSelectedJobTitle] = useState("");
 
   // Experience Level
   const [selectedExperienceLevel, setSelectedExperienceLevel] = useState(null);
@@ -69,6 +74,7 @@ const JobSeekerFilters = () => {
             min: parseInt(minSalary) || 0,
             max: null,
           },
+          preferredJobTitle: selectedJobTitle,
         },
       };
 
@@ -102,7 +108,8 @@ const JobSeekerFilters = () => {
         selectedExperienceLevel ||
       originalPreferences.preferredWorkType !== selectedWorkType ||
       originalPreferences.preferredWorkEnvironment !== selectedWorkEnv ||
-      originalPreferences.preferredSalary.min !== (parseInt(minSalary) || 0)
+      originalPreferences.preferredSalary.min !== (parseInt(minSalary) || 0) ||
+      originalPreferences.preferredJobTitle !== selectedJobTitle
     );
   };
 
@@ -137,6 +144,7 @@ const JobSeekerFilters = () => {
           setSelectedWorkType(prefs.preferredWorkType || null);
           setSelectedWorkEnv(prefs.preferredWorkEnvironment || null);
           setMinSalary(prefs.preferredSalary?.min?.toString() || "");
+          setSelectedJobTitle(prefs.preferredJobTitle || "");
 
           setOriginalPreferences({
             preferredSkills: prefs.preferredSkills || [],
@@ -148,6 +156,7 @@ const JobSeekerFilters = () => {
               min: prefs.preferredSalary?.min || 0,
               max: null,
             },
+            preferredJobTitle: prefs.preferredJobTitle || "",
           });
         }
       } catch (error) {
@@ -209,6 +218,22 @@ const JobSeekerFilters = () => {
               <AntDesign name="right" size={20} />
             </Pressable>
           </View>
+
+          <View>
+            <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
+              Preferred Job Title
+            </Text>
+            <Pressable
+              onPress={() => setIsJobModalOpen(true)}
+              className="flex-row items-center justify-between p-4 border border-gray-200 rounded-full"
+            >
+              <Text className="text-base font-poppins-500">
+                {selectedJobTitle || "Preferred Job Title"}
+              </Text>
+              <AntDesign name="right" size={20} />
+            </Pressable>
+          </View>
+
           {/* Experience Level */}
           <View>
             <Text className="mb-2 ml-4 text-sm text-gray-600 font-poppins-500">
@@ -307,6 +332,13 @@ const JobSeekerFilters = () => {
         onClose={() => setIsSkillsModalOpen(false)}
         selected={preferredSkills}
         onUpdate={setPreferredSkills}
+      />
+
+      <PreferredJobTitleModal
+        isVisible={isJobModalOpen}
+        onClose={() => setIsJobModalOpen(false)}
+        onSelect={(role) => setSelectedJobTitle(role)}
+        selected={selectedJobTitle}
       />
 
       <PreferredLocationModal

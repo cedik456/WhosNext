@@ -55,7 +55,6 @@ const RecruiterSchema = new Schema({
       type: String,
       enum: ["Full-time", "Part-time", "Internship"],
     },
-    filterJobTitle: String,
   },
 
   createdAt: {

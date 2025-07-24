@@ -15,13 +15,24 @@ exports.getConversations = async (req, res) => {
     if (jobSeeker) {
       matches = await Match.find({ jobSeekerId: jobSeeker._id }).populate({
         path: "recruiterId",
-        populate: { path: "userId", select: "name avatar" },
+        populate: {
+          path: "userId",
+          select: "name avatar companyName companyPicture",
+        },
       });
     } else if (recruiter) {
-      matches = await Match.find({ recruiterId: recruiter._id }).populate({
-        path: "jobSeekerId",
-        populate: { path: "userId", select: "name avatar" },
-      });
+      matches = await Match.find({ recruiterId: recruiter._id })
+        .populate({
+          path: "jobSeekerId",
+          populate: { path: "userId", select: "name avatar" },
+        })
+        .populate({
+          path: "recruiterId",
+          populate: {
+            path: "userId",
+            select: "name avatar companyName companyPicture",
+          },
+        });
     } else {
       return res.status(404).json({
         success: false,
@@ -51,6 +62,7 @@ exports.getConversations = async (req, res) => {
           : {
               name: match.jobSeekerId?.userId?.name || "Unknown",
               avatar: match.jobSeekerId?.userId?.avatar || "",
+              companyPicture: "",
             };
 
         const unreadCount = await Message.countDocuments({

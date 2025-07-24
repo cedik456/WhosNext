@@ -264,11 +264,6 @@ exports.getRecommendationsv2 = async (req, res) => {
           workEnvironment: filters.filterWorkEnvironment,
         });
       }
-      if (filters.filterJobTitle) {
-        filterConditions.push({
-          desiredJobTitle: filters.filterJobTitle,
-        });
-      }
 
       if (filterConditions.length > 0) {
         query.$and = filterConditions;
