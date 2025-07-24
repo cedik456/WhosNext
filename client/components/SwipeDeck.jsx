@@ -9,6 +9,7 @@ import { getToken } from "../utils/storage";
 import api from "../utils/axiosInstance";
 import Button from "../components/Button";
 import { useFocusEffect, useRouter } from "expo-router";
+import { useRefetch } from "../contexts/RefetchContext";
 
 const shuffleArray = (array) => {
   const shuffled = [...array];
@@ -27,6 +28,7 @@ const SwipeDeck = () => {
   const [matchedUser, setMatchedUser] = useState(null);
 
   const router = useRouter();
+  const { shouldRefetch, setShouldRefetch } = useRefetch();
 
   const bgColors = [
     "#fefce8",
@@ -62,11 +64,16 @@ const SwipeDeck = () => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
+  useEffect(() => {
+    fetchCards(); // only once when component first mounts
+  }, []);
+
+  useEffect(() => {
+    if (shouldRefetch) {
       fetchCards();
-    }, [])
-  );
+      setShouldRefetch(false);
+    }
+  }, [shouldRefetch]);
 
   const handleSwipe = async (targetId, action) => {
     try {

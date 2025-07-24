@@ -61,11 +61,11 @@ const WorkType = () => {
             What type of job are {"\n"}you looking for?
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins">
-            Select your preferred work setup and job type
+            Select your preferred job type
           </Text>
 
           <Text className="mb-5 text-lg font-poppins-600">
-            What type of job do you want?
+            Choose how you'd like to be employed.
           </Text>
           <View className="flex-col gap-3 mb-4">
             {types.map((type) => (

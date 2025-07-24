@@ -5,10 +5,31 @@ import Button from "../../../components/Button";
 import { useRouter } from "expo-router";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
+import DropDownPicker from "react-native-dropdown-picker";
+
+const locations = [
+  "Legazpi City",
+  "Daraga",
+  "Tabaco",
+  "Guinobatan",
+  "Ligao",
+  "Polangui",
+  "Oas",
+  "Camalig",
+  "Malilipot",
+  "Tiwi",
+  "Sto. Domingo",
+  "Bacacay",
+];
 
 const HiringLocation = () => {
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
   const [location, setLocation] = useState("");
+  const [items, setItems] = useState(
+    locations.map((loc) => ({ label: loc, value: loc }))
+  );
 
   const handleSubmit = async () => {
     if (!location.trim()) {
@@ -57,12 +78,31 @@ const HiringLocation = () => {
           <Text className="text-base text-gray-600 font-poppins-500">
             Enter the city, region, or area you're looking{"\n"}to hire in.
           </Text>
-          <TextInput
-            placeholder="Enter your location"
-            value={location}
-            onChangeText={setLocation}
-            className="py-4 border-b-2 border-gray-300 font-poppins-500"
-          />
+
+          <View style={{ zIndex: 1000 }}>
+            <DropDownPicker
+              open={open}
+              value={location}
+              items={items}
+              setOpen={setOpen}
+              setValue={setLocation}
+              setItems={setItems}
+              dropDownDirection="BOTTOM"
+              listMode="SCROLLVIEW"
+              textStyle={{
+                fontFamily: "Poppins-Regular",
+                fontWeight: "500",
+              }}
+              placeholder="Select a location..."
+              style={{ borderColor: "#D1D5DB", marginTop: 8 }}
+              dropDownContainerStyle={{ borderColor: "#D1D5DB" }}
+              placeholderStyle={{
+                color: "#9CA3AF",
+                fontFamily: "Poppins-Regular",
+              }}
+            />
+          </View>
+
           <Text className="text-base text-blue-700 font-poppins">
             Learn about our privacy and policy
           </Text>

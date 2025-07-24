@@ -11,23 +11,43 @@ import { getUserRole } from "../../utils/secureUser";
 const SKILL_SETS = {
   skills: [
     "JavaScript",
+    "TypeScript",
     "React",
     "Vue.js",
+    "Angular",
     "Node.js",
+    "Express.js",
     "Python",
     "Django",
+    "Flask",
     "PHP",
     "Laravel",
+    "Ruby on Rails",
+    "Java",
+    "Spring Boot",
+    "C#",
+    ".NET",
+    "Swift",
+    "Kotlin",
     "UI/UX Design",
     "Figma",
+    "Adobe XD",
     "Photoshop",
-    "Project Management",
-    "Sales",
-    "DevOps",
-    "AWS",
+    "Illustrator",
     "SQL",
     "MongoDB",
-    "TypeScript",
+    "Firebase",
+    "AWS",
+    "Google Cloud",
+    "DevOps",
+    "Docker",
+    "Kubernetes",
+    "Git",
+    "Agile Methodologies",
+    "Scrum",
+    "Project Management",
+    "Product Management",
+    "Sales",
     "Customer Service",
     "Other",
   ],
@@ -51,8 +71,8 @@ const Skills = () => {
   };
 
   const handleSubmit = async () => {
-    if (selectedSkills.length < 3) {
-      Alert.alert("Select more skills", "Please choose at least 3 skills");
+    if (selectedSkills.length < 1) {
+      Alert.alert("Select more skills", "Please choose at least 1 skill");
       return;
     }
 
@@ -119,14 +139,14 @@ const Skills = () => {
             What are your
             {role === "recruiter"
               ? " your\npreferred skills?"
-              : " your \nskills?"}
+              : " your\nskills?"}
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins-500">
-            Select 3 to 8 skills that match your{" "}
+            Select 1 to 8 skills that match your{" "}
             {role === "recruiter" ? "requirements" : "expertise "}
           </Text>
 
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView showsVerticalScrollIndicator={false} className="h-[70%]">
             <View className="flex-row flex-wrap mb-5">
               {skillOptions.map((skill) => (
                 <View key={skill}>
@@ -160,7 +180,7 @@ const Skills = () => {
           className="mb-10 rounded-full"
           textClassName="text-center"
           onPress={handleSubmit}
-          disabled={selectedSkills.length < 3}
+          disabled={selectedSkills.length < 1}
         />
       </View>
     </SafeAreaView>

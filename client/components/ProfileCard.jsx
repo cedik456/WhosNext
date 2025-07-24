@@ -5,7 +5,7 @@ const ProfileCard = ({ card, color }) => {
   // if (!card) return null;
   return (
     <View
-      className="p-5 rounded-2xl h-[89%] shadow-sm"
+      className="h-[90%] p-5 shadow-sm rounded-2xl"
       style={{ backgroundColor: color || "#fbfbfb" }}
     >
       <Image

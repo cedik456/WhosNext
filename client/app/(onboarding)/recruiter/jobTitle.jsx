@@ -13,9 +13,30 @@ const JOB_TITLES = [
   "Full Stack Developer",
   "UI/UX Designer",
   "Mobile Developer",
-  "Data Analyst",
+  "iOS Developer",
+  "Android Developer",
+  "Web Developer",
+  "React Developer",
+  "Node.js Developer",
   "DevOps Engineer",
   "QA Engineer",
+  "Software Engineer",
+  "Data Analyst",
+  "Data Scientist",
+  "Machine Learning Engineer",
+  "Cloud Engineer",
+  "AI Engineer",
+  "Cybersecurity Analyst",
+  "Technical Support Specialist",
+  "Product Manager",
+  "Project Manager",
+  "Scrum Master",
+  "Business Analyst",
+  "Solutions Architect",
+  "Database Administrator",
+  "Systems Engineer",
+  "IT Specialist",
+  "Technical Writer",
   "Other",
 ];
 
@@ -73,7 +94,7 @@ const JobTitle = () => {
           <Text className="mb-4 text-base text-gray-600 font-poppins-500">
             Select one job title from the list below.
           </Text>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView showsVerticalScrollIndicator={false} className="h-[70%]">
             <View className="mb-5 ">
               {JOB_TITLES.map((title) => (
                 <Chip

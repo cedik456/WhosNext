@@ -18,7 +18,7 @@ const CompanyPicture = () => {
     console.log("pickImage fired");
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: [ImagePicker.MediaType.IMAGE],
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       base64: false,
       quality: 0.7,

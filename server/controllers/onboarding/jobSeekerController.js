@@ -5,13 +5,6 @@ exports.saveName = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    if (req.user.role !== "jobSeeker") {
-      return res.status(403).json({
-        success: false,
-        message: "Only job seekers can perform this action.",
-      });
-    }
-
     const { name } = req.body;
 
     if (!name || name.trim() === "") {
@@ -34,13 +27,6 @@ exports.saveName = async (req, res) => {
 exports.saveSkills = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "jobSeeker") {
-      return res.status(403).json({
-        success: false,
-        message: "Only job seekers can perform this action.",
-      });
-    }
 
     const { skills } = req.body;
 
@@ -70,14 +56,6 @@ exports.saveSkills = async (req, res) => {
 exports.saveLocation = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "jobSeeker") {
-      return res.status(403).json({
-        success: false,
-        message: "Only job seekers can perform this action.",
-      });
-    }
-
     const { location } = req.body;
 
     if (!location || location.trim() === "") {
@@ -106,14 +84,6 @@ exports.saveLocation = async (req, res) => {
 exports.saveWorkType = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "jobSeeker") {
-      return res.status(403).json({
-        success: false,
-        message: "Only job seekers can perform this action.",
-      });
-    }
-
     const { workType } = req.body;
 
     const validTypes = ["Full-time", "Part-time", "Internship"];
@@ -149,14 +119,6 @@ exports.saveWorkType = async (req, res) => {
 exports.saveWorkEnvironment = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "jobSeeker") {
-      return res.status(403).json({
-        success: false,
-        message: "Only job seekers can perform this action.",
-      });
-    }
-
     const { workEnvironment } = req.body;
 
     const validEnvironments = ["On-site", "Remote", "Hybrid"];
@@ -194,13 +156,6 @@ exports.saveWorkEnvironment = async (req, res) => {
 exports.saveJobSeekerExperience = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "jobSeeker") {
-      return res.status(403).json({
-        success: false,
-        message: "Only job seekers can perform this action.",
-      });
-    }
 
     const { experience } = req.body;
 

@@ -24,9 +24,12 @@ import getSkillColor from "../../utils/getSkillColor";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import Button from "../../components/Button";
+import { useRefetch } from "../../contexts/RefetchContext";
 
 const RecruiterFilters = () => {
   const router = useRouter();
+
+  const { setShouldRefetch } = useRefetch();
 
   // Skills
   const [isSkillsModalOpen, setIsSkillsModalOpen] = useState(false);
@@ -81,6 +84,7 @@ const RecruiterFilters = () => {
       });
       console.log("Preferences Saved", response.data);
       setOriginalFilters(payload.filters);
+      setShouldRefetch(true);
       Alert.alert("Success", "Your filters have been saved.");
     } catch (error) {
       console.error(

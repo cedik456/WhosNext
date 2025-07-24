@@ -17,9 +17,12 @@ import ExperienceLevelModal from "../../modals/ExperienceLevelModal";
 import api from "../../utils/axiosInstance";
 import Button from "../../components/Button";
 import { getToken } from "../../utils/storage";
+import { useRefetch } from "../../contexts/RefetchContext";
 
 const JobSeekerFilters = () => {
   const router = useRouter();
+
+  const { setShouldRefetch } = useRefetch();
 
   // Skills
   const [isSkillsModalOpen, setIsSkillsModalOpen] = useState(false);
@@ -77,6 +80,7 @@ const JobSeekerFilters = () => {
 
       console.log("Preferences Saved", response.data);
       setOriginalPreferences(payload.preferences);
+      setShouldRefetch(true);
       Alert.alert("Success", "Your preferences have been saved.");
     } catch (error) {
       console.error(

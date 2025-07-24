@@ -13,6 +13,7 @@ import {
 } from "@expo-google-fonts/poppins";
 import SplashScreen from "../components/SplashScreen";
 import { Provider as PaperProvider } from "react-native-paper";
+import { RefetchProvider } from "../contexts/RefetchContext";
 
 const RootLayout = () => {
   const [fontsLoaded] = useFonts({
@@ -28,16 +29,18 @@ const RootLayout = () => {
 
   return (
     <AuthProvider>
-      <SafeAreaProvider>
-        <PaperProvider>
-          <StatusBar style="dark" />
-          <Stack
-            screenOptions={{
-              headerShown: false,
-            }}
-          />
-        </PaperProvider>
-      </SafeAreaProvider>
+      <RefetchProvider>
+        <SafeAreaProvider>
+          <PaperProvider>
+            <StatusBar style="dark" />
+            <Stack
+              screenOptions={{
+                headerShown: false,
+              }}
+            />
+          </PaperProvider>
+        </SafeAreaProvider>
+      </RefetchProvider>
     </AuthProvider>
   );
 };

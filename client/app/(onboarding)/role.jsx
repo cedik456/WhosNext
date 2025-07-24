@@ -83,7 +83,7 @@ const Role = () => {
 
           <View className="gap-4">
             <Text className="text-lg text-gray-500 font-poppins-500">
-              What is your role?
+              Are you a job seeker or a recruiter?
             </Text>
 
             <Pressable

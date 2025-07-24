@@ -5,14 +5,6 @@ const streamifier = require("streamifier");
 exports.saveCompanyName = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can perform this action.",
-      });
-    }
-
     const { name } = req.body;
 
     if (!name || name.trim() === "") {
@@ -39,13 +31,6 @@ exports.saveCompanyName = async (req, res) => {
 exports.saveJobTitle = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can perform this action.",
-      });
-    }
 
     const { jobTitle } = req.body;
 
@@ -79,13 +64,6 @@ exports.saveRequirements = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can perform this action.",
-      });
-    }
-
     const { skills } = req.body;
 
     if (!Array.isArray(skills) || skills.length < 1) {
@@ -112,13 +90,6 @@ exports.saveRequirements = async (req, res) => {
 exports.saveHiringLocation = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can perform this action.",
-      });
-    }
 
     const { location } = req.body;
 
@@ -149,13 +120,6 @@ exports.saveHiringLocation = async (req, res) => {
 
 exports.uploadCompanyLogo = async (req, res) => {
   const userId = req.user.id;
-
-  if (req.user.role !== "recruiter") {
-    return res.status(403).json({
-      success: false,
-      message: "Only recruiters can perform this action.",
-    });
-  }
 
   const file = req.file;
 

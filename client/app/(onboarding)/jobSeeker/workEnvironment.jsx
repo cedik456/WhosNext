@@ -18,6 +18,7 @@ const WorkEnvironment = () => {
   const handleSubmit = async () => {
     if (!workEnvironment) {
       Alert.alert("Select Work Setup", "Please select a work environment");
+      return;
     }
 
     try {
@@ -58,14 +59,14 @@ const WorkEnvironment = () => {
       <View className="justify-between flex-1 gap-6 px-6 mt-14">
         <View>
           <Text className="mb-3 text-3xl font-poppins-600">
-            Where do you prefer {"\n"}to work?
+            What’s your preferred work environment?
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins">
             Choose your preferred work setup
           </Text>
 
           <Text className="mb-5 text-lg font-poppins-600">
-            What type of job do you want?
+            Select where you'd be most comfortable {"\n"}working from.
           </Text>
           <View className="flex-col gap-3 mb-4">
             {environments.map((env) => (
