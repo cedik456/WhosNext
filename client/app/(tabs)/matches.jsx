@@ -4,10 +4,7 @@ import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useRouter } from "expo-router";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-
-dayjs.extend(relativeTime);
+import { formatMessengerStyleTime } from "../../utils/formatTime";
 
 const Matches = () => {
   const [matches, setMatches] = useState([]);
@@ -104,7 +101,7 @@ const Matches = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="px-5 mt-5">
+      <View className="px-6 mt-5">
         <View className="mb-5">
           <Text className="mb-3 text-2xl font-poppins-600">Matches</Text>
 
@@ -162,16 +159,20 @@ const Matches = () => {
                           </Text>
                           <View className="flex-row items-center gap-4">
                             <Text
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
                               className={`font-poppins ${
-                                isUnread > 0 ? "text-black" : "text-gray-500"
-                              }`}
+                                isUnread > 0
+                                  ? "text-black font-poppins-500"
+                                  : "text-gray-500"
+                              } max-w-[180px]`}
                             >
                               {lastMessage ?? "Start a conversation!"}
                             </Text>
 
                             <Text className="text-xs text-gray-400">
                               {lastMessageAt
-                                ? dayjs(lastMessageAt).fromNow()
+                                ? formatMessengerStyleTime(lastMessageAt)
                                 : ""}
                             </Text>
                           </View>

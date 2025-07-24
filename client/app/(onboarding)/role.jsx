@@ -59,7 +59,7 @@ const Role = () => {
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
         <View
           className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(1 / 4) * 100}%` }}
+          style={{ width: `${(1 / 5) * 100}%` }}
         />
       </View>
       {/* <Text className="mt-1 ml-2 text-sm text-gray-500">X</Text> */}

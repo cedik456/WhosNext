@@ -37,7 +37,7 @@ const Profile = () => {
 
   return (
     <SafeAreaView className="flex-1 ">
-      <View className="px-5 mt-5">
+      <View className="px-6 mt-5">
         <Text className="text-2xl font-poppins-600">Profile</Text>
       </View>
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
