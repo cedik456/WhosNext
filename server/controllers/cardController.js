@@ -269,7 +269,7 @@ exports.getRecommendationsv2 = async (req, res) => {
       }
       if (filters.filterExperienceLevel) {
         filterConditions.push({
-          experience: filters.filterExperienceLevel,
+          experienceLevel: filters.filterExperienceLevel,
         });
       }
       if (filters.filterWorkType) {
