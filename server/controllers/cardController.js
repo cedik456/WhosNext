@@ -185,7 +185,7 @@ exports.getRecommendationsv2 = async (req, res) => {
       // preferences
 
       const preferences = jobSeeker.preferences || {};
-      const query = { userId: { $nin: swipeIds }, isOnboarded: true };
+      const query = { userId: { $nin: swipeIds } };
 
       const filterConditions = [];
 
@@ -255,7 +255,7 @@ exports.getRecommendationsv2 = async (req, res) => {
       // filters
 
       const filters = recruiter.filters || {};
-      const query = { userId: { $nin: swipeIds }, isOnboarded: true };
+      const query = { userId: { $nin: swipeIds } };
 
       const filterConditions = [];
 
