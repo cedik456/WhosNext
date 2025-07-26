@@ -26,7 +26,7 @@ const ProfileCard = ({ card, color }) => {
 
       {card.workEnvironment || card.workType ? (
         <Text className="mb-2 text-gray-700 font-poppins-500">
-          {[card.workEnvironment, card.workType].filter(Boolean).join(" | ")}
+          {[card.workType, card.workEnvironment].filter(Boolean).join(" | ")}
         </Text>
       ) : null}
 
@@ -69,7 +69,11 @@ const ProfileCard = ({ card, color }) => {
         </View>
       )}
       <Text className="mb-1 text-base font-poppins-600">About me</Text>
-      <Text className="mb-2 text-sm text-gray-500 font-poppins-500">
+      <Text
+        numberOfLines={2}
+        ellipsizeMode="tail"
+        className="mb-2 text-sm text-gray-500 font-poppins-500"
+      >
         I am a simple dev, who likes learning new things, I can be fast and slow
         depending on my mood.
       </Text>

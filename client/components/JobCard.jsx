@@ -18,7 +18,7 @@ const JobCard = ({ data, color }) => {
         <Image
           source={{ uri: data.companyPicture }}
           resizeMode="cover"
-          className="w-full h-[55%]"
+          className="w-full h-[50%]"
         />
       ) : (
         <View className="w-full h-[60%] bg-gray-100 items-center justify-center">
@@ -49,7 +49,7 @@ const JobCard = ({ data, color }) => {
           data.hiringCriteria?.workType) && (
           <View className="flex-row items-center gap-2 mb-2 text-gray-700 font-poppins-500">
             {data.hiringCriteria?.workEnvironment && (
-              <Text>{data.hiringCriteria.workEnvironment} | </Text>
+              <Text>{data.hiringCriteria.workEnvironment} |</Text>
             )}
             {data.hiringCriteria?.workType && (
               <Text>{data.hiringCriteria.workType}</Text>
@@ -90,6 +90,14 @@ const JobCard = ({ data, color }) => {
             ))}
           </View>
         )}
+        <Text className="mb-1 text-base font-poppins-600">Job Description</Text>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          className="mb-2 text-sm text-gray-500 font-poppins-500"
+        >
+          We need a dev who strives and thrives.
+        </Text>
       </View>
     </View>
   );

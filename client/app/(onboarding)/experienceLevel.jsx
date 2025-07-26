@@ -92,7 +92,7 @@ const ExperienceLevel = () => {
           <Text className="mb-3 text-3xl font-poppins-600">
             {role === "recruiter"
               ? "What experience level \nare you hiring for?"
-              : "What is your experience level?"}
+              : "What is your \nexperience level?"}
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins">
             {role === "recruiter"
