@@ -1,0 +1,134 @@
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { getToken } from "../../utils/storage";
+import api from "../../utils/axiosInstance";
+import Button from "../../components/Button";
+import { getUserRole } from "../../utils/secureUser";
+
+const WorkEnvironment = () => {
+  const router = useRouter();
+  const [workEnvironment, setWorkEnvironment] = useState(null);
+  const [role, setRole] = useState(null);
+
+  const environments = ["On-site", "Remote", "Hybrid"];
+  const isValid = !!workEnvironment;
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      const userRole = await getUserRole();
+      setRole(userRole);
+    };
+    fetchRole();
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!workEnvironment) {
+      Alert.alert("Select Work Setup", "Please select a work environment");
+      return;
+    }
+
+    try {
+      const token = await getToken();
+
+      const endpoint =
+        role === "recruiter"
+          ? "/onboarding/workEnvironment/recruiter"
+          : "/onboarding/workEnvironment/jobSeeker";
+
+      const response = await api.patch(
+        endpoint,
+        { workEnvironment },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { success } = response.data;
+
+      if (success) {
+        router.replace("/experienceLevel");
+      } else {
+        console.error(error);
+        Alert.alert("Error", "Failed to save work environment.");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Failed to save work environment.");
+    }
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
+        {role === "recruiter" ? (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(7 / 9) * 100}%` }}
+          />
+        ) : (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(5 / 7) * 100}%` }}
+          />
+        )}
+      </View>
+      <View className="justify-between flex-1 gap-6 px-6 mt-14">
+        <View>
+          <Text className="mb-3 text-3xl font-poppins-600">
+            {role === "recruiter"
+              ? "What work setup are \nyou offering?"
+              : "What’s your preferred \nwork environment?"}
+          </Text>
+          <Text className="mb-4 text-base text-gray-600 font-poppins">
+            {role === "recruiter"
+              ? "Choose the environment this job will follow"
+              : "Choose your preferred work setup"}
+          </Text>
+
+          <Text className="mb-5 text-lg font-poppins-600">
+            {role === "recruiter"
+              ? "Let candidates know if the job is remote, on-site or hybrid"
+              : "Select where you'd be most comfortable \nworking from."}
+          </Text>
+          <View className="flex-col gap-3 mb-4">
+            {environments.map((env) => (
+              <Pressable
+                key={env}
+                onPress={() => setWorkEnvironment(env)}
+                className={`px-4 py-4 rounded-xl  ${
+                  workEnvironment === env ? "bg-black" : "bg-[#f6f6f6]"
+                }`}
+              >
+                <Text
+                  className={`font-poppins-500  ${
+                    workEnvironment === env ? "text-white" : "text-black"
+                  } `}
+                >
+                  {env}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+
+          <Text className="mb-10 text-sm text-gray-400 font-poppins">
+            This is how it'll appear in your profile
+          </Text>
+        </View>
+
+        <Button
+          title="Next"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
+          disabled={!isValid}
+          onPress={handleSubmit}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default WorkEnvironment;

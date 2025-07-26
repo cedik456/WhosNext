@@ -11,23 +11,43 @@ import { getUserRole } from "../../utils/secureUser";
 const SKILL_SETS = {
   skills: [
     "JavaScript",
+    "TypeScript",
     "React",
     "Vue.js",
+    "Angular",
     "Node.js",
+    "Express.js",
     "Python",
     "Django",
+    "Flask",
     "PHP",
     "Laravel",
+    "Ruby on Rails",
+    "Java",
+    "Spring Boot",
+    "C#",
+    ".NET",
+    "Swift",
+    "Kotlin",
     "UI/UX Design",
     "Figma",
+    "Adobe XD",
     "Photoshop",
-    "Project Management",
-    "Sales",
-    "DevOps",
-    "AWS",
+    "Illustrator",
     "SQL",
     "MongoDB",
-    "TypeScript",
+    "Firebase",
+    "AWS",
+    "Google Cloud",
+    "DevOps",
+    "Docker",
+    "Kubernetes",
+    "Git",
+    "Agile Methodologies",
+    "Scrum",
+    "Project Management",
+    "Product Management",
+    "Sales",
     "Customer Service",
     "Other",
   ],
@@ -51,8 +71,8 @@ const Skills = () => {
   };
 
   const handleSubmit = async () => {
-    if (selectedSkills.length < 3) {
-      Alert.alert("Select more skills", "Please choose at least 3 skills");
+    if (selectedSkills.length < 1) {
+      Alert.alert("Select more skills", "Please choose at least 1 skill");
       return;
     }
 
@@ -77,11 +97,7 @@ const Skills = () => {
       const { success } = response.data;
 
       if (success) {
-        if (role === "recruiter") {
-          router.replace("/recruiter/hiringLocation");
-        } else {
-          router.replace("/jobSeeker/location");
-        }
+        router.replace("/workType");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong.");
       }
@@ -105,55 +121,69 @@ const Skills = () => {
   const skillOptions = SKILL_SETS.skills;
 
   return (
-    <SafeAreaView className="flex-1 px-6 bg-white">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="gap-3 mt-14">
-          <Text className="text-3xl font-poppins-600">
-            Let's talk about
-            {role === "recruiter"
-              ? " your\nskill requirements"
-              : " your \nskills"}
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
+        {role === "recruiter" ? (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(5 / 9) * 100}%` }}
+          />
+        ) : (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(3 / 7) * 100}%` }}
+          />
+        )}
+      </View>
+
+      <View className="justify-between flex-1 px-6 mt-14">
+        <View>
+          <Text className="mb-2 text-3xl font-poppins-600">
+            What are your
+            {role === "recruiter" ? " \npreferred skills?" : " \nskills?"}
           </Text>
-          <Text className="text-base text-gray-600 font-poppins-500">
-            Select 3 to 8 skills that match your{" "}
+          <Text className="mb-4 text-base text-gray-600 font-poppins-500">
+            Select 1 to 8 skills that match your{" "}
             {role === "recruiter" ? "requirements" : "expertise "}
           </Text>
 
-          <View className="flex-row flex-wrap mb-5">
-            {skillOptions.map((skill) => (
-              <View key={skill}>
-                <Chip
-                  onPress={() => toggleSkill(skill)}
-                  style={{
-                    margin: 4,
-                    padding: 4,
-                    backgroundColor: selectedSkills.includes(skill)
-                      ? "#000"
-                      : "#F6F6F6",
+          <ScrollView showsVerticalScrollIndicator={false} className="h-[70%]">
+            <View className="flex-row flex-wrap mb-5">
+              {skillOptions.map((skill) => (
+                <View key={skill}>
+                  <Chip
+                    onPress={() => toggleSkill(skill)}
+                    style={{
+                      margin: 4,
+                      padding: 4,
+                      backgroundColor: selectedSkills.includes(skill)
+                        ? "#000"
+                        : "#F6F6F6",
 
-                    borderWidth: 1,
-                    borderColor: "#ccc",
-                  }}
-                  textStyle={{
-                    color: selectedSkills.includes(skill) ? "#fff" : "#000",
-                    fontFamily: "Poppins_500Medium",
-                  }}
-                >
-                  {skill}
-                </Chip>
-              </View>
-            ))}
-          </View>
+                      borderWidth: 1,
+                      borderColor: "#ccc",
+                    }}
+                    textStyle={{
+                      color: selectedSkills.includes(skill) ? "#fff" : "#000",
+                      fontFamily: "Poppins_500Medium",
+                    }}
+                  >
+                    {skill}
+                  </Chip>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
 
-      <Button
-        title="Next"
-        className="mb-10 rounded-full"
-        textClassName="text-center"
-        onPress={handleSubmit}
-        disabled={selectedSkills.length < 3}
-      />
+        <Button
+          title="Next"
+          className="mb-10 rounded-full"
+          textClassName="text-center"
+          onPress={handleSubmit}
+          disabled={selectedSkills.length < 1}
+        />
+      </View>
     </SafeAreaView>
   );
 };

@@ -1,5 +1,5 @@
-import { Alert, Pressable, Text, TextInput, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { Alert, Text, TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { getToken } from "../../utils/storage";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -47,9 +47,9 @@ const Name = () => {
 
       if (success) {
         if (role === "recruiter") {
-          router.replace("/recruiter/jobTitle");
+          router.replace("/recruiter/companyPicture");
         } else {
-          router.replace("/jobSeeker/work");
+          router.replace("/skills");
         }
       } else {
         Alert.alert("Error saving name", "Please try again.");
@@ -71,8 +71,15 @@ const Name = () => {
     fetchRole();
   }, []);
   return (
-    <SafeAreaView className="flex-1 px-6 bg-white">
-      <View className="justify-between flex-1 mt-14">
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
+        <View
+          className="h-1 bg-black rounded-r-full "
+          style={{ width: `${(2 / 9) * 100}%` }}
+        />
+      </View>
+
+      <View className="justify-between flex-1 px-6 mt-14">
         <View className="gap-4">
           <Text className="text-3xl font-poppins-600">
             {role === "recruiter"
@@ -80,8 +87,10 @@ const Name = () => {
               : "What’s your\nfirst name?"}
           </Text>
           <TextInput
-            className="py-4 border-b-2 border-gray-300 font-poppins"
-            placeholder="Enter your name"
+            className="py-4 border-b-2 border-gray-300 font-poppins-500"
+            placeholder={
+              role === "recruiter" ? "eg: Who's Next" : "eg: Charles"
+            }
             value={name}
             onChangeText={setName}
             autoCapitalize="words"

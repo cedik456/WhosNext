@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { useRef } from "react";
+import { Animated, Pressable, Text } from "react-native";
 
 const Button = ({
   onPress,
@@ -8,6 +8,22 @@ const Button = ({
   className = "",
   textClassName = "",
 }) => {
+  const scale = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.spring(scale, {
+      toValue: 0.96,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  };
+
   const baseStyles = "p-5";
   const enabledStyles = "bg-black";
   const disabledStyles = "bg-gray-300";
@@ -17,21 +33,25 @@ const Button = ({
   const disabledTextStyles = "text-gray-400";
 
   return (
-    <Pressable
-      onPress={onPress}
-      disabled={disabled}
-      className={`${baseStyles} ${
-        disabled ? disabledStyles : enabledStyles
-      } ${className}`}
-    >
-      <Text
-        className={`${baseTextStyles} ${
-          disabled ? disabledTextStyles : enabledTextStyles
-        } ${textClassName}`}
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <Pressable
+        onPress={onPress}
+        disabled={disabled}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        className={`${baseStyles} ${
+          disabled ? disabledStyles : enabledStyles
+        } ${className}`}
       >
-        {title}
-      </Text>
-    </Pressable>
+        <Text
+          className={`${baseTextStyles} ${
+            disabled ? disabledTextStyles : enabledTextStyles
+          } ${textClassName}`}
+        >
+          {title}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 };
 

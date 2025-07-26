@@ -1,6 +1,7 @@
 import api from "../utils/axiosInstance";
 import { createContext, useState } from "react";
 import { removeToken, saveToken } from "../utils/storage";
+import { removeUserRole, saveUserRole } from "../utils/secureUser";
 
 const AuthContext = createContext();
 
@@ -14,6 +15,14 @@ export function AuthProvider({ children }) {
       const { token, user } = response.data;
 
       await saveToken(token);
+
+      if (user.role) {
+        await saveUserRole(
+          typeof user.role === "string"
+            ? user.role
+            : user.role?.name || String(user.role)
+        );
+      }
 
       setUser({ token, ...user });
 
@@ -37,6 +46,14 @@ export function AuthProvider({ children }) {
 
       await saveToken(token);
 
+      if (user.role) {
+        await saveUserRole(
+          typeof user.role === "string"
+            ? user.role
+            : user.role?.name || String(user.role)
+        );
+      }
+
       setUser({ token, ...user });
 
       return { success: true, isOnboarded: user.isOnboarded };
@@ -48,6 +65,7 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     await removeToken();
+    await removeUserRole();
     setUser(null);
   }
 

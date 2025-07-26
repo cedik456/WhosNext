@@ -32,6 +32,13 @@ exports.getMatches = async (req, res) => {
           path: "recruiterId",
           populate: {
             path: "userId",
+            select: "name avatar companyName companyPicture",
+          },
+        })
+        .populate({
+          path: "jobSeekerId",
+          populate: {
+            path: "userId",
             select: "name avatar",
           },
         })
@@ -52,7 +59,7 @@ exports.getMatches = async (req, res) => {
           path: "jobSeekerId",
           populate: {
             path: "userId",
-            select: "name avatar",
+            select: "name avatar companyName companyPicture",
           },
         })
         .sort({ createdAt: -1 });

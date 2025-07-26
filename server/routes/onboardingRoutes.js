@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/authMiddleware");
+
+// upload middlewares
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 const {
   saveRole,
   completeOnboarding,
@@ -9,13 +15,19 @@ const {
   saveName,
   saveSkills,
   saveLocation,
-  saveWorkPreferencesJobSeekers,
+  saveWorkType,
+  saveWorkEnvironment,
+  saveJobSeekerExperience,
 } = require("../controllers/onboarding/jobSeekerController");
 const {
   saveCompanyName,
   saveJobTitle,
   saveRequirements,
   saveHiringLocation,
+  uploadCompanyLogo,
+  saveRecruiterExperience,
+  saveRecruiterWorkType,
+  saveRecruiterWorkEnvironment,
 } = require("../controllers/onboarding/recruiterController");
 
 // Shared
@@ -26,12 +38,18 @@ router.patch("/complete", auth, completeOnboarding);
 router.patch("/name/jobSeeker", auth, saveName);
 router.patch("/skills/jobSeeker", auth, saveSkills);
 router.patch("/location/jobSeeker", auth, saveLocation);
-router.patch("/workPreferences/jobSeeker", auth, saveWorkPreferencesJobSeekers);
+router.patch("/workType/jobSeeker", auth, saveWorkType);
+router.patch("/workEnvironment/jobSeeker", auth, saveWorkEnvironment);
+router.patch("/experience/jobSeeker", auth, saveJobSeekerExperience);
 
 // Recruiter
 router.patch("/name/recruiter", auth, saveCompanyName);
 router.patch("/jobTitle/recruiter", auth, saveJobTitle);
 router.patch("/skills/recruiter", auth, saveRequirements);
 router.patch("/hiringLocation/recruiter", auth, saveHiringLocation);
+router.patch("/experience/recruiter", auth, saveRecruiterExperience);
+router.patch("/workType/recruiter", auth, saveRecruiterWorkType);
+router.patch("/workEnvironment/recruiter", auth, saveRecruiterWorkEnvironment);
+router.post("/logo/recruiter", auth, upload.single("logo"), uploadCompanyLogo);
 
 module.exports = router;

@@ -1,11 +1,15 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text, Modal, Image, Pressable } from "react-native";
+import { useCallback, useEffect, useState } from "react";
 import { getUserRole } from "../utils/secureUser";
 import JobCard from "./JobCard";
 import ProfileCard from "./ProfileCard";
+import FallBackCard from "./FallBackCard";
 import Swiper from "react-native-deck-swiper";
 import { getToken } from "../utils/storage";
 import api from "../utils/axiosInstance";
+import Button from "../components/Button";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useRefetch } from "../contexts/RefetchContext";
 
 const shuffleArray = (array) => {
   const shuffled = [...array];
@@ -20,6 +24,12 @@ const SwipeDeck = () => {
   const [role, setRole] = useState(null);
   const [cards, setCards] = useState([]);
 
+  const [matchModalVisible, setMatchModalVisible] = useState(false);
+  const [matchedUser, setMatchedUser] = useState(null);
+
+  const router = useRouter();
+  const { shouldRefetch, setShouldRefetch } = useRefetch();
+
   const bgColors = [
     "#fefce8",
     "#f0f9ff",
@@ -29,34 +39,41 @@ const SwipeDeck = () => {
     "#fff7ed",
   ];
 
-  useEffect(() => {
-    const fetchCards = async () => {
-      try {
-        const role = await getUserRole();
-        setRole(role);
+  const fetchCards = async () => {
+    try {
+      const role = await getUserRole();
+      setRole(role);
 
-        const token = await getToken();
-        if (!token) return;
+      const token = await getToken();
+      if (!token) return;
 
-        const response = await api.get("/card/recommendations", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const response = await api.get("/card/recommendations/v2", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const { success, data } = response.data;
+      const { success, data } = response.data;
 
-        if (success) {
-          const shuffledCards = shuffleArray(data);
-          setCards(shuffledCards);
-        }
-      } catch (error) {
-        console.error("Failed to fetch cards:", error.message);
+      if (success) {
+        const shuffledCards = shuffleArray(data);
+        setCards(shuffledCards);
       }
-    };
+    } catch (error) {
+      console.error("Failed to fetch cards:", error.message);
+    }
+  };
 
-    fetchCards();
+  useEffect(() => {
+    fetchCards(); // only once when component first mounts
   }, []);
+
+  useEffect(() => {
+    if (shouldRefetch) {
+      fetchCards();
+      setShouldRefetch(false);
+    }
+  }, [shouldRefetch]);
 
   const handleSwipe = async (targetId, action) => {
     try {
@@ -74,7 +91,26 @@ const SwipeDeck = () => {
       );
 
       if (response.data.match) {
-        console.log("It's a match");
+        console.log("🎯 MATCH DETECTED:", response.data.match);
+        const matchedCard = cards.find(
+          (c) => c.userId === targetId || c._id === targetId
+        );
+
+        console.log("Matched Card:", matchedCard);
+
+        setMatchedUser({
+          name:
+            matchedCard?.userId?.name ||
+            matchedCard?.companyName ||
+            "Matched User",
+          avatar:
+            matchedCard?.userId?.avatar ||
+            matchedCard?.avatar ||
+            matchedCard?.companyPicture,
+          matchId: response.data.match,
+        });
+
+        setMatchModalVisible(true);
       }
     } catch (error) {
       console.error("Swipe:", error);
@@ -83,17 +119,11 @@ const SwipeDeck = () => {
   };
 
   if (!cards.length) {
-    return (
-      <View className="items-center justify-center flex-1">
-        <Text className="text-lg text-gray-500 font-poppins-500">
-          No available profiles yet.
-        </Text>
-      </View>
-    );
+    return <FallBackCard />;
   }
 
   return (
-    <View className="justify-center flex-1">
+    <View className="flex-1 ">
       <Swiper
         key={`deck-${role}-${cards.length}`}
         cards={cards}
@@ -130,6 +160,57 @@ const SwipeDeck = () => {
         disableTopSwipe
         disableBottomSwipe
       />
+
+      {matchedUser && (
+        <Modal
+          visible={matchModalVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setMatchModalVisible(false)}
+        >
+          <View className="items-center justify-center flex-1 bg-white">
+            <View className="items-center w-11/12 p-6 bg-white rounded-xl">
+              {/* <View className="flex-row items-center justify-center mb-6">
+            
+            </View> */}
+              <Text className="gap-6 mb-2 text-3xl text-center font-poppins-700">
+                It's a match!
+              </Text>
+
+              <Text className="mb-2 text-lg text-center font-poppins-500">
+                You and {matchedUser.name} liked each other!
+              </Text>
+
+              <View className="w-full gap-3">
+                <Button
+                  title="Start Chat"
+                  className="w-full rounded-full"
+                  textClassName="text-center"
+                  onPress={() => {
+                    setMatchModalVisible(false);
+                    router.push({
+                      pathname: "/chat",
+                      params: {
+                        matchId: matchedUser.matchId,
+                        name: matchedUser.name,
+                        avatar: matchedUser.avatar,
+                      },
+                    });
+                  }}
+                />
+                <Button
+                  title="Skip for now"
+                  onPress={() => {
+                    setMatchModalVisible(false);
+                  }}
+                  className="w-full bg-gray-300 rounded-full"
+                  textClassName="text-center"
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 };

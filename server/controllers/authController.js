@@ -6,6 +6,17 @@ const getRandomAvatar = require("../utils/avatarHelper");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+exports.me = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select(
+      "id name email avatar"
+    );
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;

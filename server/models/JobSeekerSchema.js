@@ -17,18 +17,36 @@ const JobSeekerSchema = new Schema({
   experience: String,
   education: String,
   bio: String,
-  preferences: {
-    industry: String,
-    desiredLocation: String,
-    workEnvironment: {
-      type: String,
-      enum: ["onsite", "remote", "hybrid"],
-    },
-    workType: {
-      type: String,
-      enum: ["full-time", "part-time", "internship"],
-    },
+  workEnvironment: {
+    type: String,
+    enum: ["On-Site", "Remote", "Hybrid"],
   },
+  workType: {
+    type: String,
+    enum: ["Full-time", "Part-time", "Internship"],
+  },
+  preferences: {
+    preferredSkills: {
+      type: [String],
+      default: [],
+    },
+    preferredLocation: String,
+    preferredExperienceLevel: String,
+    preferredWorkEnvironment: {
+      type: String,
+      enum: ["On-Site", "Remote", "Hybrid"],
+    },
+    preferredWorkType: {
+      type: String,
+      enum: ["Full-time", "Part-time", "Internship"],
+    },
+    preferredSalary: {
+      min: Number,
+      max: Number,
+    },
+    preferredJobTitle: String,
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,

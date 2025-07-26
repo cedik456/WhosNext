@@ -40,7 +40,7 @@ const TabsLayout = () => {
           left: 0,
           right: 0,
           height: 60,
-          backgroundColor: "transparent",
+          backgroundColor: "#F3F3F3",
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
@@ -67,26 +67,26 @@ const TabsLayout = () => {
           tabBarLabel: "People",
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <FontAwesome6 name="bars-staggered" size={24} color="black" />
+              <FontAwesome6 name="bars-staggered" size={25} color="black" />
             ) : (
-              <FontAwesome6 name="bars-staggered" size={24} color="#9ca3af" />
+              <FontAwesome6 name="bars-staggered" size={25} color="#9ca3af" />
             ),
         }}
       />
       <Tabs.Screen
         name="matches"
         options={{
-          tabBarLabel: "Liked you",
+          tabBarLabel: "Matches",
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <AntDesign name="like1" size={24} color="black" />
+              <Ionicons name="chatbubble-sharp" size={24} color="black" />
             ) : (
-              <AntDesign name="like1" size={24} color="#9ca3af" />
+              <Ionicons name="chatbubble-sharp" size={24} color="#9ca3af" />
             ),
         }}
       />
-      <Tabs.Screen
-        name="messages"
+      {/* <Tabs.Screen
+        name="chat"
         options={{
           tabBarLabel: "Chats",
           tabBarIcon: ({ focused }) =>
@@ -96,7 +96,7 @@ const TabsLayout = () => {
               <Ionicons name="chatbubble-sharp" size={24} color="#9ca3af" />
             ),
         }}
-      />
+      /> */}
     </Tabs>
   );
 };

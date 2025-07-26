@@ -25,20 +25,35 @@ const RecruiterSchema = new Schema({
 
     experienceLevel: String, // e.g., "entry", "mid", "senior"
 
-    industry: String,
-
     workEnvironment: {
       type: String,
-      enum: ["onsite", "remote", "hybrid"],
+      enum: ["On-site", "Remote", "Hybrid"],
     },
 
     workType: {
       type: String,
-      enum: ["full-time", "part-time", "internship"],
+      enum: ["Full-time", "Part-time", "Internship"],
     },
     salaryRange: {
       min: Number,
       max: Number,
+    },
+  },
+
+  filters: {
+    filterSkills: {
+      type: [String],
+      default: [],
+    },
+    filterLocation: String,
+    filterExperienceLevel: String,
+    filterWorkEnvironment: {
+      type: String,
+      enum: ["On-Site", "Remote", "Hybrid"],
+    },
+    filterWorkType: {
+      type: String,
+      enum: ["Full-time", "Part-time", "Internship"],
     },
   },
 
