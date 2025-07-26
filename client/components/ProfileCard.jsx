@@ -1,5 +1,5 @@
 import { Image, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 
 const ProfileCard = ({ card, color }) => {
   // if (!card) return null;
@@ -24,31 +24,28 @@ const ProfileCard = ({ card, color }) => {
         />
       </View>
 
-      {card.location && (
-        <Text className="mb-1 text-base text-gray-500">{card.location}</Text>
-      )}
-
-      {card.preferences?.workEnvironment || card.preferences?.workType ? (
-        <Text className="mb-1 text-base text-gray-600 font-poppins-500">
-          {[card.preferences?.workEnvironment, card.preferences?.workType]
-            .filter(Boolean)
-            .join(" | ")}
+      {card.workEnvironment || card.workType ? (
+        <Text className="mb-2 text-gray-700 font-poppins-500">
+          {[card.workEnvironment, card.workType].filter(Boolean).join(" | ")}
         </Text>
       ) : null}
 
-      <Text className="mb-1 text-base text-gray-500">1 year of experience</Text>
+      {card.location && (
+        <Text className="items-center mb-2 text-gray-700 ">
+          <FontAwesome6 name="location-dot" size={15} /> {card.location}
+        </Text>
+      )}
 
-      {card.bio?.trim() && (
-        <>
-          <Text className="mb-1 text-base font-poppins-600">About me</Text>
-          <Text className="mb-2 text-sm text-gray-500 font-poppins-500">
-            {card.bio}
+      {card.experience && (
+        <View className="self-start px-3 py-1 mb-2 bg-blue-100 border border-blue-400 rounded-full">
+          <Text className="text-sm text-blue-800 font-poppins-500">
+            {card.experience}
           </Text>
-        </>
+        </View>
       )}
 
       {card.skills?.length > 0 && (
-        <View className="mb-10">
+        <View className="mb-3">
           <Text className="mb-2 text-base font-poppins-600">Skills</Text>
 
           <View className="flex-row flex-wrap gap-2 max-w-[280px]">
@@ -71,6 +68,11 @@ const ProfileCard = ({ card, color }) => {
           </View>
         </View>
       )}
+      <Text className="mb-1 text-base font-poppins-600">About me</Text>
+      <Text className="mb-2 text-sm text-gray-500 font-poppins-500">
+        I am a simple dev, who likes learning new things, I can be fast and slow
+        depending on my mood.
+      </Text>
     </View>
   );
 };

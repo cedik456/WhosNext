@@ -11,9 +11,10 @@ import {
   Poppins_500Medium,
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
-import SplashScreen from "../components/SplashScreen";
+// import SplashScreen from "../components/SplashScreen";
 import { Provider as PaperProvider } from "react-native-paper";
 import { RefetchProvider } from "../contexts/RefetchContext";
+import { ActivityIndicator } from "react-native";
 
 const RootLayout = () => {
   const [fontsLoaded] = useFonts({
@@ -24,7 +25,7 @@ const RootLayout = () => {
   });
 
   if (!fontsLoaded) {
-    return <SplashScreen />; // or a loading spinner
+    return <ActivityIndicator color="#ffffff" className="flex-1" />; // or a loading spinner
   }
 
   return (

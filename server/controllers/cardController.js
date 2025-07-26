@@ -148,6 +148,15 @@ exports.getRecommendationsv2 = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
+    // onboarding check
+
+    if (!user.isOnboarded) {
+      return res.status(403).json({
+        success: false,
+        message: "Please complete onboarding to access recommendations.",
+      });
+    }
+
     // role check
 
     if (!user.role) {
