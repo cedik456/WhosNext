@@ -236,7 +236,7 @@ exports.saveRecruiterExperience = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const { experienceLevel } = req.body;
+    const { experience } = req.body;
 
     const validLevels = [
       "Entry-level",
@@ -248,7 +248,7 @@ exports.saveRecruiterExperience = async (req, res) => {
       "Executive",
     ];
 
-    if (!validLevels.includes(experienceLevel)) {
+    if (!validLevels.includes(experience)) {
       return res.status(400).json({
         success: false,
         message: "Invalid or missing experience level",
@@ -257,7 +257,7 @@ exports.saveRecruiterExperience = async (req, res) => {
 
     await Recruiter.findOneAndUpdate(
       { userId },
-      { $set: { "hiringCriteria.experienceLevel": experienceLevel } },
+      { $set: { "hiringCriteria.experienceLevel": experience } },
       { new: true, upsert: true }
     );
 
