@@ -10,6 +10,7 @@ import api from "../utils/axiosInstance";
 import Button from "../components/Button";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useRefetch } from "../contexts/RefetchContext";
+import { ActivityIndicator } from "react-native-paper";
 
 const shuffleArray = (array) => {
   const shuffled = [...array];
@@ -30,6 +31,8 @@ const SwipeDeck = () => {
   const router = useRouter();
   const { shouldRefetch, setShouldRefetch } = useRefetch();
 
+  const [loading, setLoading] = useState(true);
+
   const bgColors = [
     "#fefce8",
     "#f0f9ff",
@@ -41,6 +44,7 @@ const SwipeDeck = () => {
 
   const fetchCards = async () => {
     try {
+      setLoading(true);
       const role = await getUserRole();
       setRole(role);
 
@@ -61,6 +65,8 @@ const SwipeDeck = () => {
       }
     } catch (error) {
       console.error("Failed to fetch cards:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,6 +123,17 @@ const SwipeDeck = () => {
       Alert.alert("Something went wrong.");
     }
   };
+
+  if (loading) {
+    return (
+      <View className="items-center justify-center flex-1">
+        <ActivityIndicator size="large" color="#9ca3af" />
+        <Text className="mt-4 text-gray-500 font-poppins-500">
+          Finding the best matches for you...
+        </Text>
+      </View>
+    );
+  }
 
   if (!cards.length) {
     return <FallBackCard />;

@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Keyboard,
   Pressable,
@@ -7,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +19,8 @@ const Register = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     if (!email || !password) {
@@ -31,12 +34,20 @@ const Register = () => {
       return;
     }
 
-    const result = await register(email, password);
+    setLoading(true);
 
-    if (result.success) {
-      router.replace("/login");
-    } else {
-      Alert.alert(result.message);
+    try {
+      const result = await register(email, password);
+
+      if (result.success) {
+        router.replace("/login");
+      } else {
+        Alert.alert(result.message);
+      }
+    } catch (error) {
+      Alert.alert("Something went wrong", error.message);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -64,7 +75,11 @@ const Register = () => {
               className="p-5 bg-black border rounded-full"
               onPress={handleSubmit}
             >
-              <Text className="font-bold text-center text-white">Submit</Text>
+              {loading ? (
+                <ActivityIndicator color="#ffffff" />
+              ) : (
+                <Text className="font-bold text-center text-white">Submit</Text>
+              )}
             </Pressable>
             <Text className="text-center font-poppins-500">
               Already have an account?

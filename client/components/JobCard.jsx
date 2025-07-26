@@ -40,22 +40,16 @@ const JobCard = ({ data, color }) => {
         </View>
 
         {data.jobTitle && (
-          <Text className="mb-2 text-lg text-gray-700 font-poppins-500">
+          <Text className="mb-1 text-lg text-gray-700 font-poppins-500">
             {data.jobTitle}
-          </Text>
-        )}
-
-        {data.hiringCriteria?.experienceLevel && (
-          <Text className="mb-2 text-gray-700 text-ba">
-            Based in {data.hiringCriteria.experienceLevel}
           </Text>
         )}
 
         {(data.hiringCriteria?.workEnvironment ||
           data.hiringCriteria?.workType) && (
-          <View className="flex-row items-center gap-2 mb-2 text-lg text-gray-700 font-poppins-500">
+          <View className="flex-row items-center gap-2 mb-2 text-gray-700 font-poppins-500">
             {data.hiringCriteria?.workEnvironment && (
-              <Text>{data.hiringCriteria.workEnvironment} |</Text>
+              <Text>{data.hiringCriteria.workEnvironment} | </Text>
             )}
             {data.hiringCriteria?.workType && (
               <Text>{data.hiringCriteria.workType}</Text>
@@ -68,10 +62,18 @@ const JobCard = ({ data, color }) => {
         </Text> */}
 
         {data.hiringCriteria?.location && (
-          <Text className="gap-2 mb-2 text-gray-700 text-ba">
+          <Text className="gap-2 mb-2 text-gray-700 ">
             <FontAwesome6 name="location-dot" size={15} /> Based in{" "}
             {data.hiringCriteria.location}
           </Text>
+        )}
+
+        {data.hiringCriteria?.experienceLevel && (
+          <View className="self-start px-3 py-1 mb-2 bg-blue-100 border border-blue-400 rounded-full">
+            <Text className="text-sm text-blue-800 font-poppins-500">
+              {data.hiringCriteria.experienceLevel}
+            </Text>
+          </View>
         )}
 
         <Text className="mb-2 text-base font-poppins-600">Required Skills</Text>
