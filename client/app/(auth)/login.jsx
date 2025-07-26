@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Keyboard,
   Pressable,
@@ -19,6 +20,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async () => {
     if (!email || !password) {
       Alert.alert("Email and password required");
@@ -31,16 +34,24 @@ const Login = () => {
       return;
     }
 
-    const result = await login(email, password);
+    setLoading(true);
 
-    if (result.success) {
-      if (result.isOnboarded) {
-        router.replace("/home");
+    try {
+      const result = await login(email, password);
+
+      if (result.success) {
+        if (result.isOnboarded) {
+          router.replace("/home");
+        } else {
+          router.replace("/role");
+        }
       } else {
-        router.replace("/role");
+        Alert.alert("Login Failed", result.message || "Invalid credentials");
       }
-    } else {
-      Alert.alert("Login Failed", result.message || "Invalid credentials");
+    } catch (error) {
+      Alert.alert("Something went wrong", error.message);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -69,10 +80,15 @@ const Login = () => {
             <Pressable
               className="p-5 bg-black border rounded-full"
               onPress={handleSubmit}
+              disabled={loading}
             >
-              <Text className="text-center text-white font-poppins-700">
-                LOGIN
-              </Text>
+              {loading ? (
+                <ActivityIndicator color="#ffffff" />
+              ) : (
+                <Text className="text-center text-white font-poppins-700">
+                  LOGIN
+                </Text>
+              )}
             </Pressable>
 
             <Text className="text-center text-gray-500 font-poppins-500">

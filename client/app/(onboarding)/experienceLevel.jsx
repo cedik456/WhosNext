@@ -110,7 +110,7 @@ const ExperienceLevel = () => {
                 }`}
               >
                 <Text
-                  className={`font-poppins ${
+                  className={`font-poppins-500 ${
                     experience === level ? "text-white" : "text-black"
                   }`}
                 >

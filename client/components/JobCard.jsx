@@ -1,5 +1,10 @@
 import { Image, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  FontAwesome6,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 
 const JobCard = ({ data, color }) => {
   // if (!data) return null;
@@ -40,13 +45,32 @@ const JobCard = ({ data, color }) => {
           </Text>
         )}
 
-        <Text className="mb-2 text-xl text-blue-600 font-poppins-500">
+        {data.hiringCriteria?.experienceLevel && (
+          <Text className="mb-2 text-gray-700 text-ba">
+            Based in {data.hiringCriteria.experienceLevel}
+          </Text>
+        )}
+
+        {(data.hiringCriteria?.workEnvironment ||
+          data.hiringCriteria?.workType) && (
+          <View className="flex-row items-center gap-2 mb-2 text-lg text-gray-700 font-poppins-500">
+            {data.hiringCriteria?.workEnvironment && (
+              <Text>{data.hiringCriteria.workEnvironment} |</Text>
+            )}
+            {data.hiringCriteria?.workType && (
+              <Text>{data.hiringCriteria.workType}</Text>
+            )}
+          </View>
+        )}
+
+        {/* <Text className="mb-2 text-xl text-blue-600 font-poppins-500">
           ₱25-30K/mo
-        </Text>
+        </Text> */}
 
         {data.hiringCriteria?.location && (
-          <Text className="mb-2 text-gray-700 text-ba">
-            Based in {data.hiringCriteria.location}
+          <Text className="gap-2 mb-2 text-gray-700 text-ba">
+            <FontAwesome6 name="location-dot" size={15} /> Based in{" "}
+            {data.hiringCriteria.location}
           </Text>
         )}
 
