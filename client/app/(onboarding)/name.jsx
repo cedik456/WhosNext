@@ -47,9 +47,9 @@ const Name = () => {
 
       if (success) {
         if (role === "recruiter") {
-          router.replace("/recruiter/jobTitle");
+          router.replace("/recruiter/companyPicture");
         } else {
-          router.replace("/jobSeeker/workType");
+          router.replace("/skills");
         }
       } else {
         Alert.alert("Error saving name", "Please try again.");
@@ -75,7 +75,7 @@ const Name = () => {
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
         <View
           className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(2 / 5) * 100}%` }}
+          style={{ width: `${(2 / 9) * 100}%` }}
         />
       </View>
 

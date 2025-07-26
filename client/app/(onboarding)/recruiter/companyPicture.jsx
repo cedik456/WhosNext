@@ -58,7 +58,7 @@ const CompanyPicture = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/recruiter/hiringLocation");
+        router.replace("/recruiter/jobTitle");
       } else {
         Alert.alert(
           "Upload Failed",
@@ -81,7 +81,7 @@ const CompanyPicture = () => {
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
         <View
           className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(5 / 6) * 100}%` }}
+          style={{ width: `${(3 / 9) * 100}%` }}
         />
       </View>
       <View className="flex-1 px-6 mt-14">

@@ -41,12 +41,12 @@ const Complete = () => {
         You're all set!
       </Text>
 
-      <Text className="mb-2 text-gray-500 font-poppins-500">
+      <Text className="mb-2 text-center text-gray-500 font-poppins-500">
         We’ll match you with the right candidates nearby.
       </Text>
 
-      <Text className="mb-5 text-sm text-gray-400 font-poppins-500">
-        You can update your profile anytime from the Settings.
+      <Text className="mb-5 text-sm text-center text-gray-400 font-poppins-500">
+        You can update your profile anytime from the Profile.
       </Text>
 
       <View className="w-full">

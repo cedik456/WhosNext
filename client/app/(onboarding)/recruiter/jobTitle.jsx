@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Chip } from "react-native-paper";
 import { useRouter } from "expo-router";
-import Button from "../../../components/Button";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
+import Button from "../../../components/Button";
 
 const JOB_TITLES = [
   "Frontend Developer",
@@ -83,7 +83,7 @@ const JobTitle = () => {
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
         <View
           className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(3 / 5) * 100}%` }}
+          style={{ width: `${(4 / 9) * 100}%` }}
         />
       </View>
       <View className="justify-between flex-1 px-6 mt-14">
@@ -103,7 +103,7 @@ const JobTitle = () => {
                   style={{
                     margin: 4,
                     paddingHorizontal: 4,
-                    paddingVertical: 6,
+                    paddingVertical: 8,
                     backgroundColor:
                       selectedJobTitle === title ? "#000" : "#F6F6F6",
 

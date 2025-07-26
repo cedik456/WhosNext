@@ -97,11 +97,7 @@ const Skills = () => {
       const { success } = response.data;
 
       if (success) {
-        if (role === "recruiter") {
-          router.replace("/recruiter/companyPicture");
-        } else {
-          router.replace("/jobSeeker/location");
-        }
+        router.replace("/workType");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong.");
       }
@@ -127,19 +123,24 @@ const Skills = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
-        <View
-          className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(5 / 6) * 100}%` }}
-        />
+        {role === "recruiter" ? (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(5 / 9) * 100}%` }}
+          />
+        ) : (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(3 / 7) * 100}%` }}
+          />
+        )}
       </View>
 
       <View className="justify-between flex-1 px-6 mt-14">
         <View>
           <Text className="mb-2 text-3xl font-poppins-600">
             What are your
-            {role === "recruiter"
-              ? " your\npreferred skills?"
-              : " your\nskills?"}
+            {role === "recruiter" ? " \npreferred skills?" : " \nskills?"}
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins-500">
             Select 1 to 8 skills that match your{" "}

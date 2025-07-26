@@ -48,7 +48,7 @@ const RecruiterFilters = () => {
 
   // Work Environment
   const [selectedWorkEnv, setSelectedWorkEnv] = useState(null);
-  const workEnvironments = ["Remote", "Hybrid", "Onsite"];
+  const workEnvironments = ["Remote", "Hybrid", "On-site"];
 
   const [originalFilters, setOriginalFilters] = useState(null);
 
@@ -113,6 +113,57 @@ const RecruiterFilters = () => {
     );
   };
 
+  const handleClearFilters = async () => {
+    Alert.alert(
+      "Clear All Filters",
+      "Are you sure you want to reset all filters?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Clear",
+          onPress: async () => {
+            const token = await getToken();
+
+            try {
+              await api.patch(
+                "/preferences/recruiter",
+                { filters: {} },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+
+              // Clear local state
+              setPreferredSkills([]);
+              setSelectedLocation(null);
+              setSelectedExperienceLevel(null);
+              setSelectedWorkType(null);
+              setSelectedWorkEnv(null);
+              setOriginalFilters({
+                filterSkills: [],
+                filterLocation: null,
+                filterExperienceLevel: null,
+                filterWorkType: null,
+                filterWorkEnvironment: null,
+              });
+              setShouldRefetch(true);
+
+              Alert.alert("Success", "Filters have been cleared.");
+            } catch (error) {
+              console.error(
+                "Error clearing filters:",
+                error.response?.data || error.message
+              );
+              Alert.alert("Error", "Failed to clear filters.");
+            }
+          },
+        },
+      ]
+    );
+  };
+
   useEffect(() => {
     const fetchPreferences = async () => {
       try {
@@ -154,11 +205,14 @@ const RecruiterFilters = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-row items-center p-5">
-        <Pressable onPress={() => router.back()} className="mr-16">
+      <View className="flex-row items-center justify-between p-5">
+        <Pressable onPress={() => router.back()}>
           <FontAwesome6 name="chevron-left" size={24} />
         </Pressable>
         <Text className="text-2xl font-poppins-600">Narrow your search</Text>
+        <Pressable onPress={handleClearFilters}>
+          <Text className="text-sm text-blue-600 font-poppins-500">Clear</Text>
+        </Pressable>
       </View>
       <View className="h-px bg-gray-200" />
 

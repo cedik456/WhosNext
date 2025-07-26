@@ -1,19 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Button from "../../../components/Button";
-import { getToken } from "../../../utils/storage";
-import api from "../../../utils/axiosInstance";
+import api from "../../utils/axiosInstance";
+import { getToken } from "../../utils/storage";
+import { getUserRole } from "../../utils/secureUser";
+import Button from "../../components/Button";
 
 const WorkType = () => {
   const router = useRouter();
-
   const [workType, setWorkType] = useState(null);
+  const [role, setRole] = useState(null);
 
   const types = ["Full-time", "Part-time", "Internship"];
-
   const isValid = !!workType;
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      const userRole = await getUserRole();
+      setRole(userRole);
+    };
+
+    fetchRole();
+  }, []);
 
   const handleSubmit = async () => {
     if (!workType) {
@@ -24,8 +33,13 @@ const WorkType = () => {
     try {
       const token = await getToken();
 
+      const endpoint =
+        role === "recruiter"
+          ? "/onboarding/workType/recruiter"
+          : "/onboarding/workType/jobSeeker";
+
       const response = await api.patch(
-        "/onboarding/workType/jobSeeker",
+        endpoint,
         { workType },
         {
           headers: {
@@ -37,7 +51,7 @@ const WorkType = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/jobSeeker/workEnvironment");
+        router.replace("/workEnvironment");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong");
       }
@@ -50,22 +64,35 @@ const WorkType = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
-        <View
-          className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(3 / 5) * 100}%` }}
-        />
+        {role === "recruiter" ? (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(6 / 9) * 100}%` }}
+          />
+        ) : (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(4 / 7) * 100}%` }}
+          />
+        )}
       </View>
       <View className="justify-between flex-1 gap-6 px-6 mt-14">
         <View>
           <Text className="mb-3 text-3xl font-poppins-600">
-            What type of job are {"\n"}you looking for?
+            {role === "recruiter"
+              ? "What type of job are \nyou offering?"
+              : "What type of job are you looking for?"}
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins">
-            Select your preferred job type
+            {role === "recruiter"
+              ? "Select the type of work arrangement you're offering"
+              : "Select your preferred work arrangement"}
           </Text>
 
           <Text className="mb-5 text-lg font-poppins-600">
-            Choose how you'd like to be employed.
+            {role === "recruiter"
+              ? "Choose how this job will be structured"
+              : "Choose how you'd like to be employed"}
           </Text>
           <View className="flex-col gap-3 mb-4">
             {types.map((type) => (

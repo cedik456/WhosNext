@@ -48,7 +48,7 @@ const Location = () => {
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
         <View
           className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(5 / 5) * 100}%` }}
+          style={{ width: `${(7 / 7) * 100}%` }}
         />
       </View>
       <View className="justify-between flex-1 px-6 mt-14">

@@ -123,7 +123,7 @@ const SwipeDeck = () => {
   }
 
   return (
-    <View className="justify-center flex-1">
+    <View className="flex-1 ">
       <Swiper
         key={`deck-${role}-${cards.length}`}
         cards={cards}

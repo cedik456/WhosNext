@@ -36,7 +36,7 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 ">
       <View className="px-5">
         <View className="absolute z-10 top-5 left-5 right-5 ">
           <View className="flex-row items-center justify-between">

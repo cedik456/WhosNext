@@ -47,7 +47,7 @@ const JobSeekerFilters = () => {
 
   // Work Environment
   const [selectedWorkEnv, setSelectedWorkEnv] = useState(null);
-  const workEnvironments = ["Remote", "Hybrid", "Onsite"];
+  const workEnvironments = ["Remote", "Hybrid", "On-site"];
 
   // Salary Range (Minimum Salary)
   const [minSalary, setMinSalary] = useState("");
@@ -72,7 +72,6 @@ const JobSeekerFilters = () => {
           preferredWorkEnvironment: selectedWorkEnv,
           preferredSalary: {
             min: parseInt(minSalary) || 0,
-            max: null,
           },
           preferredJobTitle: selectedJobTitle,
         },
@@ -124,6 +123,61 @@ const JobSeekerFilters = () => {
     );
   };
 
+  const handleClearPreferences = async () => {
+    Alert.alert(
+      "Clear All Filters",
+      "Are you sure you want to reset all filters?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Clear",
+          onPress: async () => {
+            const token = await getToken();
+
+            try {
+              await api.patch(
+                "/preferences/jobSeeker",
+                { preferences: {} },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+
+              // Clear local state
+              setPreferredSkills([]);
+              setSelectedLocation(null);
+              setSelectedExperienceLevel(null);
+              setSelectedWorkType(null);
+              setSelectedWorkEnv(null);
+              setMinSalary("");
+              setSelectedJobTitle("");
+
+              setOriginalPreferences({
+                preferredSkills: [],
+                preferredLocation: null,
+                preferredExperienceLevel: null,
+                preferredWorkType: null,
+                preferredWorkEnvironment: null,
+                preferredSalary: { min: 0 },
+                preferredJobTitle: "",
+              });
+              setShouldRefetch(true);
+              Alert.alert("Success", "Filters have been cleared.");
+            } catch (error) {
+              console.error(
+                "Error clearing filters:",
+                error.response?.data || error.message
+              );
+              Alert.alert("Error", "Failed to clear filters.");
+            }
+          },
+        },
+      ]
+    );
+  };
+
   useEffect(() => {
     const fetchPreferences = async () => {
       try {
@@ -154,7 +208,6 @@ const JobSeekerFilters = () => {
             preferredWorkEnvironment: prefs.preferredWorkEnvironment || null,
             preferredSalary: {
               min: prefs.preferredSalary?.min || 0,
-              max: null,
             },
             preferredJobTitle: prefs.preferredJobTitle || "",
           });
@@ -172,11 +225,15 @@ const JobSeekerFilters = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-row items-center p-5">
-        <Pressable onPress={() => router.back()} className="mr-28">
+      <View className="flex-row items-center justify-between p-5">
+        <Pressable onPress={() => router.back()}>
           <FontAwesome6 name="chevron-left" size={24} />
         </Pressable>
         <Text className="text-2xl font-poppins-600">Filter Jobs</Text>
+
+        <Pressable onPress={handleClearPreferences}>
+          <Text className="text-sm text-blue-600 font-poppins-500">Clear</Text>
+        </Pressable>
       </View>
       <View className="h-px bg-gray-200" />
       <ScrollView className="flex-1">

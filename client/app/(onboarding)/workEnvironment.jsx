@@ -1,19 +1,27 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Button from "../../../components/Button";
-import { getToken } from "../../../utils/storage";
-import api from "../../../utils/axiosInstance";
+import { getToken } from "../../utils/storage";
+import api from "../../utils/axiosInstance";
+import Button from "../../components/Button";
+import { getUserRole } from "../../utils/secureUser";
 
 const WorkEnvironment = () => {
   const router = useRouter();
-
   const [workEnvironment, setWorkEnvironment] = useState(null);
+  const [role, setRole] = useState(null);
 
   const environments = ["On-site", "Remote", "Hybrid"];
-
   const isValid = !!workEnvironment;
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      const userRole = await getUserRole();
+      setRole(userRole);
+    };
+    fetchRole();
+  }, []);
 
   const handleSubmit = async () => {
     if (!workEnvironment) {
@@ -24,8 +32,13 @@ const WorkEnvironment = () => {
     try {
       const token = await getToken();
 
+      const endpoint =
+        role === "recruiter"
+          ? "/onboarding/workEnvironment/recruiter"
+          : "/onboarding/workEnvironment/jobSeeker";
+
       const response = await api.patch(
-        "/onboarding/workEnvironment/jobSeeker",
+        endpoint,
         { workEnvironment },
         {
           headers: {
@@ -37,7 +50,7 @@ const WorkEnvironment = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/skills");
+        router.replace("/experienceLevel");
       } else {
         console.error(error);
         Alert.alert("Error", "Failed to save work environment.");
@@ -51,22 +64,35 @@ const WorkEnvironment = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
-        <View
-          className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(4 / 6) * 100}%` }}
-        />
+        {role === "recruiter" ? (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(7 / 9) * 100}%` }}
+          />
+        ) : (
+          <View
+            className="h-1 bg-black rounded-r-full "
+            style={{ width: `${(5 / 7) * 100}%` }}
+          />
+        )}
       </View>
       <View className="justify-between flex-1 gap-6 px-6 mt-14">
         <View>
           <Text className="mb-3 text-3xl font-poppins-600">
-            What’s your preferred work environment?
+            {role === "recruiter"
+              ? "What work setup are \nyou offering?"
+              : "What’s your preferred \nwork environment?"}
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins">
-            Choose your preferred work setup
+            {role === "recruiter"
+              ? "Choose the environment this job will follow"
+              : "Choose your preferred work setup"}
           </Text>
 
           <Text className="mb-5 text-lg font-poppins-600">
-            Select where you'd be most comfortable {"\n"}working from.
+            {role === "recruiter"
+              ? "Let candidates know if the job is remote, on-site or hybrid"
+              : "Select where you'd be most comfortable \nworking from."}
           </Text>
           <View className="flex-col gap-3 mb-4">
             {environments.map((env) => (

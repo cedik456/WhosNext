@@ -157,16 +157,84 @@ exports.uploadCompanyLogo = async (req, res) => {
   }
 };
 
+exports.saveRecruiterWorkType = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { workType } = req.body;
+
+    const validTypes = ["Full-time", "Part-time", "Internship"];
+
+    if (!validTypes.includes(workType)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing work type",
+      });
+    }
+
+    await Recruiter.findOneAndUpdate(
+      { userId },
+      {
+        $set: {
+          "hiringCriteria.workType": workType,
+        },
+      },
+      { new: true, upsert: true }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, message: "Work type saved successfully" });
+  } catch (error) {
+    console.error("Error saving recruiter work type", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error while saving recruiter work type",
+    });
+  }
+};
+
+exports.saveRecruiterWorkEnvironment = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { workEnvironment } = req.body;
+
+    const validEnvironments = ["On-site", "Remote", "Hybrid"];
+
+    if (!validEnvironments.includes(workEnvironment)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing work environment",
+      });
+    }
+
+    await Recruiter.findOneAndUpdate(
+      { userId },
+      {
+        $set: {
+          "hiringCriteria.workEnvironment": workEnvironment,
+        },
+      },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Work environment saved successfully",
+    });
+  } catch (error) {
+    console.error("Error saving recruiter work environment", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error while saving work environment",
+    });
+  }
+};
+
 exports.saveRecruiterExperience = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can perform this action.",
-      });
-    }
 
     const { experience } = req.body;
 

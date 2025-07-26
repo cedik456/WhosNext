@@ -210,6 +210,15 @@ exports.getRecommendationsv2 = async (req, res) => {
         });
       }
 
+      if (preferences.preferredJobTitle) {
+        filterConditions.push({
+          jobTitle: {
+            $regex: preferences.preferredJobTitle,
+            $options: "i",
+          },
+        });
+      }
+
       if (filterConditions.length > 0) {
         query.$and = filterConditions;
       }

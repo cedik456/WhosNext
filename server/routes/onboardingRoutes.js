@@ -26,6 +26,8 @@ const {
   saveHiringLocation,
   uploadCompanyLogo,
   saveRecruiterExperience,
+  saveRecruiterWorkType,
+  saveRecruiterWorkEnvironment,
 } = require("../controllers/onboarding/recruiterController");
 
 // Shared
@@ -46,6 +48,8 @@ router.patch("/jobTitle/recruiter", auth, saveJobTitle);
 router.patch("/skills/recruiter", auth, saveRequirements);
 router.patch("/hiringLocation/recruiter", auth, saveHiringLocation);
 router.patch("/experience/recruiter", auth, saveRecruiterExperience);
+router.patch("/workType/recruiter", auth, saveRecruiterWorkType);
+router.patch("/workEnvironment/recruiter", auth, saveRecruiterWorkEnvironment);
 router.post("/logo/recruiter", auth, upload.single("logo"), uploadCompanyLogo);
 
 module.exports = router;
