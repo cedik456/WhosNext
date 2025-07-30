@@ -79,4 +79,4 @@ const computeSimilarity = (jobSeekerProfile, candidate) => {
   return totalWeight > 0 ? score / totalWeight : 0;
 };
 
-module.exports = { jaccardSimilarity, computeSimilarity };
+module.exports = { computeSimilarity };
