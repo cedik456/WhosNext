@@ -1,72 +1,69 @@
+// Jaccard Similarity
+
 const jaccardSimilarity = (setA, setB) => {
   const intersection = [...setA].filter((x) => setB.has(x));
   const union = new Set([...setA, ...setB]);
   return union.size === 0 ? 0 : intersection.length / union.size;
 };
 
-const computeSimilarity = (
-  jobSeekerProfile,
-  recruiterProfile,
-  mode = "jobSeeker"
-) => {
+// Job Seeker Similarity
+
+const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
   let score = 0;
   let totalWeight = 0;
 
-  // pick the right structures depending on mode
-  const jobSeeker = mode === "jobSeeker" ? jobSeekerProfile : recruiterProfile;
-  const recruiter = mode === "jobSeeker" ? recruiterProfile : jobSeekerProfile;
-
-  // Skills (40%)
   if (
-    jobSeeker.skills?.length &&
-    recruiter.hiringCriteria?.requiredSkills?.length
+    jobSeekerProfile.skills?.length &&
+    recruiterProfile.hiringCriteria?.requiredSkills?.length
   ) {
     const skillScore = jaccardSimilarity(
-      new Set(jobSeeker.skills),
-      new Set(recruiter.hiringCriteria.requiredSkills)
+      new Set(jobSeekerProfile.skills),
+      new Set(recruiterProfile.hiringCriteria.requiredSkills)
     );
     score += skillScore * 0.4;
     totalWeight += 0.4;
   }
 
-  // Location (20%)
-  if (jobSeeker.location && recruiter.hiringCriteria?.location) {
+  if (jobSeekerProfile.location && recruiterProfile.hiringCriteria?.location) {
     if (
-      jobSeeker.location.toLowerCase() ===
-      recruiter.hiringCriteria.location.toLowerCase()
+      jobSeekerProfile.location.toLowerCase() ===
+      recruiterProfile.hiringCriteria.location.toLowerCase()
     ) {
       score += 1 * 0.2;
     }
     totalWeight += 0.2;
   }
 
-  // Experience (15%)
-  if (jobSeeker.experience && recruiter.hiringCriteria?.experienceLevel) {
+  if (
+    jobSeekerProfile.experience &&
+    recruiterProfile.hiringCriteria?.experienceLevel
+  ) {
     if (
-      jobSeeker.experience.toLowerCase() ===
-      recruiter.hiringCriteria.experienceLevel.toLowerCase()
+      jobSeekerProfile.experience.toLowerCase() ===
+      recruiterProfile.hiringCriteria.experienceLevel.toLowerCase()
     ) {
       score += 1 * 0.15;
     }
     totalWeight += 0.15;
   }
 
-  // Work Type (15%)
-  if (jobSeeker.workType && recruiter.hiringCriteria?.workType) {
+  if (jobSeekerProfile.workType && recruiterProfile.hiringCriteria?.workType) {
     if (
-      jobSeeker.workType.toLowerCase() ===
-      recruiter.hiringCriteria.workType.toLowerCase()
+      jobSeekerProfile.workType.toLowerCase() ===
+      recruiterProfile.hiringCriteria.workType.toLowerCase()
     ) {
       score += 1 * 0.15;
     }
     totalWeight += 0.15;
   }
 
-  // Work Environment (10%)
-  if (jobSeeker.workEnvironment && recruiter.hiringCriteria?.workEnvironment) {
+  if (
+    jobSeekerProfile.workEnvironment &&
+    recruiterProfile.hiringCriteria?.workEnvironment
+  ) {
     if (
-      jobSeeker.workEnvironment.toLowerCase() ===
-      recruiter.hiringCriteria.workEnvironment.toLowerCase()
+      jobSeekerProfile.workEnvironment.toLowerCase() ===
+      recruiterProfile.hiringCriteria.workEnvironment.toLowerCase()
     ) {
       score += 1 * 0.1;
     }
@@ -76,4 +73,68 @@ const computeSimilarity = (
   return totalWeight > 0 ? score / totalWeight : 0;
 };
 
-module.exports = { computeSimilarity };
+// Recruiter Similarity
+
+const computeRecruiterSimilarity = (jobSeekerProfile, recruiterFilters) => {
+  let score = 0;
+  let totalWeight = 0;
+
+  if (
+    jobSeekerProfile.skills?.length &&
+    recruiterFilters?.filterSkills?.length
+  ) {
+    const skillScore = jaccardSimilarity(
+      new Set(jobSeekerProfile.skills),
+      new Set(recruiterFilters.filterSkills)
+    );
+    score += skillScore * 0.4;
+    totalWeight += 0.4;
+  }
+
+  if (jobSeekerProfile.location && recruiterFilters?.filterLocation) {
+    if (
+      jobSeekerProfile.location.toLowerCase() ===
+      recruiterFilters.filterLocation.toLowerCase()
+    ) {
+      score += 1 * 0.2;
+    }
+    totalWeight += 0.2;
+  }
+
+  if (jobSeekerProfile.experience && recruiterFilters?.filterExperienceLevel) {
+    if (
+      jobSeekerProfile.experience.toLowerCase() ===
+      recruiterFilters.filterExperienceLevel.toLowerCase()
+    ) {
+      score += 1 * 0.15;
+    }
+    totalWeight += 0.15;
+  }
+
+  if (jobSeekerProfile.workType && recruiterFilters?.filterWorkType) {
+    if (
+      jobSeekerProfile.workType.toLowerCase() ===
+      recruiterFilters.filterWorkType.toLowerCase()
+    ) {
+      score += 1 * 0.15;
+    }
+    totalWeight += 0.15;
+  }
+
+  if (
+    jobSeekerProfile.workEnvironment &&
+    recruiterFilters?.filterWorkEnvironment
+  ) {
+    if (
+      jobSeekerProfile.workEnvironment.toLowerCase() ===
+      recruiterFilters.filterWorkEnvironment.toLowerCase()
+    ) {
+      score += 1 * 0.1;
+    }
+    totalWeight += 0.1;
+  }
+
+  return totalWeight > 0 ? score / totalWeight : 0;
+};
+
+module.exports = { computeJobSeekerSimilarity, computeRecruiterSimilarity };

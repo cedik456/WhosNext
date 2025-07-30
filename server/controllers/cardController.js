@@ -2,7 +2,10 @@ const JobSeeker = require("../models/JobSeekerSchema");
 const Recruiter = require("../models/RecruiterSchema");
 const Swipe = require("../models/SwipeSchema");
 const User = require("../models/UserSchema");
-const { computeSimilarity } = require("../utils/similarity");
+const {
+  computeJobSeekerSimilarity,
+  computeRecruiterSimilarity,
+} = require("../utils/similarity");
 
 exports.getAllRecruiters = async (req, res) => {
   try {
@@ -423,7 +426,10 @@ exports.getRecommendationsv3 = async (req, res) => {
 
       matches = matches
         .map((candidate) => {
-          const similarityScore = computeSimilarity(jobSeeker, candidate);
+          const similarityScore = computeJobSeekerSimilarity(
+            jobSeeker,
+            candidate
+          );
           return { ...candidate, _similarity: similarityScore };
         })
         .sort((a, b) => b._similarity - a._similarity);
@@ -491,10 +497,9 @@ exports.getRecommendationsv3 = async (req, res) => {
             candidate.skills,
             candidate.location
           );
-          const similarityScore = computeSimilarity(
+          const similarityScore = computeRecruiterSimilarity(
             candidate,
-            recruiter,
-            "recruiter"
+            recruiter.filters
           );
           return { ...candidate, _similarity: similarityScore };
         })
