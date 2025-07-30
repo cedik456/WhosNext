@@ -499,7 +499,7 @@ exports.getRecommendationsv3 = async (req, res) => {
           );
           const similarityScore = computeRecruiterSimilarity(
             candidate,
-            recruiter.filters
+            recruiter.hiringCriteria
           );
           return { ...candidate, _similarity: similarityScore };
         })

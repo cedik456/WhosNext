@@ -75,59 +75,61 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
 
 // Recruiter Similarity
 
-const computeRecruiterSimilarity = (jobSeekerProfile, recruiterFilters) => {
+const computeRecruiterSimilarity = (jobSeekerProfile, recruiterCriteria) => {
   let score = 0;
   let totalWeight = 0;
 
+  // Skills (40%)
   if (
     jobSeekerProfile.skills?.length &&
-    recruiterFilters?.filterSkills?.length
+    recruiterCriteria?.requiredSkills?.length
   ) {
     const skillScore = jaccardSimilarity(
       new Set(jobSeekerProfile.skills),
-      new Set(recruiterFilters.filterSkills)
+      new Set(recruiterCriteria.requiredSkills)
     );
     score += skillScore * 0.4;
     totalWeight += 0.4;
   }
 
-  if (jobSeekerProfile.location && recruiterFilters?.filterLocation) {
+  // Location (20%)
+  if (jobSeekerProfile.location && recruiterCriteria?.location) {
     if (
       jobSeekerProfile.location.toLowerCase() ===
-      recruiterFilters.filterLocation.toLowerCase()
+      recruiterCriteria.location.toLowerCase()
     ) {
       score += 1 * 0.2;
     }
     totalWeight += 0.2;
   }
 
-  if (jobSeekerProfile.experience && recruiterFilters?.filterExperienceLevel) {
+  // Experience (15%)
+  if (jobSeekerProfile.experience && recruiterCriteria?.experienceLevel) {
     if (
       jobSeekerProfile.experience.toLowerCase() ===
-      recruiterFilters.filterExperienceLevel.toLowerCase()
+      recruiterCriteria.experienceLevel.toLowerCase()
     ) {
       score += 1 * 0.15;
     }
     totalWeight += 0.15;
   }
 
-  if (jobSeekerProfile.workType && recruiterFilters?.filterWorkType) {
+  // Work Type (15%)
+  if (jobSeekerProfile.workType && recruiterCriteria?.workType) {
     if (
       jobSeekerProfile.workType.toLowerCase() ===
-      recruiterFilters.filterWorkType.toLowerCase()
+      recruiterCriteria.workType.toLowerCase()
     ) {
       score += 1 * 0.15;
     }
     totalWeight += 0.15;
   }
 
-  if (
-    jobSeekerProfile.workEnvironment &&
-    recruiterFilters?.filterWorkEnvironment
-  ) {
+  // Work Environment (10%)
+  if (jobSeekerProfile.workEnvironment && recruiterCriteria?.workEnvironment) {
     if (
       jobSeekerProfile.workEnvironment.toLowerCase() ===
-      recruiterFilters.filterWorkEnvironment.toLowerCase()
+      recruiterCriteria.workEnvironment.toLowerCase()
     ) {
       score += 1 * 0.1;
     }
