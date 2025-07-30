@@ -18,6 +18,7 @@ const computeSimilarity = (jobSeekerProfile, candidate) => {
       new Set(jobSeekerProfile.skills),
       new Set(candidate.hiringCriteria.requiredSkills)
     );
+    console.log("Skill Score:", skillScore);
     score += skillScore * 0.4;
     totalWeight += 0.4;
   }
@@ -29,7 +30,10 @@ const computeSimilarity = (jobSeekerProfile, candidate) => {
       jobSeekerProfile.location.toLowerCase() ===
       candidate.hiringCriteria.location.toLowerCase()
     ) {
+      console.log("Location matched!");
       score += 1 * 0.2;
+    } else {
+      console.log("Location mismatch!");
     }
     totalWeight += 0.2;
   }
@@ -44,7 +48,10 @@ const computeSimilarity = (jobSeekerProfile, candidate) => {
       jobSeekerProfile.experience.toLowerCase() ===
       candidate.hiringCriteria.experienceLevel.toLowerCase()
     ) {
+      console.log("Experience matched!");
       score += 1 * 0.15;
+    } else {
+      console.log("Experience mismatch.");
     }
     totalWeight += 0.15;
   }
@@ -56,7 +63,10 @@ const computeSimilarity = (jobSeekerProfile, candidate) => {
       jobSeekerProfile.workType.toLowerCase() ===
       candidate.hiringCriteria.workType.toLowerCase()
     ) {
+      console.log("Work Type Matched!");
       score += 1 * 0.15;
+    } else {
+      console.log("Work Type Mismatched!");
     }
     totalWeight += 0.15;
   }
@@ -76,7 +86,31 @@ const computeSimilarity = (jobSeekerProfile, candidate) => {
     totalWeight += 0.1;
   }
 
+  console.log(totalWeight);
   return totalWeight > 0 ? score / totalWeight : 0;
 };
 
-module.exports = { jaccardSimilarity, computeSimilarity };
+// --- Test Case ---
+// --- Test Case ---
+const jobSeekerProfile = {
+  skills: ["React", "Node"],
+  location: "Quezon City",
+  experience: "Mid-level",
+  workType: "Full-time",
+  workEnvironment: "Remote",
+};
+
+const candidate = {
+  hiringCriteria: {
+    requiredSkills: ["React", "Node", "Express"],
+    location: "Quezon City",
+    experienceLevel: "Mid-level",
+    workType: "Part-time",
+    workEnvironment: "Remote",
+  },
+};
+
+console.log(
+  "Final Similarity:",
+  computeSimilarity(jobSeekerProfile, candidate)
+);
