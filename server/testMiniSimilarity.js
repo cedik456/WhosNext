@@ -76,33 +76,36 @@ const computeSimilarity = (
   return totalWeight > 0 ? score / totalWeight : 0;
 };
 
-// --- Test Case ---
-// --- Test Case ---
-const jobSeekerProfile = {
-  skills: ["React", "Node", "JavaScript", "Express.js", "MongoDB", "Figma"],
-  location: "Legazpi City",
-  experience: "Executive",
-  workType: "Full-time",
-  workEnvironment: "On-site",
-};
+module.exports = { jaccardSimilarity, computeSimilarity };
 
-const candidate = {
-  hiringCriteria: {
-    requiredSkills: [
-      "Photoshop",
-      "UI/UX Design",
-      "Illustrator",
-      "Adobe XD",
-      "MongoDB",
-    ],
-    location: "Daraga",
-    experienceLevel: "Entry-level",
+// --- TEMP TEST HARNESS (remove later) ---
+if (process.env.NODE_ENV !== "production") {
+  const jobSeekerProfile = {
+    skills: ["React", "Node", "JavaScript", "Express.js", "MongoDB", "Figma"],
+    location: "Legazpi City",
+    experience: "Executive",
     workType: "Full-time",
     workEnvironment: "On-site",
-  },
-};
+  };
 
-console.log(
-  "Final Similarity:",
-  computeSimilarity(jobSeekerProfile, candidate)
-);
+  const candidate = {
+    hiringCriteria: {
+      requiredSkills: [
+        "Photoshop",
+        "UI/UX Design",
+        "Illustrator",
+        "Adobe XD",
+        "MongoDB",
+      ],
+      location: "Daraga",
+      experienceLevel: "Entry-level",
+      workType: "Full-time",
+      workEnvironment: "On-site",
+    },
+  };
+
+  console.log(
+    "🧪 Test Similarity Score:",
+    computeSimilarity(jobSeekerProfile, candidate)
+  );
+}
