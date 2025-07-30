@@ -1,3 +1,9 @@
+const jaccardSimilarity = (setA, setB) => {
+  const intersection = [...setA].filter((x) => setB.has(x));
+  const union = new Set([...setA, ...setB]);
+  return union.size === 0 ? 0 : intersection.length / union.size;
+};
+
 const computeSimilarity = (
   jobSeekerProfile,
   recruiterProfile,
