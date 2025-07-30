@@ -4,89 +4,75 @@ const jaccardSimilarity = (setA, setB) => {
   return union.size === 0 ? 0 : intersection.length / union.size;
 };
 
-const computeSimilarity = (jobSeekerProfile, candidate) => {
+const computeSimilarity = (
+  jobSeekerProfile,
+  recruiterProfile,
+  mode = "jobSeeker"
+) => {
   let score = 0;
   let totalWeight = 0;
 
-  // Skills (40%)
+  // pick the right structures depending on mode
+  const jobSeeker = mode === "jobSeeker" ? jobSeekerProfile : recruiterProfile;
+  const recruiter = mode === "jobSeeker" ? recruiterProfile : jobSeekerProfile;
 
+  // Skills (40%)
   if (
-    jobSeekerProfile.skills?.length &&
-    candidate.hiringCriteria?.requiredSkills?.length
+    jobSeeker.skills?.length &&
+    recruiter.hiringCriteria?.requiredSkills?.length
   ) {
     const skillScore = jaccardSimilarity(
-      new Set(jobSeekerProfile.skills),
-      new Set(candidate.hiringCriteria.requiredSkills)
+      new Set(jobSeeker.skills),
+      new Set(recruiter.hiringCriteria.requiredSkills)
     );
-    console.log("Skill Score:", skillScore);
     score += skillScore * 0.4;
     totalWeight += 0.4;
   }
 
   // Location (20%)
-
-  if (jobSeekerProfile.location && candidate.hiringCriteria?.location) {
+  if (jobSeeker.location && recruiter.hiringCriteria?.location) {
     if (
-      jobSeekerProfile.location.toLowerCase() ===
-      candidate.hiringCriteria.location.toLowerCase()
+      jobSeeker.location.toLowerCase() ===
+      recruiter.hiringCriteria.location.toLowerCase()
     ) {
-      console.log("Location matched!");
       score += 1 * 0.2;
-    } else {
-      console.log("Location mismatch!");
     }
     totalWeight += 0.2;
   }
 
-  // Experience
-
-  if (
-    jobSeekerProfile.experience &&
-    candidate.hiringCriteria?.experienceLevel
-  ) {
+  // Experience (15%)
+  if (jobSeeker.experience && recruiter.hiringCriteria?.experienceLevel) {
     if (
-      jobSeekerProfile.experience.toLowerCase() ===
-      candidate.hiringCriteria.experienceLevel.toLowerCase()
+      jobSeeker.experience.toLowerCase() ===
+      recruiter.hiringCriteria.experienceLevel.toLowerCase()
     ) {
-      console.log("Experience matched!");
       score += 1 * 0.15;
-    } else {
-      console.log("Experience mismatch.");
     }
     totalWeight += 0.15;
   }
 
-  // Work Type
-
-  if (jobSeekerProfile.workType && candidate.hiringCriteria?.workType) {
+  // Work Type (15%)
+  if (jobSeeker.workType && recruiter.hiringCriteria?.workType) {
     if (
-      jobSeekerProfile.workType.toLowerCase() ===
-      candidate.hiringCriteria.workType.toLowerCase()
+      jobSeeker.workType.toLowerCase() ===
+      recruiter.hiringCriteria.workType.toLowerCase()
     ) {
-      console.log("Work Type Matched!");
       score += 1 * 0.15;
-    } else {
-      console.log("Work Type Mismatched!");
     }
     totalWeight += 0.15;
   }
 
-  // Work Environments
-
-  if (
-    jobSeekerProfile.workEnvironment &&
-    candidate.hiringCriteria?.workEnvironment
-  ) {
+  // Work Environment (10%)
+  if (jobSeeker.workEnvironment && recruiter.hiringCriteria?.workEnvironment) {
     if (
-      jobSeekerProfile.workEnvironment.toLowerCase() ===
-      candidate.hiringCriteria.workEnvironment.toLowerCase()
+      jobSeeker.workEnvironment.toLowerCase() ===
+      recruiter.hiringCriteria.workEnvironment.toLowerCase()
     ) {
       score += 1 * 0.1;
     }
     totalWeight += 0.1;
   }
 
-  console.log(totalWeight);
   return totalWeight > 0 ? score / totalWeight : 0;
 };
 

@@ -423,6 +423,13 @@ exports.getRecommendationsv3 = async (req, res) => {
 
       matches = matches
         .map((candidate) => {
+          console.log("Recruiter hiringCriteria:", recruiter.hiringCriteria);
+          console.log(
+            "Candidate profile:",
+            candidate.skills,
+            candidate.location
+          );
+
           const similarityScore = computeSimilarity(jobSeeker, candidate);
           return { ...candidate, _similarity: similarityScore };
         })
