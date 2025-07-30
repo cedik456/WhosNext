@@ -417,7 +417,7 @@ exports.getRecommendationsv3 = async (req, res) => {
 
       // matches
 
-      const matches = await Recruiter.find(query)
+      let matches = await Recruiter.find(query)
         .populate("userId", "name avatar")
         .lean();
 
