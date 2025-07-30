@@ -19,7 +19,7 @@ const JobSeekerSchema = new Schema({
   bio: String,
   workEnvironment: {
     type: String,
-    enum: ["On-Site", "Remote", "Hybrid"],
+    enum: ["On-site", "Remote", "Hybrid"],
   },
   workType: {
     type: String,
