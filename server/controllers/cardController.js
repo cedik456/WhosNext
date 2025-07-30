@@ -2,6 +2,7 @@ const JobSeeker = require("../models/JobSeekerSchema");
 const Recruiter = require("../models/RecruiterSchema");
 const Swipe = require("../models/SwipeSchema");
 const User = require("../models/UserSchema");
+const { computeSimilarity } = require("../utils/similarity");
 
 exports.getAllRecruiters = async (req, res) => {
   try {
