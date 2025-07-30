@@ -51,7 +51,7 @@ const SwipeDeck = () => {
       const token = await getToken();
       if (!token) return;
 
-      const response = await api.get("/card/recommendations/v2", {
+      const response = await api.get("/card/recommendations/v3", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -60,8 +60,8 @@ const SwipeDeck = () => {
       const { success, data } = response.data;
 
       if (success) {
-        const shuffledCards = shuffleArray(data);
-        setCards(shuffledCards);
+        // const shuffledCards = shuffleArray(data);
+        setCards(data);
       }
     } catch (error) {
       console.error("Failed to fetch cards:", error.message);

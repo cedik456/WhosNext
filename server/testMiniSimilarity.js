@@ -93,20 +93,26 @@ const computeSimilarity = (jobSeekerProfile, candidate) => {
 // --- Test Case ---
 // --- Test Case ---
 const jobSeekerProfile = {
-  skills: ["React", "Node"],
-  location: "Quezon City",
-  experience: "Mid-level",
+  skills: ["React", "Node", "JavaScript", "Express.js", "MongoDB", "Figma"],
+  location: "Legazpi City",
+  experience: "Executive",
   workType: "Full-time",
-  workEnvironment: "Remote",
+  workEnvironment: "On-site",
 };
 
 const candidate = {
   hiringCriteria: {
-    requiredSkills: ["React", "Node", "Express"],
-    location: "Quezon City",
-    experienceLevel: "Mid-level",
-    workType: "Part-time",
-    workEnvironment: "Remote",
+    requiredSkills: [
+      "Photoshop",
+      "UI/UX Design",
+      "Illustrator",
+      "Adobe XD",
+      "MongoDB",
+    ],
+    location: "Daraga",
+    experienceLevel: "Entry-level",
+    workType: "Full-time",
+    workEnvironment: "On-site",
   },
 };
 

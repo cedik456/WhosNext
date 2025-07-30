@@ -483,6 +483,17 @@ exports.getRecommendationsv3 = async (req, res) => {
         .populate("userId", "name avatar")
         .lean();
 
+      matches = matches
+        .map((candidate) => {
+          const similarityScore = computeSimilarity(
+            candidate,
+            recruiter,
+            "recruiter"
+          );
+          return { ...candidate, _similarity: similarityScore };
+        })
+        .sort((a, b) => b._similarity - a._similarity);
+
       return res.status(200).json({ success: true, data: matches });
     }
 
