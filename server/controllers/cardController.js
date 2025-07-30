@@ -420,6 +420,13 @@ exports.getRecommendationsv3 = async (req, res) => {
         .populate("userId", "name avatar")
         .lean();
 
+      matches = matches
+        .map((candidate) => {
+          const similarityScore = computeSimilarity(jobSeeker, candidate);
+          return { ...candidate, _similarity: similarityScore };
+        })
+        .sort((a, b) => b._similarity - a._similarity);
+
       return res.status(200).json({ success: true, data: matches });
     }
 
@@ -474,14 +481,6 @@ exports.getRecommendationsv3 = async (req, res) => {
       const matches = await JobSeeker.find(query)
         .populate("userId", "name avatar")
         .lean();
-
-      matches = matches
-        .map((candidate) => {
-          const similarityScore = computeSimilarity(jobSeeker, candidate);
-          return { ...candidate, _similarity: similarityScore };
-        })
-        .sort((a, b) => b._similarity - a._similarity)
-        .map(({ _similarity, ...candidate }) => candidate);
 
       return res.status(200).json({ success: true, data: matches });
     }
