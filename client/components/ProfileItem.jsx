@@ -11,8 +11,14 @@ const ProfileItem = ({
   dot,
   onPress,
   showDivider,
+  showStatus,
 }) => {
   const { colorScheme } = useColorScheme();
+
+  let statusText = null;
+  if (showStatus) {
+    statusText = colorScheme === "dark" ? "On" : "Off";
+  }
 
   return (
     <>
@@ -34,7 +40,9 @@ const ProfileItem = ({
         </View>
 
         <View className="flex-row items-center gap-2">
-          {value ? (
+          {showStatus && statusText !== null ? (
+            <Text className="text-gray-500 font-poppins-400">{statusText}</Text>
+          ) : value ? (
             <Text className="text-gray-500 font-poppins-400">{value}</Text>
           ) : dot ? (
             <View className="w-2 h-2 bg-blue-500 rounded-full" />

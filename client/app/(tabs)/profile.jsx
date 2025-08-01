@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { getToken } from "../../utils/storage";
@@ -42,105 +42,100 @@ const Profile = () => {
             Profile
           </Text>
         </View>
-        <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
-          <View className="">
-            <View className="items-center">
-              <View className="relative">
-                <Image
-                  source={
-                    profile?.role === "jobSeeker"
-                      ? { uri: profile?.avatar }
-                      : { uri: profile?.companyPicture }
-                  }
-                  className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black  "
-                />
-                {/* <TouchableOpacity className="absolute bottom-0 right-0">
+
+        <View className="">
+          <View className="items-center">
+            <View className="relative">
+              <Image
+                source={
+                  profile?.role === "jobSeeker"
+                    ? { uri: profile?.avatar }
+                    : { uri: profile?.companyPicture }
+                }
+                className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black  "
+              />
+              {/* <TouchableOpacity className="absolute bottom-0 right-0">
             <FontAwesome name="camera" size={20} />
           </TouchableOpacity> */}
-              </View>
-              <Text className="mt-2 text-3xl font-poppins-600 dark:text-white">
-                {profile?.name || profile?.companyName}
-              </Text>
-              <Text className="text-xl text-gray-500">
-                {profile?.role === "jobSeeker" ? "Job Seeker" : "Recruiter"}
-              </Text>
             </View>
+            <Text className="mt-2 text-3xl font-poppins-600 dark:text-white">
+              {profile?.name || profile?.companyName}
+            </Text>
+            <Text className="text-xl text-gray-500">
+              {profile?.role === "jobSeeker" ? "Job Seeker" : "Recruiter"}
+            </Text>
+          </View>
 
-            <View className="px-6 mt-8 ">
-              <View className="p-4 rounded-xl bg-gray-50 dark:bg-[#242526]">
-                <ProfileItem
-                  onPress={() => router.push("profile/darkMode")}
-                  label="Dark Mode"
-                  value="Off"
-                  icon="moon"
-                  iconSet={Ionicons}
-                  showDivider={true}
-                />
-                <ProfileItem
-                  onPress={() => router.push("profile/editProfile")}
-                  label="Edit Profile"
-                  value=""
-                  icon="user-alt"
-                  iconSet={FontAwesome5}
-                />
-              </View>
-            </View>
-
-            <View className="px-6 mt-8 ">
-              <View className="p-5 rounded-xl bg-gray-50 dark:bg-[#242526]">
-                <ProfileItem
-                  onPress={() => router.push("profile/workPreferences")}
-                  label={`${
-                    profile?.role === "jobSeeker" ? "Work" : "Hiring"
-                  } Preferences`}
-                  value=""
-                  icon="suitcase"
-                  iconSet={FontAwesome}
-                  showDivider={true}
-                />
-
-                <ProfileItem
-                  onPress={() => router.push("profile/changeAvatar")}
-                  label="Change Avatar"
-                  value=""
-                  icon="people-sharp"
-                  iconSet={Ionicons}
-                  showDivider={true}
-                />
-
-                <ProfileItem
-                  onPress={() => router.push("profile/notifSounds")}
-                  label="Notifications & Sounds"
-                  value=""
-                  icon="people-sharp"
-                  iconSet={Ionicons}
-                  showDivider={false}
-                />
-              </View>
-            </View>
-
-            <View className="px-6 mt-8 ">
-              <View className="p-4 rounded-xl bg-gray-50 dark:bg-[#242526]">
-                <ProfileItem
-                  onPress={() => router.push("profile/privacySafety")}
-                  label="Privacy & Safety"
-                  value=""
-                  icon="privacy-tip"
-                  iconSet={MaterialIcons}
-                  showDivider={true}
-                />
-                <ProfileItem
-                  onPress={() => router.push("profile/accountSettings")}
-                  label="Account Settings"
-                  value=""
-                  icon="settings-sharp"
-                  iconSet={Ionicons}
-                  showDivider={false}
-                />
-              </View>
+          <View className="px-6 mt-8">
+            <View className="p-5 rounded-xl bg-gray-50 dark:bg-[#242526]">
+              <ProfileItem
+                onPress={() => router.push("profile/darkMode")}
+                label="Dark Mode"
+                value="Off"
+                icon="moon"
+                iconSet={Ionicons}
+                showDivider={true}
+                showStatus={true}
+              />
+              <ProfileItem
+                onPress={() => router.push("profile/editProfile")}
+                label="Edit Profile"
+                value=""
+                icon="user-alt"
+                iconSet={FontAwesome5}
+              />
             </View>
           </View>
-        </ScrollView>
+
+          <View className="p-5">
+            <View className="py-6 px-5 rounded-xl bg-gray-50 dark:bg-[#242526]">
+              {/* <ProfileItem
+                onPress={() => router.push("profile/workPreferences")}
+                label={`${
+                  profile?.role === "jobSeeker" ? "Work" : "Hiring"
+                } Preferences`}
+                value=""
+                icon="suitcase"
+                iconSet={FontAwesome}
+                showDivider={true}
+              /> */}
+
+              <ProfileItem
+                onPress={() => router.push("profile/notifSounds")}
+                label="Notifications & Sounds"
+                value=""
+                icon="people-sharp"
+                iconSet={Ionicons}
+                showDivider={true}
+              />
+
+              <ProfileItem
+                onPress={() => router.push("profile/privacySafety")}
+                label="Privacy & Safety"
+                value=""
+                icon="privacy-tip"
+                iconSet={MaterialIcons}
+                showDivider={true}
+              />
+              <ProfileItem
+                onPress={() => router.push("profile/accountSettings")}
+                label="Account Settings"
+                value=""
+                icon="settings-sharp"
+                iconSet={Ionicons}
+                showDivider={true}
+              />
+              <ProfileItem
+                onPress={() => router.push("profile/changeAvatar")}
+                label="Change Avatar"
+                value=""
+                icon="people-sharp"
+                iconSet={Ionicons}
+                showDivider={false}
+              />
+            </View>
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );

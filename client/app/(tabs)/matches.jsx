@@ -100,10 +100,12 @@ const Matches = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 dark:bg-black">
       <View className="px-6 mt-5">
         <View className="mb-5">
-          <Text className="mb-3 text-2xl font-poppins-600">Matches</Text>
+          <Text className="mb-3 text-2xl font-poppins-600 dark:text-white">
+            Matches
+          </Text>
 
           {matches.length > 0 ? (
             <FlatList
@@ -121,7 +123,9 @@ const Matches = () => {
         </View>
 
         <View>
-          <Text className="mb-3 text-xl font-poppins-600">Messages</Text>
+          <Text className="mb-3 text-xl font-poppins-600 dark:text-white">
+            Messages
+          </Text>
 
           {messages.length > 0 ? (
             <FlatList
@@ -193,7 +197,7 @@ const Matches = () => {
               keyExtractor={(item) => item.matchId}
             />
           ) : (
-            <Text className="mt-5 text-center text-gray-400"></Text>
+            <Text className="mt-5 text-sm text-gray-400">No messages yet</Text>
           )}
         </View>
       </View>

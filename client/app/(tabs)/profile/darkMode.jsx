@@ -2,8 +2,7 @@ import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileItem from "../../../components/ProfileItem";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
-import { colorScheme, useColorScheme } from "nativewind";
-import { useState } from "react";
+import { useColorScheme } from "nativewind";
 import { router } from "expo-router";
 
 const DarkMode = () => {
@@ -23,7 +22,7 @@ const DarkMode = () => {
         } text-2xl  font-poppins-600 `}
       >
         <View className="relative flex-row items-center justify-center px-6 mt-5">
-          <Pressable onPress={() => router.back()} className="absolute left-7 ">
+          <Pressable onPress={() => router.back()} className="absolute left-6 ">
             <FontAwesome6
               name="chevron-left"
               size={24}
@@ -61,16 +60,15 @@ const DarkMode = () => {
               iconSet={Ionicons}
               dot={colorScheme === "dark"}
               onPress={() => changeScheme("dark")}
-              showDivider={true}
             />
 
-            <ProfileItem
+            {/* <ProfileItem
               label="System"
               icon="settings-outline"
               iconSet={Ionicons}
-              dot={colorScheme === "system"}
+              dot={selectedTheme === "system"}
               onPress={() => changeScheme("system")}
-            />
+            /> */}
           </View>
         </View>
       </View>
