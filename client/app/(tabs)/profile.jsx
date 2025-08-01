@@ -1,5 +1,4 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { useAuth } from "../../hooks/useAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { getToken } from "../../utils/storage";
@@ -11,12 +10,10 @@ import {
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import Button from "../../components/Button";
 import { router } from "expo-router";
 import ProfileItem from "../../components/ProfileItem";
 
 const Profile = () => {
-  const { logout } = useAuth();
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -38,7 +35,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 dark:bg-black">
       <View className="dark:bg-black">
         <View className="px-6 mt-5">
           <Text className="text-2xl font-poppins-600 dark:text-white">
@@ -55,13 +52,13 @@ const Profile = () => {
                       ? { uri: profile?.avatar }
                       : { uri: profile?.companyPicture }
                   }
-                  className="w-[100px] h-[100px] rounded-full "
+                  className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black  "
                 />
                 {/* <TouchableOpacity className="absolute bottom-0 right-0">
             <FontAwesome name="camera" size={20} />
           </TouchableOpacity> */}
               </View>
-              <Text className="mt-2 text-3xl font-poppins-600">
+              <Text className="mt-2 text-3xl font-poppins-600 dark:text-white">
                 {profile?.name || profile?.companyName}
               </Text>
               <Text className="text-xl text-gray-500">
@@ -70,9 +67,9 @@ const Profile = () => {
             </View>
 
             <View className="px-6 mt-8 ">
-              <View className="p-4 rounded-xl bg-gray-50">
+              <View className="p-4 rounded-xl bg-gray-50 dark:bg-[#242526]">
                 <ProfileItem
-                  onPress={() => router.push("/darkMode")}
+                  onPress={() => router.push("profile/darkMode")}
                   label="Dark Mode"
                   value="Off"
                   icon="moon"
@@ -80,6 +77,7 @@ const Profile = () => {
                   showDivider={true}
                 />
                 <ProfileItem
+                  onPress={() => router.push("profile/editProfile")}
                   label="Edit Profile"
                   value=""
                   icon="user-alt"
@@ -89,8 +87,9 @@ const Profile = () => {
             </View>
 
             <View className="px-6 mt-8 ">
-              <View className="p-5 rounded-xl bg-gray-50">
+              <View className="p-5 rounded-xl bg-gray-50 dark:bg-[#242526]">
                 <ProfileItem
+                  onPress={() => router.push("profile/workPreferences")}
                   label={`${
                     profile?.role === "jobSeeker" ? "Work" : "Hiring"
                   } Preferences`}
@@ -101,6 +100,7 @@ const Profile = () => {
                 />
 
                 <ProfileItem
+                  onPress={() => router.push("profile/changeAvatar")}
                   label="Change Avatar"
                   value=""
                   icon="people-sharp"
@@ -109,6 +109,7 @@ const Profile = () => {
                 />
 
                 <ProfileItem
+                  onPress={() => router.push("profile/notifSounds")}
                   label="Notifications & Sounds"
                   value=""
                   icon="people-sharp"
@@ -119,8 +120,9 @@ const Profile = () => {
             </View>
 
             <View className="px-6 mt-8 ">
-              <View className="p-4 rounded-xl bg-gray-50">
+              <View className="p-4 rounded-xl bg-gray-50 dark:bg-[#242526]">
                 <ProfileItem
+                  onPress={() => router.push("profile/privacySafety")}
                   label="Privacy & Safety"
                   value=""
                   icon="privacy-tip"
@@ -128,6 +130,7 @@ const Profile = () => {
                   showDivider={true}
                 />
                 <ProfileItem
+                  onPress={() => router.push("profile/accountSettings")}
                   label="Account Settings"
                   value=""
                   icon="settings-sharp"
@@ -135,15 +138,6 @@ const Profile = () => {
                   showDivider={false}
                 />
               </View>
-            </View>
-
-            <View className="px-6 mt-8 ">
-              <Button
-                title="Logout"
-                onPress={logout}
-                className="px-2 py-4 bg-red-500 rounded-xl "
-                textClassName="text-center"
-              />
             </View>
           </View>
         </ScrollView>

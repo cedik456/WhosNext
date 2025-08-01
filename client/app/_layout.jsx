@@ -15,8 +15,11 @@ import {
 import { Provider as PaperProvider } from "react-native-paper";
 import { RefetchProvider } from "../contexts/RefetchContext";
 import { ActivityIndicator } from "react-native";
+import { useColorScheme } from "nativewind";
 
 const RootLayout = () => {
+  const { colorScheme } = useColorScheme();
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_700Bold,
@@ -33,7 +36,7 @@ const RootLayout = () => {
       <RefetchProvider>
         <SafeAreaProvider>
           <PaperProvider>
-            <StatusBar style="dark" />
+            <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
             <Stack
               screenOptions={{
                 headerShown: false,
