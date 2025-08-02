@@ -1,33 +1,38 @@
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileItem from "../../../components/ProfileItem";
-import { Ionicons } from "@expo/vector-icons";
-import { colorScheme } from "nativewind";
-import { useState } from "react";
-
-export const href = null; // Prevents this from showing as a tab
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { useColorScheme } from "nativewind";
+import { router } from "expo-router";
 
 const DarkMode = () => {
-  const [currentScheme, setCurrentScheme] = useState("light");
+  const { colorScheme, setColorScheme } = useColorScheme();
 
   const changeScheme = (scheme) => {
-    setCurrentScheme(scheme);
-    colorScheme.set(scheme);
+    setColorScheme(scheme);
   };
 
   return (
     <SafeAreaView
-      className={currentScheme === "dark" ? "dark flex-1 bg-black" : "flex-1"}
+      className={`flex-1 ${colorScheme === "dark" ? " bg-black" : ""}`}
     >
       <View
         className={`${
-          currentScheme === "dark" ? "bg-black" : ""
+          colorScheme === "dark" ? "bg-black" : ""
         } text-2xl  font-poppins-600 `}
       >
-        <View className="px-6 mt-5">
+        <View className="relative flex-row items-center justify-center px-6 mt-5">
+          <Pressable onPress={() => router.back()} className="absolute left-6 ">
+            <FontAwesome6
+              name="chevron-left"
+              size={24}
+              color={colorScheme === "dark" ? "white" : "black"}
+            />
+          </Pressable>
+
           <Text
             className={`${
-              currentScheme === "dark" ? "text-white" : "text-black"
+              colorScheme === "dark" ? "text-white" : "text-black"
             } text-2xl  font-poppins-600 `}
           >
             Appearance
@@ -37,14 +42,14 @@ const DarkMode = () => {
         <View className="px-6 mt-8">
           <View
             className={`p-4 rounded-xl ${
-              currentScheme === "dark" ? "bg-[#242526]" : "bg-gray-50"
+              colorScheme === "dark" ? "bg-[#242526]" : "bg-gray-50"
             } `}
           >
             <ProfileItem
               label="Light"
               icon="sunny-outline"
               iconSet={Ionicons}
-              dot={currentScheme === "light"}
+              dot={colorScheme === "light"}
               onPress={() => changeScheme("light")}
               showDivider={true}
             />
@@ -53,18 +58,17 @@ const DarkMode = () => {
               label="Dark"
               icon="moon-outline"
               iconSet={Ionicons}
-              dot={currentScheme === "dark"}
+              dot={colorScheme === "dark"}
               onPress={() => changeScheme("dark")}
-              showDivider={true}
             />
 
-            <ProfileItem
+            {/* <ProfileItem
               label="System"
               icon="settings-outline"
               iconSet={Ionicons}
-              dot={currentScheme === "system"}
+              dot={selectedTheme === "system"}
               onPress={() => changeScheme("system")}
-            />
+            /> */}
           </View>
         </View>
       </View>

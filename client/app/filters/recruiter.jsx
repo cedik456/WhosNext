@@ -228,7 +228,9 @@ const RecruiterFilters = () => {
                   key={index}
                   className={`px-3 py-1 rounded-full ${getSkillColor(skill)}`}
                 >
-                  <Text className="text-sm text-gray-800">{skill}</Text>
+                  <Text className="text-sm text-gray-800 font-poppins">
+                    {skill}
+                  </Text>
                 </View>
               ))}
               <Pressable

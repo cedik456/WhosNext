@@ -8,9 +8,11 @@ import {
 } from "@expo/vector-icons";
 import { useAuth } from "../../hooks/useAuth";
 import { ActivityIndicator } from "react-native-paper";
+import { useColorScheme } from "nativewind";
 
 const TabsLayout = () => {
   const { user } = useAuth();
+  const { colorScheme } = useColorScheme();
 
   if (user === undefined) {
     return (
@@ -29,7 +31,7 @@ const TabsLayout = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: true,
-        tabBarActiveTintColor: "black",
+        tabBarActiveTintColor: colorScheme === "dark" ? "white" : "black",
         tabBarLabelStyle: {
           fontSize: 11,
           fontFamily: "Poppins-Medium",
@@ -40,7 +42,7 @@ const TabsLayout = () => {
           left: 0,
           right: 0,
           height: 60,
-          backgroundColor: "#F3F3F3",
+          backgroundColor: colorScheme === "dark" ? "black" : "#F3F3F3",
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
@@ -53,50 +55,102 @@ const TabsLayout = () => {
         name="profile"
         options={{
           tabBarLabel: "Profile",
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="person" size={24} color="black" />
-            ) : (
-              <Ionicons name="person" size={24} color="#9ca3af" />
-            ),
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name="person"
+              size={24}
+              color={
+                focused
+                  ? colorScheme === "dark"
+                    ? "white"
+                    : "black"
+                  : "#9ca3af"
+              }
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="home"
         options={{
           tabBarLabel: "People",
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <FontAwesome6 name="bars-staggered" size={25} color="black" />
-            ) : (
-              <FontAwesome6 name="bars-staggered" size={25} color="#9ca3af" />
-            ),
+          tabBarIcon: ({ focused }) => (
+            <FontAwesome6
+              name="bars-staggered"
+              size={25}
+              color={
+                focused
+                  ? colorScheme === "dark"
+                    ? "white"
+                    : "black"
+                  : "#9ca3af"
+              }
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="matches"
         options={{
           tabBarLabel: "Matches",
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="chatbubble-sharp" size={24} color="black" />
-            ) : (
-              <Ionicons name="chatbubble-sharp" size={24} color="#9ca3af" />
-            ),
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name="chatbubble-sharp"
+              size={24}
+              color={
+                focused
+                  ? colorScheme === "dark"
+                    ? "white"
+                    : "black"
+                  : "#9ca3af"
+              }
+            />
+          ),
         }}
       />
-      {/* <Tabs.Screen
-        name="chat"
+      {/* Profile Screens */}
+      <Tabs.Screen
+        name="profile/darkMode"
         options={{
-          tabBarLabel: "Chats",
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="chatbubble-sharp" size={24} color="black" />
-            ) : (
-              <Ionicons name="chatbubble-sharp" size={24} color="#9ca3af" />
-            ),
+          href: null,
         }}
-      /> */}
+      />
+      <Tabs.Screen
+        name="profile/editProfile"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/workPreferences"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/changeAvatar"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/notifSounds"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/privacySafety"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/accountSettings"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 };
