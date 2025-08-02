@@ -30,6 +30,8 @@ coverage/
 # Env vars
 .env
 .env.*.local
+**/.env
+**/.env.*.local
 
 # --------------------
 # IDE
@@ -71,3 +73,6 @@ Thumbs.db
 # (Optional) Server build output
 /server/dist/
 /server/build/
+
+# catch any node_modules folder anywhere
+node_modules/
