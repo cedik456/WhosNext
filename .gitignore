@@ -1,0 +1,73 @@
+# --------------------
+# Node dependencies (matches at any depth)
+/client/node_modules/
+/server/node_modules/
+/node_modules/        # also catches a top-level modules folder, if you ever npm-install at root
+
+# --------------------
+# Logs & debug
+logs/                 # any “logs” folder, e.g. /server/logs/
+/*.log                # any .log at repo root
+*.log                 # any .log in any subfolder
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.localhistory
+
+# --------------------
+# Runtime & PIDs
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# --------------------
+# Coverage
+coverage/
+.nyc_output/
+
+# --------------------
+# Env vars
+.env
+.env.*.local
+
+# --------------------
+# IDE
+.vscode/
+.idea/
+
+# --------------------
+# OS files
+.DS_Store
+Thumbs.db
+*.pem
+
+# --------------------
+# Expo (client)
+/client/.expo/
+/client/dist/
+/client/web-build/
+/client/expo-env.d.ts
+
+# --------------------
+# Native (Android/iOS) – client
+/client/.kotlin/
+/client/*.orig.*
+/client/*.jks
+/client/*.p8
+/client/*.p12
+/client/*.key
+/client/*.mobileprovision
+
+# --------------------
+# Metro Bundler – client
+/client/.metro-health-check*
+
+# --------------------
+# TypeScript build info
+*.tsbuildinfo
+
+# --------------------
+# (Optional) Server build output
+/server/dist/
+/server/build/
