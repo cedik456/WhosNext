@@ -1,11 +1,12 @@
 import { View, Text } from "react-native";
 import Button from "../../../components/Button";
 import { useAuth } from "../../../hooks/useAuth";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AccountSettings = () => {
   const { logout } = useAuth();
   return (
-    <View>
+    <SafeAreaView className="flex-1 dark:bg-black">
       <View className="px-6 mt-8 ">
         <Button
           title="Logout"
@@ -14,7 +15,7 @@ const AccountSettings = () => {
           textClassName="text-center"
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

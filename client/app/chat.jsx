@@ -17,6 +17,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { getToken } from "../utils/storage";
 import api from "../utils/axiosInstance";
 import socket from "../utils/socket";
+import { useColorScheme } from "nativewind";
 
 const Chat = () => {
   const router = useRouter();
@@ -26,6 +27,8 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
   const { matchId, name, avatar } = useLocalSearchParams();
+
+  const { colorScheme } = useColorScheme();
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -107,7 +110,7 @@ const Chat = () => {
 
       if (success) {
         socket.emit("sendMessage", { matchId, message: data });
-        setMessages((prev) => [...prev, response.data.data]);
+
         setText("");
       }
     } catch (error) {
@@ -146,7 +149,7 @@ const Chat = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white dark:bg-black">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -156,13 +159,19 @@ const Chat = () => {
             <View className="flex-row items-center justify-between p-4 ">
               <View className="flex-row items-center">
                 <Pressable onPress={() => router.back()} className="mr-4">
-                  <AntDesign name="arrowleft" size={24} />
+                  <AntDesign
+                    name="arrowleft"
+                    size={24}
+                    color={colorScheme === "dark" ? "white" : "black"}
+                  />
                 </Pressable>
                 <Image
                   source={{ uri: avatar }}
                   className="w-10 h-10 mr-2 border border-gray-300 rounded-full"
                 />
-                <Text className="text-2xl font-poppins-600 ">{name}</Text>
+                <Text className="text-2xl font-poppins-600 dark:text-white ">
+                  {name}
+                </Text>
               </View>
               <Entypo name="dots-three-vertical" size={18} />
             </View>
@@ -170,10 +179,8 @@ const Chat = () => {
               ref={flatListRef}
               data={messages}
               renderItem={renderMessage}
-              keyExtractor={(item) =>
-                item._id?.toString() ||
-                item.id?.toString() ||
-                Math.random().toString()
+              keyExtractor={(item, index) =>
+                item._id?.toString() || `${item.createdAt}-${index}`
               }
               contentContainerStyle={{ padding: 16, flexGrow: 1 }}
               keyboardShouldPersistTaps="handled"
@@ -183,19 +190,27 @@ const Chat = () => {
                 }
               }}
             />
-            <View className="flex-row items-center gap-4 p-4 bg-white">
+            <View className="flex-row items-center gap-4 p-4 bg-white dark:bg-black">
               <Pressable>
-                <AntDesign name="pluscircleo" size={24} color="gray" />
+                <AntDesign
+                  name="pluscircleo"
+                  size={24}
+                  color={colorScheme === "dark" ? "white" : "gray"}
+                />
               </Pressable>
 
               <View className="flex-row items-center flex-1 px-3 border border-gray-200 rounded-full justify-items-end">
                 <TextInput
-                  className="flex-1 px-3 py-3 font-poppins"
+                  className="flex-1 px-3 py-3 font-poppins dark:text-white"
                   value={text}
                   onChangeText={setText}
                 />
                 <Pressable onPress={sendMessage}>
-                  <Ionicons name="send" size={22} />
+                  <Ionicons
+                    name="send"
+                    size={22}
+                    color={colorScheme === "dark" ? "white" : "black"}
+                  />
                 </Pressable>
               </View>
             </View>

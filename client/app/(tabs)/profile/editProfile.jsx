@@ -103,7 +103,9 @@ const EditProfile = () => {
           />
 
           <View className="px-6 py-6">
-            <Text className="mb-2 text-base font-poppins-500">Skills</Text>
+            <Text className="mb-2 text-base font-poppins-500 dark:text-white">
+              Skills
+            </Text>
             <View className="flex-row flex-wrap gap-2">
               {(user?.skills || user?.hiringCriteria?.requiredSkills || [])
                 .length > 0 ? (

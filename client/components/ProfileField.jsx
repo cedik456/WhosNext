@@ -5,7 +5,7 @@ const ProfileField = ({ label, value, onPress }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-row items-center justify-between px-6 py-3 mt-5 border-b border-gray-200"
+      className="flex-row items-center justify-between px-6 py-3 mt-5 border-b border-gray-200 dark:border-b-gray-500"
     >
       <View className="gap-2">
         <Text className="text-base font-poppins-500 dark:text-white">

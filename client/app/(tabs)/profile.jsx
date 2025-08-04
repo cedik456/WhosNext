@@ -52,7 +52,7 @@ const Profile = () => {
                     ? { uri: profile?.avatar }
                     : { uri: profile?.companyPicture }
                 }
-                className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black  "
+                className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black dark:bg-white "
               />
               {/* <TouchableOpacity className="absolute bottom-0 right-0">
             <FontAwesome name="camera" size={20} />
