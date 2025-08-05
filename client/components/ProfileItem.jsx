@@ -12,8 +12,21 @@ const ProfileItem = ({
   onPress,
   showDivider,
   showStatus,
+  iconOnly,
 }) => {
   const { colorScheme } = useColorScheme();
+
+  if (iconOnly) {
+    return (
+      <TouchableOpacity onPress={onPress} className="p-2">
+        <IconSet
+          name={icon}
+          size={22}
+          color={colorScheme === "dark" ? "white" : "black"}
+        />
+      </TouchableOpacity>
+    );
+  }
 
   let statusText = null;
   if (showStatus) {
