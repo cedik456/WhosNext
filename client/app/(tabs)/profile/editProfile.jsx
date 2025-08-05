@@ -1,7 +1,19 @@
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
 import ProfileField from "../../../components/ProfileField";
 import { useEffect, useState } from "react";
@@ -12,6 +24,7 @@ const EditProfile = () => {
   const { colorScheme } = useColorScheme();
 
   const [user, setUser] = useState(null);
+  const [changes, setChanges] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +49,7 @@ const EditProfile = () => {
 
   if (loading) {
     return (
-      <SafeAreaView className="items-center justify-center flex-1">
+      <SafeAreaView className="items-center justify-center flex-1 dark:bg-black">
         <Text className="text-lg text-gray-500 font-poppins">Loading...</Text>
       </SafeAreaView>
     );
@@ -49,7 +62,7 @@ const EditProfile = () => {
       <View
         className={`${
           colorScheme === "dark" ? "bg-black" : ""
-        } text-2xl  font-poppins-600 `}
+        } text-2xl  font-poppins-600 flex-1 `}
       >
         <View className="flex-row items-center justify-between px-6 mt-5 ">
           <Pressable onPress={() => router.back()}>
@@ -73,64 +86,128 @@ const EditProfile = () => {
           </Pressable>
         </View>
 
-        <ScrollView>
-          <ProfileField
-            label="Name"
-            value={user?.name || user?.companyName || "N/A"}
-            onPress={() => {}}
-          />
-          <ProfileField
-            label="Email"
-            value={user?.email || "N/A"}
-            onPress={() => {}}
-          />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={80}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView>
+              <View className="px-6 py-3 mt-5 border-b border-gray-200 dark:border-b-gray-500">
+                <Text className="mb-2 text-base text-gray-600 font-poppins-500 dark:text-white">
+                  Name
+                </Text>
+                <TextInput
+                  className="text-base border border-gray-300 rounded-lg dark:border-gray-600 font-poppins-500 dark:text-white"
+                  value={changes.name ?? user?.name ?? ""}
+                  style={{ borderWidth: 0 }}
+                  onChangeText={(text) => {
+                    setChanges((prev) => ({ ...prev, name: text }));
+                    setUser((prev) => ({ ...prev, name: text }));
+                  }}
+                  placeholder="Enter your name"
+                />
+              </View>
 
-          <ProfileField
-            label="Location"
-            value={user?.location || user?.hiringLocation || "N/A"}
-            onPress={() => {}}
-          />
-          <ProfileField
-            label="Work Type"
-            value={user?.workType || "N/A"}
-            onPress={() => {}}
-          />
-          <ProfileField
-            label="Work Environment"
-            value={user?.workEnvironment || "N/A"}
-            onPress={() => {}}
-          />
-          <ProfileField
-            label="Experience"
-            value={user?.experience || "N/A"}
-            onPress={() => {}}
-          />
+              <View className="flex-row items-center justify-between px-6 py-3 mt-5 border-b border-gray-200 dark:border-b-gray-500">
+                <View className="gap-2">
+                  <Text className="text-base text-black font-poppins-500 dark:text-white">
+                    Email
+                  </Text>
+                  <Text
+                    className="text-gray-400 font-poppins max-w-80"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {user?.email}
+                  </Text>
+                </View>
+              </View>
 
-          <View className="px-6 py-6">
-            <Text className="mb-2 text-base font-poppins-500 dark:text-white">
-              Skills
-            </Text>
-            <View className="flex-row flex-wrap gap-2">
-              {(user?.skills || user?.hiringCriteria?.requiredSkills || [])
-                .length > 0 ? (
-                (user?.skills || user?.hiringCriteria?.requiredSkills).map(
-                  (skill, index) => (
-                    <View
-                      key={index}
-                      className="px-3 py-1 bg-gray-200 rounded-full"
-                    >
-                      <Text className="text-sm text-gray-600 font-poppins">
-                        {skill}
-                      </Text>
-                    </View>
-                  )
-                )
-              ) : (
-                <Text className="text-gray-500 font-poppins-400">N/A</Text>
-              )}
-            </View>
-          </View>
-        </ScrollView>
+              <ProfileField
+                label="Location"
+                value={user?.location || user?.hiringCriteria.location || "N/A"}
+                onPress={() => {}}
+              />
+              <ProfileField
+                label="Work Type"
+                value={user?.workType || user?.hiringCriteria.workType || "N/A"}
+                onPress={() => {}}
+              />
+              <ProfileField
+                label="Work Environment"
+                value={
+                  user?.workEnvironment ||
+                  user?.hiringCriteria.workEnvironment ||
+                  "N/A"
+                }
+                onPress={() => {}}
+              />
+              <ProfileField
+                label="Experience"
+                value={
+                  user?.experience ||
+                  user?.hiringCriteria.experienceLevel ||
+                  "N/A"
+                }
+                onPress={() => {}}
+              />
+
+              <View className="flex-row items-center justify-between px-6 py-3 mt-5 border-b border-gray-200 dark:border-b-gray-500">
+                <View className="gap-2">
+                  <Text className="text-base text-black font-poppins-500 dark:text-white">
+                    {user?.role === "recruiter" ? "Job Description" : "Bio"}
+                  </Text>
+                  <TextInput
+                    className="text-gray-600 font-poppins dark:text-white"
+                    style={{ borderWidth: 0 }}
+                    multiline
+                    value={
+                      changes.bio ??
+                      (user?.role === "recruiter"
+                        ? user?.jobDescription
+                        : user?.bio) ??
+                      ""
+                    }
+                    placeholder={
+                      user?.role === "recruiter"
+                        ? "Add a job description"
+                        : "Add a bio"
+                    }
+                    onChangeText={(text) =>
+                      setChanges((prev) => ({ ...prev, bio: text }))
+                    }
+                  />
+                </View>
+              </View>
+
+              <View className="px-6 py-6">
+                <Text className="mb-2 text-base font-poppins-500 dark:text-white">
+                  Skills
+                </Text>
+                <View className="flex-row flex-wrap gap-2">
+                  {(user?.skills || user?.hiringCriteria?.requiredSkills || [])
+                    .length > 0 ? (
+                    (user?.skills || user?.hiringCriteria?.requiredSkills).map(
+                      (skill, index) => (
+                        <View
+                          key={index}
+                          className="px-3 py-1 bg-gray-200 rounded-full"
+                        >
+                          <Text className="text-sm text-gray-600 font-poppins">
+                            {skill}
+                          </Text>
+                        </View>
+                      )
+                    )
+                  ) : (
+                    <Text className="text-gray-500 font-poppins-400">N/A</Text>
+                  )}
+                </View>
+              </View>
+            </ScrollView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </View>
     </SafeAreaView>
   );

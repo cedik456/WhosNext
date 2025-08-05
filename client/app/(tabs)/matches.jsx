@@ -191,7 +191,7 @@ const Matches = () => {
                               <Text
                                 numberOfLines={1}
                                 ellipsizeMode="tail"
-                                className={`font-poppins ${
+                                className={`font-poppins dark:text-white ${
                                   isUnread > 0
                                     ? "text-black font-poppins-500"
                                     : "text-gray-500"

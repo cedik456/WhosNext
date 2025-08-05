@@ -74,8 +74,7 @@ const ProfileCard = ({ card, color }) => {
         ellipsizeMode="tail"
         className="mb-2 text-sm text-gray-500 font-poppins-500"
       >
-        I am a simple dev, who likes learning new things, I can be fast and slow
-        depending on my mood.
+        {card.bio || "No bio"}
       </Text>
     </View>
   );

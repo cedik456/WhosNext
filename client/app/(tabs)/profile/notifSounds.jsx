@@ -1,48 +1,67 @@
 import { useState } from "react";
-import { ScrollView, View, Text, TouchableOpacity, useColorScheme } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  Pressable,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CustomSwitch from "../../../components/CustomSwitch";
+import { router } from "expo-router";
+import { FontAwesome6 } from "@expo/vector-icons";
 
-const NotificationAndSounds = ({ navigation }) => {
-  const scheme = useColorScheme();
-  const [pushDND, setPushDND] = useState(false);
-  const [pushChat, setPushChat] = useState(false);
-  const [emailMatch, setEmailMatch] = useState(false);
-  const [emailNew, setEmailNew] = useState(false);
+const NotificationAndSounds = () => {
+  // const [pushDND, setPushDND] = useState(false);
+  // const [pushChat, setPushChat] = useState(false);
+  // const [emailMatch, setEmailMatch] = useState(false);
+  // const [emailNew, setEmailNew] = useState(false);
+
+  const { colorScheme } = useColorScheme();
 
   return (
-    <SafeAreaView edges={['top']} className="flex-1 dark:bg-black">
-      <View className="flex-row items-center p-4 bg-white dark:bg-black">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons
-            name="chevron-back"
-            size={24}
-            color={scheme === "dark" ? "#fff" : "#000"}
-          />
-        </TouchableOpacity>
-        <Text className="ml-3 text-xl font-semibold text-black dark:text-white">
-          Notifications
-        </Text>
-      </View>
-
-      <ScrollView className="py-2">
-        <View className="mb-2 bg-white dark:bg-[#242526]">
-          <Text className="mx-4 my-3 text-lg font-semibold text-black dark:text-white">
-            Push Notifications
-          </Text>
-
-          <View className="flex-row items-center justify-between px-4 py-3">
-            <View className="flex-1 pr-3">
-              <Text className="text-base font-medium text-black dark:text-white">
+    <SafeAreaView className="flex-1 dark:bg-black">
+      <View className="relative flex-row items-center justify-center px-6 mt-5">
+        <TouchableOpacity
+          onPress={onPress}
+          className="flex-row items-center justify-between py-4"
+        >
+          <View className="flex-row items-center">
+            <View className="flex-row gap-4">
+              <Text className="text-lg font-poppins dark:text-white">
                 Do not disturb
               </Text>
-              <Text className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Mutes all notifications
-              </Text>
             </View>
-            <CustomSwitch value={pushDND} onValueChange={setPushDND} />
           </View>
+
+          <View className="flex-row items-center gap-2">
+            {/* <CustomSwitch value={pushDND} onValueChange={setPushDND} /> */}
+          </View>
+        </TouchableOpacity>
+        {showDivider && (
+          <View className="h-px ml-10 bg-gray-200 dark:bg-gray-500" />
+        )}
+      </View>
+
+      <View className="px-6 mt-8">
+        <View
+          className={`p-4 rounded-xl ${
+            colorScheme === "dark" ? "bg-[#242526]" : "bg-gray-50"
+          } `}
+        >
+          <View className="flex-1 pr-3">
+            <Text className="text-base font-medium text-black dark:text-white">
+              Do not disturb
+            </Text>
+            <Text className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Mutes all notifications
+            </Text>
+          </View>
+          {/* <CustomSwitch value={pushDND} onValueChange={setPushDND} /> */}
+
+          <View />
 
           <View className="flex-row items-center justify-between px-4 py-3">
             <View className="flex-1 pr-3">
@@ -53,7 +72,7 @@ const NotificationAndSounds = ({ navigation }) => {
                 If disabled, you will stop receiving notifications for messages.
               </Text>
             </View>
-            <CustomSwitch value={pushChat} onValueChange={setPushChat} />
+            {/* <CustomSwitch value={pushChat} onValueChange={setPushChat} /> */}
           </View>
         </View>
 
@@ -71,7 +90,7 @@ const NotificationAndSounds = ({ navigation }) => {
                 Get a notification when you’ve matched with someone.
               </Text>
             </View>
-            <CustomSwitch value={emailMatch} onValueChange={setEmailMatch} />
+            {/* <CustomSwitch value={emailMatch} onValueChange={setEmailMatch} /> */}
           </View>
 
           <View className="flex-row items-center justify-between px-4 py-3">
@@ -83,10 +102,10 @@ const NotificationAndSounds = ({ navigation }) => {
                 Receive an email when you’ve got a new message.
               </Text>
             </View>
-            <CustomSwitch value={emailNew} onValueChange={setEmailNew} />
+            {/* <CustomSwitch value={emailNew} onValueChange={setEmailNew} /> */}
           </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

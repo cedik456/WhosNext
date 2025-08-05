@@ -9,6 +9,7 @@ import {
 import { useAuth } from "../../hooks/useAuth";
 import { ActivityIndicator } from "react-native-paper";
 import { useColorScheme } from "nativewind";
+import { TouchableOpacity } from "react-native";
 
 const TabsLayout = () => {
   const { user } = useAuth();
@@ -49,6 +50,9 @@ const TabsLayout = () => {
           shadowOffset: { width: 0, height: 0 },
           shadowRadius: 0,
         },
+        tabBarButton: (props) => (
+          <TouchableOpacity {...props} activeOpacity={1} />
+        ),
       }}
     >
       <Tabs.Screen
