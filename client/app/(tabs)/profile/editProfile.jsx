@@ -37,7 +37,7 @@ const EditProfile = () => {
   if (loading) {
     return (
       <SafeAreaView className="items-center justify-center flex-1">
-        <Text className="text-lg">Loading...</Text>
+        <Text className="text-lg text-gray-500 font-poppins">Loading...</Text>
       </SafeAreaView>
     );
   }
@@ -51,8 +51,8 @@ const EditProfile = () => {
           colorScheme === "dark" ? "bg-black" : ""
         } text-2xl  font-poppins-600 `}
       >
-        <View className="relative flex-row items-center justify-center px-6 mt-5">
-          <Pressable onPress={() => router.back()} className="absolute left-6 ">
+        <View className="flex-row items-center justify-between px-6 mt-5 ">
+          <Pressable onPress={() => router.back()}>
             <FontAwesome6
               name="chevron-left"
               size={24}
@@ -67,6 +67,10 @@ const EditProfile = () => {
           >
             Edit Profile
           </Text>
+
+          <Pressable>
+            <Text className="text-sm text-blue-600 font-poppins-500">Save</Text>
+          </Pressable>
         </View>
 
         <ScrollView>
