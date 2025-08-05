@@ -117,7 +117,9 @@ const Matches = () => {
     <SafeAreaView className="flex-1 dark:bg-black">
       {loading ? (
         <View className="items-center justify-center flex-1">
-          <Text className="mt-3 text-gray-500">Loading matches...</Text>
+          <Text className="mt-3 text-lg text-gray-500 font-poppins">
+            Loading matches...
+          </Text>
         </View>
       ) : (
         <View className="px-6 mt-5">
@@ -179,7 +181,7 @@ const Matches = () => {
                         <View className="flex-row items-center mb-4">
                           <Image
                             source={{ uri: profileImage }}
-                            className="w-16 h-16 mr-3 rounded-full"
+                            className="w-16 h-16 mr-3 bg-black rounded-full dark:bg-white"
                           />
                           <View>
                             <Text className="text-lg text-gray-600 font-poppins-600 dark:text-white">

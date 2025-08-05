@@ -66,9 +66,13 @@ const Chat = () => {
     };
 
     const handleNewMessage = (message) => {
-      if (message.matchId === matchId) {
-        setMessages((prev) => [...prev, message]);
-      }
+      setMessages((prev) => {
+        if (prev.some((m) => m._id === message._id)) {
+          console.log("⚠️ Duplicate skipped:", message._id);
+          return prev;
+        }
+        return [...prev, message];
+      });
     };
 
     socket.emit("join", matchId);
@@ -109,8 +113,8 @@ const Chat = () => {
       const { success, data } = response.data;
 
       if (success) {
+        setMessages((prev) => [...prev, data]);
         socket.emit("sendMessage", { matchId, message: data });
-
         setText("");
       }
     } catch (error) {
