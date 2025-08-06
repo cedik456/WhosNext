@@ -1,4 +1,4 @@
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { getToken } from "../../utils/storage";
@@ -12,8 +12,10 @@ import {
 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import ProfileItem from "../../components/ProfileItem";
+import { useColorScheme } from "nativewind";
 
 const Profile = () => {
+  const { colorScheme } = useColorScheme();
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -37,10 +39,17 @@ const Profile = () => {
   return (
     <SafeAreaView className="flex-1 dark:bg-black">
       <View className="dark:bg-black">
-        <View className="px-6 mt-5">
+        <View className="flex-row items-center justify-between px-6 mt-5">
           <Text className="text-2xl font-poppins-600 dark:text-white">
             Profile
           </Text>
+          <ProfileItem
+            onPress={() => router.push("profile/settingsScreen")}
+            value=""
+            icon="settings-sharp"
+            iconSet={Ionicons}
+            iconOnly
+          />
         </View>
 
         <View className="">

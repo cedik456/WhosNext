@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Tabs } from "expo-router";
+import { Redirect, Tabs, useSegments } from "expo-router";
 import {
   AntDesign,
   FontAwesome6,
@@ -9,11 +9,15 @@ import {
 import { useAuth } from "../../hooks/useAuth";
 import { ActivityIndicator } from "react-native-paper";
 import { useColorScheme } from "nativewind";
-import { TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 
 const TabsLayout = () => {
   const { user } = useAuth();
   const { colorScheme } = useColorScheme();
+  const segments = useSegments();
+
+  const hideTabs =
+    segments.includes("settings") || segments.includes("settingsScreen");
 
   if (user === undefined) {
     return (
@@ -49,6 +53,7 @@ const TabsLayout = () => {
           shadowOpacity: 0,
           shadowOffset: { width: 0, height: 0 },
           shadowRadius: 0,
+          display: hideTabs ? "none" : "flex",
         },
         tabBarButton: (props) => (
           <TouchableOpacity {...props} activeOpacity={1} />
@@ -145,6 +150,44 @@ const TabsLayout = () => {
       />
       <Tabs.Screen
         name="profile/accountSettings"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/settingsScreen"
+        options={{
+          href: null,
+        }}
+      />
+
+      {/* Settings Screens */}
+      <Tabs.Screen
+        name="profile/settings/about"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/settings/contact"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/settings/general"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/settings/help"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/settings/terms"
         options={{
           href: null,
         }}
