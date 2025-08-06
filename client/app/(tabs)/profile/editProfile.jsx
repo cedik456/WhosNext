@@ -7,18 +7,20 @@ import {
   ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
-import { useColorScheme } from "nativewind";
+import { FontAwesome6 } from "@expo/vector-icons";
 import ProfileField from "../../../components/ProfileField";
 import { useEffect, useState } from "react";
 import api from "../../../utils/axiosInstance";
 import { getToken } from "../../../utils/storage";
+import { useColorScheme } from "nativewind";
+import PreferredSkillsModal from "../../../modals/PreferredSkillsModal";
+import PreferredLocationModal from "../../../modals/PreferredLocationModal";
+import ExperienceLevelModal from "../../../modals/ExperienceLevelModal";
 
 const EditProfile = () => {
   const { colorScheme } = useColorScheme();
@@ -26,6 +28,30 @@ const EditProfile = () => {
   const [user, setUser] = useState(null);
   const [changes, setChanges] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const handleSave = async () => {
+    if (Object.keys(changes).length === 0) {
+      Alert.alert("Nothing to update", "You haven't made any changes");
+      return;
+    }
+
+    try {
+      const token = await getToken();
+
+      const response = await api.patch("/profile/", changes, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      Alert.alert("Success", "Profile updated successfully");
+      setUser(response.data.data);
+      setChanges({});
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Failed to update profile.");
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -88,17 +114,16 @@ const EditProfile = () => {
 
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1 }}
           keyboardVerticalOffset={80}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView>
               <View className="px-6 py-3 mt-5 border-b border-gray-200 dark:border-b-gray-500">
                 <Text className="mb-2 text-base text-gray-600 font-poppins-500 dark:text-white">
-                  Name
+                  {user?.role === "recruiter" ? "Company name" : "Name"}
                 </Text>
                 <TextInput
-                  className="text-base border border-gray-300 rounded-lg dark:border-gray-600 font-poppins-500 dark:text-white"
+                  className="text-base border border-gray-300 rounded-lg font-poppins dark:text-white"
                   value={changes.name ?? user?.name ?? ""}
                   style={{ borderWidth: 0 }}
                   onChangeText={(text) => {
@@ -126,19 +151,23 @@ const EditProfile = () => {
 
               <ProfileField
                 label="Location"
-                value={user?.location || user?.hiringCriteria.location || "N/A"}
+                value={
+                  user?.location || user?.hiringCriteria?.location || "N/A"
+                }
                 onPress={() => {}}
               />
               <ProfileField
                 label="Work Type"
-                value={user?.workType || user?.hiringCriteria.workType || "N/A"}
+                value={
+                  user?.workType || user?.hiringCriteria?.workType || "N/A"
+                }
                 onPress={() => {}}
               />
               <ProfileField
                 label="Work Environment"
                 value={
                   user?.workEnvironment ||
-                  user?.hiringCriteria.workEnvironment ||
+                  user?.hiringCriteria?.workEnvironment ||
                   "N/A"
                 }
                 onPress={() => {}}
@@ -147,7 +176,7 @@ const EditProfile = () => {
                 label="Experience"
                 value={
                   user?.experience ||
-                  user?.hiringCriteria.experienceLevel ||
+                  user?.hiringCriteria?.experienceLevel ||
                   "N/A"
                 }
                 onPress={() => {}}
@@ -161,7 +190,6 @@ const EditProfile = () => {
                   <TextInput
                     className="text-gray-600 font-poppins dark:text-white"
                     style={{ borderWidth: 0 }}
-                    multiline
                     value={
                       changes.bio ??
                       (user?.role === "recruiter"

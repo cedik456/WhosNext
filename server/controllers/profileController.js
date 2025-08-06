@@ -40,36 +40,10 @@ exports.updateProfile = async (req, res) => {
     const userId = req.user.id;
     const updates = req.body;
 
-    const userUpdates = {};
-    const jobSeekerUpdates = {};
-    const recruiterUpdates = {};
-
-    if (updates.name !== undefined) userUpdates.name = updates.name;
-    if (updates.email !== undefined) userUpdates.email = updates.email;
-
-    if (updates.skills !== undefined) jobSeekerUpdates.skills = updates.skills;
-    if (updates.location !== undefined)
-      jobSeekerUpdates.location = updates.location;
-    if (updates.experience !== undefined)
-      jobSeekerUpdates.experience = updates.experience;
-    if (updates.bio !== undefined) jobSeekerUpdates.bio = updates.bio;
-    if (updates.workEnvironment !== undefined)
-      jobSeekerUpdates.workEnvironment = updates.workEnvironment;
-    if (updates.workType !== undefined)
-      jobSeekerUpdates.workType = updates.workType;
-
-    if (updates.companyName !== undefined)
-      recruiterUpdates.companyName = updates.companyName;
-    if (updates.companyPicture !== undefined)
-      recruiterUpdates.companyPicture = updates.companyPicture;
-    if (updates.jobDescription !== undefined)
-      recruiterUpdates.jobDescription = updates.jobDescription;
-    if (updates.jobTitle !== undefined)
-      recruiterUpdates.jobTitle = updates.jobTitle;
-
+    // update base user info
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { $set: userUpdates },
+      { $set: updates },
       { new: true, runValidators: true }
     ).select("-password");
 
@@ -79,21 +53,40 @@ exports.updateProfile = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    if (
-      updatedUser.role === "jobSeeker" &&
-      Object.keys(jobSeekerUpdates).length > 0
-    ) {
+    if (updatedUser.role === "jobSeeker") {
+      const jobSeeker = await JobSeeker.findOne({ userId });
+      if (!jobSeeker) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Job Seeker not found" });
+      }
+
       await JobSeeker.findOneAndUpdate(
         { userId },
-        { $set: jobSeekerUpdates },
+        { $set: { ...jobSeeker.toObject(), ...updates } },
         { new: true, runValidators: true }
       );
     }
 
-    if (
-      updatedUser.role === "recruiter" &&
-      Object.keys(recruiterUpdates).length > 0
-    ) {
+    if (updatedUser.role === "recruiter") {
+      const recruiter = await Recruiter.findOne({ userId });
+      if (!recruiter) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Recruiter not found" });
+      }
+
+      // merge hiringCriteria instead of overwriting it
+      const recruiterUpdates = {
+        companyName: updates.companyName ?? recruiter.companyName,
+        jobDescription: updates.jobDescription ?? recruiter.jobDescription,
+        jobTitle: updates.jobTitle ?? recruiter.jobTitle,
+        hiringCriteria: {
+          ...recruiter.hiringCriteria.toObject(), // keep old
+          ...(updates.hiringCriteria || {}), // apply new
+        },
+      };
+
       await Recruiter.findOneAndUpdate(
         { userId },
         { $set: recruiterUpdates },
