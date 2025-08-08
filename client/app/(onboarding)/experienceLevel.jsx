@@ -6,21 +6,12 @@ import { getUserRole } from "../../utils/secureUser";
 import Button from "../../components/Button";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
+import { EXPERIENCE_LEVELS } from "../../constants/experienceLevel";
 
 const ExperienceLevel = () => {
   const router = useRouter();
   const [experience, setExperience] = useState(null);
   const [role, setRole] = useState(null);
-
-  const levels = [
-    "Entry-level",
-    "Junior",
-    "Mid-level",
-    "Senior",
-    "Lead",
-    "Director",
-    "Executive",
-  ];
 
   const isValid = !!experience;
 
@@ -101,7 +92,7 @@ const ExperienceLevel = () => {
           </Text>
 
           <View className="flex-col gap-2 mb-4">
-            {levels.map((level) => (
+            {EXPERIENCE_LEVELS.map((level) => (
               <Pressable
                 key={level}
                 onPress={() => setExperience(level)}

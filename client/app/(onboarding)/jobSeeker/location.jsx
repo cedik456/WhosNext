@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Alert, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getReadableLocation } from "../../../utils/locationHelper";
 import { getToken } from "../../../utils/storage";
@@ -56,9 +56,14 @@ const Location = () => {
           <Text className="mb-4 text-3xl text-center font-poppins-600">
             Enable Location
           </Text>
-          <Text className="text-center text-gray-500 font-poppins-500">
+          <Text className="mb-4 text-center text-gray-500 font-poppins-500">
             We'll use your location to recommend nearby jobs
           </Text>
+
+          <Image
+            source={require("../../../assets/locationAvatar.png")}
+            className="w-auto h-auto"
+          />
         </View>
 
         <Button

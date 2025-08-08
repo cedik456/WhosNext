@@ -1,4 +1,4 @@
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, Platform } from "react-native";
 import {
   AntDesign,
   FontAwesome6,
@@ -11,7 +11,9 @@ const JobCard = ({ data, color }) => {
 
   return (
     <View
-      className="h-[90%] overflow-hidden shadow-sm rounded-2xl"
+      className={`${
+        Platform.OS === "ios" ? "h-[88%]" : "h-[101%]"
+      } overflow-hidden shadow-sm rounded-2xl`}
       style={{ backgroundColor: color || "#fff" }}
     >
       {data.companyPicture ? (
@@ -96,7 +98,7 @@ const JobCard = ({ data, color }) => {
           ellipsizeMode="tail"
           className="mb-2 text-sm text-gray-500 font-poppins-500"
         >
-          We need a dev who strives and thrives.
+          {data.hiringCriteria?.jobDescription || "No job description"}
         </Text>
       </View>
     </View>

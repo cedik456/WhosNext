@@ -26,8 +26,6 @@ const Home = () => {
   const handleFilterPress = () => {
     if (!role) return;
 
-    console.log(role);
-
     if (role === "recruiter") {
       router.push("/filters/recruiter");
     } else {
