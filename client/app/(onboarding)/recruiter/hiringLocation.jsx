@@ -6,21 +6,7 @@ import { useRouter } from "expo-router";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 import DropDownPicker from "react-native-dropdown-picker";
-
-const locations = [
-  "Legazpi City",
-  "Daraga",
-  "Tabaco",
-  "Guinobatan",
-  "Ligao",
-  "Polangui",
-  "Oas",
-  "Camalig",
-  "Malilipot",
-  "Tiwi",
-  "Sto. Domingo",
-  "Bacacay",
-];
+import { LOCATIONS } from "../../../constants/locations";
 
 const HiringLocation = () => {
   const router = useRouter();
@@ -28,7 +14,7 @@ const HiringLocation = () => {
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState("");
   const [items, setItems] = useState(
-    locations.map((loc) => ({ label: loc, value: loc }))
+    LOCATIONS.map((loc) => ({ label: loc, value: loc }))
   );
 
   const handleSubmit = async () => {

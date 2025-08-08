@@ -53,7 +53,6 @@ const Matches = () => {
       });
 
       const { success, data } = response.data;
-      console.log("Conversations data:", JSON.stringify(data, null, 2));
 
       if (success) {
         const sorted = data.sort(

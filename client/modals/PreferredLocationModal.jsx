@@ -1,21 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
 import { FlatList, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
-
-const locations = [
-  "Legazpi City",
-  "Daraga",
-  "Tabaco",
-  "Guinobatan",
-  "Ligao",
-  "Polangui",
-  "Oas",
-  "Camalig",
-  "Malilipot",
-  "Tiwi",
-  "Sto. Domingo",
-  "Bacacay",
-];
+import { LOCATIONS } from "../constants/locations";
 
 const PreferredLocationModal = ({ isVisible, onClose, onSelect, selected }) => {
   const handleSelect = (location) => {
@@ -49,7 +35,7 @@ const PreferredLocationModal = ({ isVisible, onClose, onSelect, selected }) => {
         </View>
 
         <FlatList
-          data={locations}
+          data={LOCATIONS}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (

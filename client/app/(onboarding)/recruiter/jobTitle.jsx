@@ -6,39 +6,7 @@ import { useRouter } from "expo-router";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 import Button from "../../../components/Button";
-
-const JOB_TITLES = [
-  "Frontend Developer",
-  "Backend Developer",
-  "Full Stack Developer",
-  "UI/UX Designer",
-  "Mobile Developer",
-  "iOS Developer",
-  "Android Developer",
-  "Web Developer",
-  "React Developer",
-  "Node.js Developer",
-  "DevOps Engineer",
-  "QA Engineer",
-  "Software Engineer",
-  "Data Analyst",
-  "Data Scientist",
-  "Machine Learning Engineer",
-  "Cloud Engineer",
-  "AI Engineer",
-  "Cybersecurity Analyst",
-  "Technical Support Specialist",
-  "Product Manager",
-  "Project Manager",
-  "Scrum Master",
-  "Business Analyst",
-  "Solutions Architect",
-  "Database Administrator",
-  "Systems Engineer",
-  "IT Specialist",
-  "Technical Writer",
-  "Other",
-];
+import { JOB_TITLES } from "../../../constants/jobTitles";
 
 const JobTitle = () => {
   const router = useRouter();

@@ -1,11 +1,13 @@
-import { Image, Text, View } from "react-native";
+import { Image, Platform, Text, View } from "react-native";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 
 const ProfileCard = ({ card, color }) => {
   // if (!card) return null;
   return (
     <View
-      className="h-[90%] p-5 shadow-sm rounded-2xl"
+      className={`${
+        Platform.OS === "ios" ? "h-[88%]" : "h-[100%]"
+      } p-5 shadow-sm rounded-2xl`}
       style={{ backgroundColor: color || "#fbfbfb" }}
     >
       <Image

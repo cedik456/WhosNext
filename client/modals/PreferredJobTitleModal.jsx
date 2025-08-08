@@ -1,39 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
 import { FlatList, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
-
-const jobTitles = [
-  "Frontend Developer",
-  "Backend Developer",
-  "Full Stack Developer",
-  "UI/UX Designer",
-  "Mobile Developer",
-  "iOS Developer",
-  "Android Developer",
-  "Web Developer",
-  "React Developer",
-  "Node.js Developer",
-  "DevOps Engineer",
-  "QA Engineer",
-  "Software Engineer",
-  "Data Analyst",
-  "Data Scientist",
-  "Machine Learning Engineer",
-  "Cloud Engineer",
-  "AI Engineer",
-  "Cybersecurity Analyst",
-  "Technical Support Specialist",
-  "Product Manager",
-  "Project Manager",
-  "Scrum Master",
-  "Business Analyst",
-  "Solutions Architect",
-  "Database Administrator",
-  "Systems Engineer",
-  "IT Specialist",
-  "Technical Writer",
-  "Other",
-];
+import { JOB_TITLES } from "../constants/jobTitles";
 
 const PreferredJobTitleModal = ({ isVisible, onClose, onSelect, selected }) => {
   const handleSelect = (title) => {
@@ -67,7 +35,7 @@ const PreferredJobTitleModal = ({ isVisible, onClose, onSelect, selected }) => {
         </View>
 
         <FlatList
-          data={jobTitles}
+          data={JOB_TITLES}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
