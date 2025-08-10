@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { INDUSTRIES } = require("../constants/industries");
 const Schema = mongoose.Schema;
 
 const RecruiterSchema = new Schema({
@@ -14,6 +15,11 @@ const RecruiterSchema = new Schema({
     default: "",
   },
   jobDescription: String,
+  industry: {
+    type: String,
+    enum: INDUSTRIES,
+    default: "General",
+  },
   jobTitle: String,
 
   hiringCriteria: {
