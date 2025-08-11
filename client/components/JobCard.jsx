@@ -12,8 +12,8 @@ const JobCard = ({ data, color }) => {
   return (
     <View
       className={`${
-        Platform.OS === "ios" ? "h-[88%]" : "h-[101%]"
-      } overflow-hidden shadow-sm rounded-2xl`}
+        Platform.OS === "ios" ? "h-[90%]" : "h-[100%]"
+      }  shadow-sm rounded-2xl`}
       style={{ backgroundColor: color || "#fff" }}
     >
       {data.companyPicture ? (

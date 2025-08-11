@@ -12,7 +12,7 @@ const LandingPage = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="justify-between flex-1 px-6 ">
+      <View className="justify-center flex-1 px-6 ">
         {!isReady && (
           <View className="absolute inset-0 z-10 items-center justify-center bg-white">
             <Image
@@ -21,15 +21,16 @@ const LandingPage = () => {
             />
           </View>
         )}
+
         <View className="items-center">
           <Image
             source={require("../assets/logown.png")}
-            className="w-44 h-44"
+            className="w-40 h-40"
             onLoadEnd={() => setLogoReady(true)}
           />
         </View>
 
-        <View className="gap-8">
+        <View className="gap-4">
           <Image
             source={require("../assets/landing-page.png")}
             className="w-auto h-auto"
@@ -47,7 +48,7 @@ const LandingPage = () => {
           <View className="w-full gap-3">
             <AuthButton
               label="Sign in with Email"
-              onPress={() => router.push("/login")}
+              onPress={() => router.replace("/login")}
               icon={<MaterialIcons name="email" size={24} color="white" />}
             />
             <AuthButton

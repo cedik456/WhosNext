@@ -38,8 +38,8 @@ const Home = () => {
       <View className="px-5">
         <View className="absolute z-10 top-5 left-5 right-5 ">
           <View className="flex-row items-center justify-between">
-            <Text className="text-2xl font-poppins-600 dark:text-white">
-              Who's Next?
+            <Text className="text-2xl font-poppins dark:text-white">
+              who'snext?
             </Text>
 
             <Pressable onPress={handleFilterPress}>

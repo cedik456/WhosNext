@@ -51,7 +51,7 @@ const Location = () => {
           style={{ width: `${(7 / 7) * 100}%` }}
         />
       </View>
-      <View className="justify-between flex-1 px-6 mt-14">
+      <View className="justify-between flex-1 px-6 ">
         <View className="items-center mt-20 ">
           <Text className="mb-4 text-3xl text-center font-poppins-600">
             Enable Location

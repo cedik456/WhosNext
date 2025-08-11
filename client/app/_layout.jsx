@@ -40,6 +40,7 @@ const RootLayout = () => {
             <Stack
               screenOptions={{
                 headerShown: false,
+                gestureEnabled: false,
               }}
             />
           </PaperProvider>
