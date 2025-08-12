@@ -1,3 +1,4 @@
+const { INDUSTRIES } = require("../../constants/industries");
 const JobSeeker = require("../../models/JobSeekerSchema");
 const User = require("../../models/UserSchema");
 
@@ -192,5 +193,33 @@ exports.saveJobSeekerExperience = async (req, res) => {
       success: false,
       message: "Server error while saving experience level",
     });
+  }
+};
+
+exports.saveJobSeekerIndustry = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { industry } = req.body;
+
+    if (!industry || !INDUSTRIES.includes(industry)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or missing industry" });
+    }
+
+    await JobSeeker.findOneAndUpdate(
+      { userId },
+      { $set: { industry }, $setOnInsert: { userId } },
+      { new: true, upsert: true }
+    );
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Industry saved successfully" });
+  } catch (error) {
+    console.error("Error saving job seeker industry:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error while saving industry." });
   }
 };
