@@ -55,6 +55,6 @@ router.patch("/experience/recruiter", auth, saveRecruiterExperience);
 router.patch("/workType/recruiter", auth, saveRecruiterWorkType);
 router.patch("/workEnvironment/recruiter", auth, saveRecruiterWorkEnvironment);
 router.post("/logo/recruiter", auth, upload.single("logo"), uploadCompanyLogo);
-router.post("/industry/recruiter", auth, saveRecruiterIndustry);
+router.patch("/industry/recruiter", auth, saveRecruiterIndustry);
 
 module.exports = router;
