@@ -1,4 +1,11 @@
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,6 +14,7 @@ import Button from "../../components/Button";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import { EXPERIENCE_LEVELS } from "../../constants/experienceLevel";
+import { AntDesign } from "@expo/vector-icons";
 
 const ExperienceLevel = () => {
   const router = useRouter();
@@ -78,7 +86,19 @@ const ExperienceLevel = () => {
           />
         )}
       </View>
-      <View className="justify-between flex-1 gap-6 px-6 mt-14">
+
+      <View className="flex-row items-center justify-between p-5">
+        <TouchableOpacity onPress={() => router.replace("/workEnvironment")}>
+          <AntDesign name="left" size={24} color="gray" />
+        </TouchableOpacity>
+
+        <Text className="text-xs text-gray-500 font-poppins-500">
+          {" "}
+          {role === "recruiter" ? "8 of 9" : "6 of 7"}
+        </Text>
+      </View>
+
+      <View className="justify-between flex-1 gap-6 px-6 ">
         <View>
           <Text className="mb-3 text-3xl font-poppins-600">
             {role === "recruiter"

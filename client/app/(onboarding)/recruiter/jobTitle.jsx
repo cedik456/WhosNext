@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Chip } from "react-native-paper";
@@ -7,6 +14,7 @@ import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 import Button from "../../../components/Button";
 import { JOB_TITLES } from "../../../constants/jobTitles";
+import { AntDesign } from "@expo/vector-icons";
 
 const JobTitle = () => {
   const router = useRouter();
@@ -54,7 +62,18 @@ const JobTitle = () => {
           style={{ width: `${(4 / 9) * 100}%` }}
         />
       </View>
-      <View className="justify-between flex-1 px-6 mt-14">
+
+      <View className="flex-row items-center justify-between p-5">
+        <TouchableOpacity
+          onPress={() => router.replace("/recruiter/companyPicture")}
+        >
+          <AntDesign name="left" size={24} color="gray" />
+        </TouchableOpacity>
+
+        <Text className="text-xs text-gray-500 font-poppins-500">4 of 9</Text>
+      </View>
+
+      <View className="justify-between flex-1 px-6 ">
         <View>
           <Text className="mb-2 text-3xl font-poppins-600">
             What job are you hiring for?

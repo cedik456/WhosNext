@@ -1,4 +1,4 @@
-import { View, Text, Alert, TextInput } from "react-native";
+import { View, Text, Alert, TextInput, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../../components/Button";
@@ -7,6 +7,7 @@ import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 import DropDownPicker from "react-native-dropdown-picker";
 import { LOCATIONS } from "../../../constants/locations";
+import { AntDesign } from "@expo/vector-icons";
 
 const HiringLocation = () => {
   const router = useRouter();
@@ -56,7 +57,16 @@ const HiringLocation = () => {
           style={{ width: `${(9 / 9) * 100}%` }}
         />
       </View>
-      <View className="justify-between flex-1 px-6 mt-14">
+
+      <View className="flex-row items-center justify-between p-5">
+        <TouchableOpacity onPress={() => router.replace("/experienceLevel")}>
+          <AntDesign name="left" size={24} color="gray" />
+        </TouchableOpacity>
+
+        <Text className="text-xs text-gray-500 font-poppins-500">9 of 9</Text>
+      </View>
+
+      <View className="justify-between flex-1 px-6 ">
         <View className="gap-3">
           <Text className="text-3xl font-poppins-600">
             Where are you hiring?

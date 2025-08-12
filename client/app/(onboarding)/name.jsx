@@ -1,4 +1,4 @@
-import { Alert, Text, TextInput, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { getToken } from "../../utils/storage";
@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../utils/axiosInstance";
 import { getUserRole } from "../../utils/secureUser";
 import Button from "../../components/Button";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 const Name = () => {
   const router = useRouter();
@@ -79,7 +80,15 @@ const Name = () => {
         />
       </View>
 
-      <View className="justify-between flex-1 px-6 mt-14">
+      <View className="flex-row items-center justify-between p-5">
+        <TouchableOpacity onPress={() => router.replace("/role")}>
+          <AntDesign name="left" size={24} color="gray" />
+        </TouchableOpacity>
+
+        <Text className="text-xs text-gray-500 font-poppins-500">2 of 7</Text>
+      </View>
+
+      <View className="justify-between flex-1 px-6 ">
         <View className="gap-4">
           <Text className="text-3xl font-poppins-600">
             {role === "recruiter"

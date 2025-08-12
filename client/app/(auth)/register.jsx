@@ -82,8 +82,9 @@ const Register = () => {
               Email
             </Text>
             <TextInput
-              className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
+              className="p-5 rounded-full font-poppins-500"
               placeholder="Enter your email"
+              placeholderTextColor="#9CA3AF"
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
@@ -97,8 +98,9 @@ const Register = () => {
             </Text>
 
             <TextInput
-              className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
+              className="p-5 rounded-full font-poppins-500"
               placeholder="Enter your password"
+              placeholderTextColor="#9CA3AF"
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
@@ -122,8 +124,9 @@ const Register = () => {
             </Text>
 
             <TextInput
-              className="p-5 bg-[#F6F6F6] rounded-full font-poppins-500"
+              className="p-5 rounded-full font-poppins-500"
               placeholder="Re-type your password"
+              placeholderTextColor="#9CA3AF"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               secureTextEntry={!showConfirmPassword}

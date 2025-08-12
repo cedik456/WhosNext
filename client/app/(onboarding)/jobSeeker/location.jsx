@@ -1,11 +1,19 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Image, Pressable, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getReadableLocation } from "../../../utils/locationHelper";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 import Button from "../../../components/Button";
+import { AntDesign } from "@expo/vector-icons";
 
 const Location = () => {
   const router = useRouter();
@@ -51,8 +59,17 @@ const Location = () => {
           style={{ width: `${(7 / 7) * 100}%` }}
         />
       </View>
+
+      <View className="flex-row items-center justify-between p-5">
+        <TouchableOpacity onPress={() => router.replace("/experienceLevel")}>
+          <AntDesign name="left" size={24} color="gray" />
+        </TouchableOpacity>
+
+        <Text className="text-xs text-gray-500 font-poppins-500">7 of 7</Text>
+      </View>
+
       <View className="justify-between flex-1 px-6 ">
-        <View className="items-center mt-20 ">
+        <View className="items-center mt-10 ">
           <Text className="mb-4 text-3xl text-center font-poppins-600">
             Enable Location
           </Text>
