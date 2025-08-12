@@ -36,7 +36,6 @@ const {
 // Shared
 router.patch("/role", auth, saveRole);
 router.patch("/complete", auth, completeOnboarding);
-router.patch("/industry", auth, saveIndustry);
 
 // Job Seeker
 router.patch("/name/jobSeeker", auth, saveName);
