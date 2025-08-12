@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Alert, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../utils/axiosInstance";
 import { getToken } from "../../utils/storage";
 import { getUserRole } from "../../utils/secureUser";
 import Button from "../../components/Button";
+import { AntDesign } from "@expo/vector-icons";
 
 const WorkType = () => {
   const router = useRouter();
@@ -76,7 +77,19 @@ const WorkType = () => {
           />
         )}
       </View>
-      <View className="justify-between flex-1 gap-6 px-6 mt-14">
+
+      <View className="flex-row items-center justify-between p-5">
+        <TouchableOpacity onPress={() => router.replace("/skills")}>
+          <AntDesign name="left" size={24} color="gray" />
+        </TouchableOpacity>
+
+        <Text className="text-xs text-gray-500 font-poppins-500">
+          {" "}
+          {role === "recruiter" ? "6 of 9" : "4 of 7"}
+        </Text>
+      </View>
+
+      <View className="justify-between flex-1 gap-6 px-6 ">
         <View>
           <Text className="mb-3 text-3xl font-poppins-600">
             {role === "recruiter"

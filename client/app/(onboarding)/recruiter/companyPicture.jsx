@@ -7,7 +7,7 @@ import api from "../../../utils/axiosInstance";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../../components/Button";
 import { TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 
 const CompanyPicture = () => {
   const router = useRouter();
@@ -84,14 +84,23 @@ const CompanyPicture = () => {
           style={{ width: `${(3 / 9) * 100}%` }}
         />
       </View>
-      <View className="flex-1 px-6 mt-14">
+
+      <View className="flex-row items-center justify-between p-5">
+        <TouchableOpacity onPress={() => router.replace("/name")}>
+          <AntDesign name="left" size={24} color="gray" />
+        </TouchableOpacity>
+
+        <Text className="text-xs text-gray-500 font-poppins-500">3 of 9</Text>
+      </View>
+
+      <View className="flex-1 px-6">
         <View>
-          <Text className="mb-2 text-3xl font-poppins-600">
-            Upload your Company Logo
+          <Text className="mb-6 text-3xl font-poppins-600">
+            Upload your {"\n"}Company Logo
           </Text>
-          <Text className="mb-4 text-gray-400 font-poppins">
+          {/* <Text className="mb-2 text-gray-400 font-poppins">
             This is how it will appear on your profile
-          </Text>
+          </Text> */}
           <View
             className={`relative items-center w-full h-[75%] ${
               image ? "" : "border-2 border-gray-300 border-dashed"

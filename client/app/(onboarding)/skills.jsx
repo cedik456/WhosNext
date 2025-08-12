@@ -1,4 +1,11 @@
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,6 +14,7 @@ import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import Button from "../../components/Button";
 import { getUserRole } from "../../utils/secureUser";
+import { AntDesign } from "@expo/vector-icons";
 
 const SKILL_SETS = {
   skills: [
@@ -99,7 +107,7 @@ const Skills = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/workType");
+        router.push("/workType");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong.");
       }
@@ -138,7 +146,25 @@ const Skills = () => {
         )}
       </View>
 
-      <View className="justify-between flex-1 px-6 mt-14">
+      <View className="flex-row items-center justify-between p-5">
+        <TouchableOpacity
+          onPress={() => {
+            if (role === "recruiter") {
+              router.replace("/recruiter/jobTitle");
+            } else {
+              router.replace("/name");
+            }
+          }}
+        >
+          <AntDesign name="left" size={24} color="gray" />
+        </TouchableOpacity>
+
+        <Text className="text-xs text-gray-500 font-poppins-500">
+          {role === "recruiter" ? "5 of 9" : "3 of 7"}
+        </Text>
+      </View>
+
+      <View className="justify-between flex-1 px-6 ">
         <View>
           <Text className="mb-2 text-3xl font-poppins-600">
             What are your
