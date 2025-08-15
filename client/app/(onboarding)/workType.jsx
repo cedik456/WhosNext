@@ -64,20 +64,6 @@ const WorkType = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
-        {role === "recruiter" ? (
-          <View
-            className="h-1 bg-black rounded-r-full "
-            style={{ width: `${(6 / 9) * 100}%` }}
-          />
-        ) : (
-          <View
-            className="h-1 bg-black rounded-r-full "
-            style={{ width: `${(4 / 7) * 100}%` }}
-          />
-        )}
-      </View>
-
       <View className="flex-row items-center justify-between p-5">
         <TouchableOpacity onPress={() => router.replace("/skills")}>
           <AntDesign name="left" size={24} color="gray" />
@@ -85,7 +71,7 @@ const WorkType = () => {
 
         <Text className="text-xs text-gray-500 font-poppins-500">
           {" "}
-          {role === "recruiter" ? "6 of 9" : "4 of 7"}
+          {role === "recruiter" ? "5 of 10" : "5 of 8"}
         </Text>
       </View>
 
@@ -102,7 +88,7 @@ const WorkType = () => {
               : "Select your preferred work arrangement"}
           </Text>
 
-          <Text className="mb-5 text-lg font-poppins-600">
+          <Text className="mb-5 text-sm font-poppins-600">
             {role === "recruiter"
               ? "Choose how this job will be structured"
               : "Choose how you'd like to be employed"}

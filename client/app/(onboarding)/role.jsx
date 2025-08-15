@@ -56,12 +56,6 @@ const Role = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
-        <View
-          className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(1 / 9) * 100}%` }}
-        />
-      </View>
       {/* <Text className="mt-1 ml-2 text-sm text-gray-500">X</Text> */}
 
       <View className="justify-between flex-1 px-6 mt-14">
@@ -72,7 +66,7 @@ const Role = () => {
             </Text>
             <Text className="text-lg text-gray-500 font-poppins-600">
               {" "}
-              Your one swipe away
+              Your one match away
             </Text>
             <Image
               source={Onboarding1}

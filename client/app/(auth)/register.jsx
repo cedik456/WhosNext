@@ -82,7 +82,7 @@ const Register = () => {
               Email
             </Text>
             <TextInput
-              className="p-5 rounded-full font-poppins-500"
+              className="p-5 border border-gray-300 rounded-full font-poppins-500"
               placeholder="Enter your email"
               placeholderTextColor="#9CA3AF"
               value={email}
@@ -98,7 +98,7 @@ const Register = () => {
             </Text>
 
             <TextInput
-              className="p-5 rounded-full font-poppins-500"
+              className="p-5 border border-gray-300 rounded-full font-poppins-500"
               placeholder="Enter your password"
               placeholderTextColor="#9CA3AF"
               value={password}
@@ -124,7 +124,7 @@ const Register = () => {
             </Text>
 
             <TextInput
-              className="p-5 rounded-full font-poppins-500"
+              className="p-5 border border-gray-300 rounded-full font-poppins-500"
               placeholder="Re-type your password"
               placeholderTextColor="#9CA3AF"
               value={confirmPassword}
