@@ -64,20 +64,6 @@ const WorkEnvironment = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
-        {role === "recruiter" ? (
-          <View
-            className="h-1 bg-black rounded-r-full "
-            style={{ width: `${(7 / 9) * 100}%` }}
-          />
-        ) : (
-          <View
-            className="h-1 bg-black rounded-r-full "
-            style={{ width: `${(5 / 7) * 100}%` }}
-          />
-        )}
-      </View>
-
       <View className="flex-row items-center justify-between p-5">
         <TouchableOpacity onPress={() => router.replace("/workType")}>
           <AntDesign name="left" size={24} color="gray" />
@@ -85,7 +71,7 @@ const WorkEnvironment = () => {
 
         <Text className="text-xs text-gray-500 font-poppins-500">
           {" "}
-          {role === "recruiter" ? "7 of 9" : "5 of 7"}
+          {role === "recruiter" ? "6 of 10" : "6 of 8"}
         </Text>
       </View>
 
@@ -102,7 +88,7 @@ const WorkEnvironment = () => {
               : "Choose your preferred work setup"}
           </Text>
 
-          <Text className="mb-5 text-lg font-poppins-600">
+          <Text className="mb-5 text-sm font-poppins-500">
             {role === "recruiter"
               ? "Let candidates know if the job is remote, on-site or hybrid"
               : "Select where you'd be most comfortable \nworking from."}

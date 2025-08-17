@@ -375,6 +375,13 @@ exports.getRecommendationsv3 = async (req, res) => {
 
       const filterConditions = [];
 
+      if (
+        preferences.preferredIndustry &&
+        preferences.preferredIndustry !== "General"
+      ) {
+        filterConditions.push({ industry: preferences.preferredIndustry }); // recruiter root
+      }
+
       if (preferences.preferredSkills?.length) {
         filterConditions.push({
           "hiringCriteria.requiredSkills": { $in: preferences.preferredSkills },
@@ -388,9 +395,10 @@ exports.getRecommendationsv3 = async (req, res) => {
           },
         });
       }
-      if (preferences.experienceLevel) {
+      if (preferences.preferredExperienceLevel) {
         filterConditions.push({
-          "hiringCriteria.experienceLevel": preferences.experienceLevel,
+          "hiringCriteria.experienceLevel":
+            preferences.preferredExperienceLevel,
         });
       }
       if (preferences.preferredWorkType) {
@@ -455,6 +463,10 @@ exports.getRecommendationsv3 = async (req, res) => {
 
       const filterConditions = [];
 
+      if (filters.filterIndustry && filters.filterIndustry !== "General") {
+        filterConditions.push({ industry: filters.filterIndustry });
+      }
+
       if (filters.filterSkills?.length) {
         filterConditions.push({ skills: { $in: filters.filterSkills } });
       }
@@ -493,7 +505,8 @@ exports.getRecommendationsv3 = async (req, res) => {
         .map((candidate) => {
           const similarityScore = computeRecruiterSimilarity(
             candidate,
-            recruiter.hiringCriteria
+            recruiter.hiringCriteria,
+            recruiter.industry
           );
           return { ...candidate, _similarity: similarityScore };
         })

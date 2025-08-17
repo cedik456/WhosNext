@@ -32,6 +32,11 @@ const JobSeekerSchema = new Schema({
     enum: ["Full-time", "Part-time", "Internship"],
   },
   preferences: {
+    preferredIndustry: {
+      type: String,
+      enum: INDUSTRIES,
+    },
+
     preferredSkills: {
       type: [String],
       default: [],

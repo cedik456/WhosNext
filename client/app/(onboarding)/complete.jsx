@@ -46,7 +46,7 @@ const Complete = () => {
       </Text>
 
       <Text className="mb-5 text-sm text-center text-gray-400 font-poppins-500">
-        You can update your profile anytime from the Profile.
+        You can update your profile anytime from the settings.
       </Text>
 
       <View className="w-full">

@@ -46,7 +46,7 @@ const JobTitle = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/skills");
+        router.replace("/recruiter/companyPicture");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong.");
       }
@@ -56,21 +56,12 @@ const JobTitle = () => {
   };
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
-        <View
-          className="h-1 bg-black rounded-r-full "
-          style={{ width: `${(4 / 9) * 100}%` }}
-        />
-      </View>
-
       <View className="flex-row items-center justify-between p-5">
-        <TouchableOpacity
-          onPress={() => router.replace("/recruiter/companyPicture")}
-        >
+        <TouchableOpacity onPress={() => router.replace("/experienceLevel")}>
           <AntDesign name="left" size={24} color="gray" />
         </TouchableOpacity>
 
-        <Text className="text-xs text-gray-500 font-poppins-500">4 of 9</Text>
+        <Text className="text-xs text-gray-500 font-poppins-500">8 of 10</Text>
       </View>
 
       <View className="justify-between flex-1 px-6 ">

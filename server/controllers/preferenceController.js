@@ -1,3 +1,4 @@
+const { INDUSTRIES } = require("../constants/industries");
 const JobSeeker = require("../models/JobSeekerSchema");
 const Recruiter = require("../models/RecruiterSchema");
 
@@ -10,6 +11,15 @@ exports.updatePreferences = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Preferences data is required" });
+    }
+
+    if (
+      preferences.preferredIndustry &&
+      !INDUSTRIES.includes(preferences.preferredIndustry)
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid preferred Industry" });
     }
 
     const updated = await JobSeeker.findOneAndUpdate(
@@ -62,6 +72,15 @@ exports.updateFilters = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Filters data is required" });
+    }
+
+    if (
+      filters.filterIndustry &&
+      !INDUSTRIES.includes(filters.filterIndustry)
+    ) {
+      return res
+        .status(400)
+        .json({ success: 400, message: "Invalid filter Industry" });
     }
 
     const updated = await Recruiter.findOneAndUpdate(

@@ -1,70 +1,29 @@
-import {
-  Alert,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Chip } from "react-native-paper";
+import { ActivityIndicator, Chip } from "react-native-paper";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import Button from "../../components/Button";
 import { getUserRole } from "../../utils/secureUser";
 import { AntDesign } from "@expo/vector-icons";
-
-const SKILL_SETS = {
-  skills: [
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Vue.js",
-    "Angular",
-    "Node.js",
-    "Express.js",
-    "Python",
-    "Django",
-    "Flask",
-    "PHP",
-    "Laravel",
-    "Ruby on Rails",
-    "Java",
-    "Spring Boot",
-    "C#",
-    ".NET",
-    "Swift",
-    "Kotlin",
-    "UI/UX Design",
-    "Figma",
-    "Adobe XD",
-    "Photoshop",
-    "Illustrator",
-    "SQL",
-    "MongoDB",
-    "Firebase",
-    "AWS",
-    "Google Cloud",
-    "DevOps",
-    "Docker",
-    "Kubernetes",
-    "Git",
-    "Agile Methodologies",
-    "Scrum",
-    "Project Management",
-    "Product Management",
-    "Sales",
-    "Customer Service",
-    "Other",
-  ],
-};
+import { SKILLS_BY_INDUSTRY } from "../../constants/skillsByIndustry";
+import { useLocalSearchParams } from "expo-router";
 
 const Skills = () => {
   const router = useRouter();
-  const [role, setRole] = useState("jobSeeker");
+  const params = useLocalSearchParams();
+
+  const paramRole = Array.isArray(params.role) ? params.role[0] : params.role;
+  const paramIndustry = Array.isArray(params.industry)
+    ? params.industry[0]
+    : params.industry;
+
+  const [role, setRole] = useState(paramRole || "jobSeeker");
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const [industry, setIndustry] = useState(paramIndustry || "");
+  const [loading, setLoading] = useState(!paramIndustry);
 
   const toggleSkill = (skill) => {
     if (selectedSkills.includes(skill)) {
@@ -107,60 +66,72 @@ const Skills = () => {
       const { success } = response.data;
 
       if (success) {
-        router.push("/workType");
+        router.replace("/workType");
       } else {
         Alert.alert("Error", response.data.message || "Something went wrong.");
       }
     } catch (error) {
       Alert.alert("Network Error", "Couldn't save skills. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (paramRole) return;
     const fetchRole = async () => {
       const role = await getUserRole();
       if (!role) {
-        router.replace("onboarding/role");
+        router.replace("/role");
       } else {
         setRole(role);
       }
     };
     fetchRole();
-  }, []);
+  }, [paramRole]);
 
-  const skillOptions = SKILL_SETS.skills;
+  useEffect(() => {
+    if (industry) {
+      setLoading(false);
+      return;
+    }
+    const fetchIndustry = async () => {
+      try {
+        const token = await getToken();
+        const response = await api.get("/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const saved = response.data?.data?.industry;
+
+        if (!saved) {
+          setLoading(false);
+          router.replace("/industry");
+          return;
+        }
+        setIndustry(saved);
+        setLoading(false);
+      } catch (error) {
+        Alert.alert("Error", "Couldn't load industry");
+        setLoading(false);
+      }
+    };
+    fetchIndustry();
+  }, [industry]);
+
+  const skillOptions = industry
+    ? SKILLS_BY_INDUSTRY[industry] || SKILLS_BY_INDUSTRY["Other"] || []
+    : [];
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="w-full h-1 mt-2 bg-gray-200 rounded-full">
-        {role === "recruiter" ? (
-          <View
-            className="h-1 bg-black rounded-r-full "
-            style={{ width: `${(5 / 9) * 100}%` }}
-          />
-        ) : (
-          <View
-            className="h-1 bg-black rounded-r-full "
-            style={{ width: `${(3 / 7) * 100}%` }}
-          />
-        )}
-      </View>
-
       <View className="flex-row items-center justify-between p-5">
-        <TouchableOpacity
-          onPress={() => {
-            if (role === "recruiter") {
-              router.replace("/recruiter/jobTitle");
-            } else {
-              router.replace("/name");
-            }
-          }}
-        >
+        <TouchableOpacity onPress={() => router.replace("/industry")}>
           <AntDesign name="left" size={24} color="gray" />
         </TouchableOpacity>
 
         <Text className="text-xs text-gray-500 font-poppins-500">
-          {role === "recruiter" ? "5 of 9" : "3 of 7"}
+          {role === "recruiter" ? "4 of 10" : "4 of 8"}
         </Text>
       </View>
 
@@ -212,6 +183,14 @@ const Skills = () => {
           disabled={selectedSkills.length < 1}
         />
       </View>
+
+      {loading && (
+        <View className="absolute inset-0 z-10 items-center justify-center">
+          <Text className="text-gray-500 font-poppins-500">
+            Loading skills based on industry...
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
