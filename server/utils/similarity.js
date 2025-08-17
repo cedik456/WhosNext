@@ -20,8 +20,8 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       new Set(jobSeekerProfile.skills),
       new Set(recruiterProfile.hiringCriteria.requiredSkills)
     );
-    score += skillScore * 0.4;
-    totalWeight += 0.4;
+    score += skillScore * 0.35;
+    totalWeight += 0.35;
   }
 
   if (jobSeekerProfile.location && recruiterProfile.hiringCriteria?.location) {
@@ -65,9 +65,21 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       jobSeekerProfile.workEnvironment.toLowerCase() ===
       recruiterProfile.hiringCriteria.workEnvironment.toLowerCase()
     ) {
-      score += 1 * 0.1;
+      score += 1 * 0.05;
     }
-    totalWeight += 0.1;
+    totalWeight += 0.05;
+  }
+
+  if (jobSeekerProfile.industry && recruiterProfile?.industry) {
+    const jp = jobSeekerProfile.industry.toLowerCase();
+    const ri = recruiterProfile.industry.toLowerCase();
+
+    if (ri !== "general") {
+      if (jp === ri) {
+        score += 1 * 0.1;
+      }
+      totalWeight += 0.1; // weight only counts if not general
+    }
   }
 
   return totalWeight > 0 ? score / totalWeight : 0;
@@ -75,11 +87,15 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
 
 // Recruiter Similarity
 
-const computeRecruiterSimilarity = (jobSeekerProfile, recruiterCriteria) => {
+const computeRecruiterSimilarity = (
+  jobSeekerProfile,
+  recruiterCriteria,
+  recruiterIndustry
+) => {
   let score = 0;
   let totalWeight = 0;
 
-  // Skills (40%)
+  // Skills (35%)
   if (
     jobSeekerProfile.skills?.length &&
     recruiterCriteria?.requiredSkills?.length
@@ -88,8 +104,8 @@ const computeRecruiterSimilarity = (jobSeekerProfile, recruiterCriteria) => {
       new Set(jobSeekerProfile.skills),
       new Set(recruiterCriteria.requiredSkills)
     );
-    score += skillScore * 0.4;
-    totalWeight += 0.4;
+    score += skillScore * 0.35;
+    totalWeight += 0.35;
   }
 
   // Location (20%)
@@ -125,15 +141,28 @@ const computeRecruiterSimilarity = (jobSeekerProfile, recruiterCriteria) => {
     totalWeight += 0.15;
   }
 
-  // Work Environment (10%)
+  // Work Environment (5%)
   if (jobSeekerProfile.workEnvironment && recruiterCriteria?.workEnvironment) {
     if (
       jobSeekerProfile.workEnvironment.toLowerCase() ===
       recruiterCriteria.workEnvironment.toLowerCase()
     ) {
-      score += 1 * 0.1;
+      score += 1 * 0.05;
     }
-    totalWeight += 0.1;
+    totalWeight += 0.05;
+  }
+
+  if (jobSeekerProfile.industry && recruiterIndustry) {
+    const jp = jobSeekerProfile.industry.toLowerCase();
+    const ri = recruiterIndustry.toLowerCase();
+
+    if (ri !== "general") {
+      // only count when not general
+      if (jp === ri) {
+        score += 1 * 0.1;
+      }
+      totalWeight += 0.1; // weight only added if considered
+    }
   }
 
   return totalWeight > 0 ? score / totalWeight : 0;

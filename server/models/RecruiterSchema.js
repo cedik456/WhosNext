@@ -47,6 +47,10 @@ const RecruiterSchema = new Schema({
   },
 
   filters: {
+    filterIndustry: {
+      type: String,
+      enum: INDUSTRIES,
+    },
     filterSkills: {
       type: [String],
       default: [],
