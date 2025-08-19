@@ -20,8 +20,8 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       new Set(jobSeekerProfile.skills),
       new Set(recruiterProfile.hiringCriteria.requiredSkills)
     );
-    score += skillScore * 0.35;
-    totalWeight += 0.35;
+    score += skillScore * 3.5;
+    totalWeight += 3.5;
   }
 
   if (jobSeekerProfile.location && recruiterProfile.hiringCriteria?.location) {
@@ -29,9 +29,9 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       jobSeekerProfile.location.toLowerCase() ===
       recruiterProfile.hiringCriteria.location.toLowerCase()
     ) {
-      score += 1 * 0.2;
+      score += 1 * 0.5;
     }
-    totalWeight += 0.2;
+    totalWeight += 0.5;
   }
 
   if (
@@ -42,9 +42,9 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       jobSeekerProfile.experience.toLowerCase() ===
       recruiterProfile.hiringCriteria.experienceLevel.toLowerCase()
     ) {
-      score += 1 * 0.15;
+      score += 1 * 2.0;
     }
-    totalWeight += 0.15;
+    totalWeight += 2.0;
   }
 
   if (jobSeekerProfile.workType && recruiterProfile.hiringCriteria?.workType) {
@@ -52,9 +52,9 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       jobSeekerProfile.workType.toLowerCase() ===
       recruiterProfile.hiringCriteria.workType.toLowerCase()
     ) {
-      score += 1 * 0.15;
+      score += 1 * 1.0;
     }
-    totalWeight += 0.15;
+    totalWeight += 1.0;
   }
 
   if (
@@ -65,9 +65,9 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       jobSeekerProfile.workEnvironment.toLowerCase() ===
       recruiterProfile.hiringCriteria.workEnvironment.toLowerCase()
     ) {
-      score += 1 * 0.05;
+      score += 1 * 0.5;
     }
-    totalWeight += 0.05;
+    totalWeight += 0.5;
   }
 
   if (jobSeekerProfile.industry && recruiterProfile?.industry) {
@@ -76,9 +76,9 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
 
     if (ri !== "general") {
       if (jp === ri) {
-        score += 1 * 0.1;
+        score += 1 * 3.0;
       }
-      totalWeight += 0.1; // weight only counts if not general
+      totalWeight += 3.0; // weight only counts if not general
     }
   }
 
@@ -95,7 +95,6 @@ const computeRecruiterSimilarity = (
   let score = 0;
   let totalWeight = 0;
 
-  // Skills (35%)
   if (
     jobSeekerProfile.skills?.length &&
     recruiterCriteria?.requiredSkills?.length
@@ -104,52 +103,48 @@ const computeRecruiterSimilarity = (
       new Set(jobSeekerProfile.skills),
       new Set(recruiterCriteria.requiredSkills)
     );
-    score += skillScore * 0.35;
-    totalWeight += 0.35;
+    score += skillScore * 3.5;
+    totalWeight += 3.5;
   }
 
-  // Location (20%)
   if (jobSeekerProfile.location && recruiterCriteria?.location) {
     if (
       jobSeekerProfile.location.toLowerCase() ===
       recruiterCriteria.location.toLowerCase()
     ) {
-      score += 1 * 0.2;
+      score += 1 * 0.5;
     }
-    totalWeight += 0.2;
+    totalWeight += 0.5;
   }
 
-  // Experience (15%)
   if (jobSeekerProfile.experience && recruiterCriteria?.experienceLevel) {
     if (
       jobSeekerProfile.experience.toLowerCase() ===
       recruiterCriteria.experienceLevel.toLowerCase()
     ) {
-      score += 1 * 0.15;
+      score += 1 * 2.0;
     }
-    totalWeight += 0.15;
+    totalWeight += 2.0;
   }
 
-  // Work Type (15%)
   if (jobSeekerProfile.workType && recruiterCriteria?.workType) {
     if (
       jobSeekerProfile.workType.toLowerCase() ===
       recruiterCriteria.workType.toLowerCase()
     ) {
-      score += 1 * 0.15;
+      score += 1 * 1.0;
     }
-    totalWeight += 0.15;
+    totalWeight += 1.0;
   }
 
-  // Work Environment (5%)
   if (jobSeekerProfile.workEnvironment && recruiterCriteria?.workEnvironment) {
     if (
       jobSeekerProfile.workEnvironment.toLowerCase() ===
       recruiterCriteria.workEnvironment.toLowerCase()
     ) {
-      score += 1 * 0.05;
+      score += 1 * 0.5;
     }
-    totalWeight += 0.05;
+    totalWeight += 0.5;
   }
 
   if (jobSeekerProfile.industry && recruiterIndustry) {
@@ -159,9 +154,9 @@ const computeRecruiterSimilarity = (
     if (ri !== "general") {
       // only count when not general
       if (jp === ri) {
-        score += 1 * 0.1;
+        score += 1 * 3.0;
       }
-      totalWeight += 0.1; // weight only added if considered
+      totalWeight += 3.0; // weight only added if considered
     }
   }
 

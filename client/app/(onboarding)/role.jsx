@@ -56,21 +56,19 @@ const Role = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      {/* <Text className="mt-1 ml-2 text-sm text-gray-500">X</Text> */}
-
       <View className="justify-between flex-1 px-6 mt-14">
         <View>
           <View>
             <Text className="mb-2 text-5xl font-poppins-700">
-              Welcome to {"\n"} Who's Next!
+              Welcome to {"\n"}Who's Next!
             </Text>
             <Text className="text-lg text-gray-500 font-poppins-600">
               {" "}
-              Your one match away
+              You are one match away
             </Text>
             <Image
               source={Onboarding1}
-              className="w-80 h-80"
+              className="w-[95%] h-80"
               resizeMode="cover"
             />
           </View>
@@ -109,6 +107,9 @@ const Role = () => {
                 Recruiter
               </Text>
             </Pressable>
+            <Text className="mb-4 text-sm text-blue-600 font-poppins-500">
+              This will determine your onboarding process.
+            </Text>
           </View>
         </View>
         <Button

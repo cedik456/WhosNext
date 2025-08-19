@@ -1,11 +1,11 @@
-import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import ProfileItem from '../../../components/ProfileItem';
-import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
-import { useColorScheme } from 'nativewind';
-import { useRouter } from 'expo-router';
-import { useAuth } from '../../../hooks/useAuth';
-import Button from '../../../components/Button';
+import { Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ProfileItem from "../../../components/ProfileItem";
+import { Ionicons, FontAwesome6 } from "@expo/vector-icons";
+import { useColorScheme } from "nativewind";
+import { useRouter } from "expo-router";
+import { useAuth } from "../../../hooks/useAuth";
+import Button from "../../../components/Button";
 
 const SettingsScreen = () => {
   const { colorScheme } = useColorScheme();
@@ -14,25 +14,28 @@ const SettingsScreen = () => {
 
   return (
     <SafeAreaView
-      className={`flex-1 ${colorScheme === 'dark' ? ' bg-black' : ''}`}
+      className={`flex-1 ${colorScheme === "dark" ? " bg-black" : ""}`}
     >
       <View
         className={`${
-          colorScheme === 'dark' ? 'bg-black' : ''
+          colorScheme === "dark" ? "bg-black" : ""
         } text-2xl  font-poppins-600 `}
       >
         <View className="relative flex-row items-center justify-center px-6 mt-5">
-          <Pressable onPress={() => router.back()} className="absolute left-6 ">
+          <Pressable
+            onPress={() => router.replace("/profile")}
+            className="absolute left-6 "
+          >
             <FontAwesome6
               name="chevron-left"
               size={24}
-              color={colorScheme === 'dark' ? 'white' : 'black'}
+              color={colorScheme === "dark" ? "white" : "black"}
             />
           </Pressable>
 
           <Text
             className={`${
-              colorScheme === 'dark' ? 'text-white' : 'text-black'
+              colorScheme === "dark" ? "text-white" : "text-black"
             } text-2xl  font-poppins-600 `}
           >
             Settings
@@ -43,35 +46,35 @@ const SettingsScreen = () => {
         <View className="px-6 mt-8">
           <View
             className={`p-4 rounded-xl ${
-              colorScheme === 'dark' ? 'bg-[#242526]' : 'bg-gray-50'
+              colorScheme === "dark" ? "bg-[#242526]" : "bg-gray-50"
             }`}
           >
             <ProfileItem
               label="General"
               icon="settings-outline"
               iconSet={Ionicons}
-              onPress={() => router.push('profile/settings/general')}
+              onPress={() => router.push("profile/settings/general")}
               showDivider
             />
             <ProfileItem
               label="Contact"
               icon="mail-outline"
               iconSet={Ionicons}
-              onPress={() => router.push('profile/settings/contact')}
+              onPress={() => router.push("profile/settings/contact")}
               showDivider
             />
             <ProfileItem
               label="Terms & Conditions"
               icon="document-text-outline"
               iconSet={Ionicons}
-              onPress={() => router.push('profile/settings/terms')}
+              onPress={() => router.push("profile/settings/terms")}
               showDivider
             />
             <ProfileItem
               label="Help"
               icon="help-circle-outline"
               iconSet={Ionicons}
-              onPress={() => router.push('profile/settings/help')}
+              onPress={() => router.push("profile/settings/help")}
             />
           </View>
         </View>
@@ -80,14 +83,14 @@ const SettingsScreen = () => {
         <View className="px-6 mt-5">
           <View
             className={`p-4 rounded-xl ${
-              colorScheme === 'dark' ? 'bg-[#242526]' : 'bg-gray-50'
+              colorScheme === "dark" ? "bg-[#242526]" : "bg-gray-50"
             }`}
           >
             <ProfileItem
               label="About"
               icon="information-circle-outline"
               iconSet={Ionicons}
-              onPress={() => router.push('profile/settings/about')}
+              onPress={() => router.push("profile/settings/about")}
             />
           </View>
         </View>
@@ -96,7 +99,7 @@ const SettingsScreen = () => {
           <Button
             onPress={() => {
               logout();
-              router.push('/login');
+              router.push("/login");
             }}
             title="Log out"
             className="items-center w-full py-4 bg-red-500 rounded-full"

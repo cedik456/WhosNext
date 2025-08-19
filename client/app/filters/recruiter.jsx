@@ -30,6 +30,9 @@ const RecruiterFilters = () => {
 
   const { setShouldRefetch } = useRefetch();
 
+  // Industry
+  const [selectedIndustry, setSelectedIndustry] = useState(null);
+
   // Skills
   const [isSkillsModalOpen, setIsSkillsModalOpen] = useState(false);
   const [preferredSkills, setPreferredSkills] = useState([]);
@@ -203,6 +206,27 @@ const RecruiterFilters = () => {
     fetchPreferences();
   }, []);
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = await getToken();
+        const res = await api.get("/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const raw =
+          res.data?.data?.industry || res.data?.data?.jobSeeker?.industry;
+        if (raw) setSelectedIndustry(raw);
+      } catch (err) {
+        console.error(
+          "Failed to load profile:",
+          err.response?.data || err.message
+        );
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center justify-between p-5">
@@ -350,6 +374,7 @@ const RecruiterFilters = () => {
         onClose={() => setIsSkillsModalOpen(false)}
         selected={preferredSkills}
         onUpdate={setPreferredSkills}
+        industry={selectedIndustry || "General"}
       />
     </SafeAreaView>
   );

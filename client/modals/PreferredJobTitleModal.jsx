@@ -1,9 +1,17 @@
 import { AntDesign } from "@expo/vector-icons";
 import { FlatList, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
-import { JOB_TITLES } from "../constants/jobTitles";
+import { JOB_TITLES_BY_INDUSTRY } from "../constants/jobTitlesByIndustry";
 
-const PreferredJobTitleModal = ({ isVisible, onClose, onSelect, selected }) => {
+const PreferredJobTitleModal = ({
+  isVisible,
+  onClose,
+  onSelect,
+  selected,
+  industry,
+}) => {
+  const data = industry ? JOB_TITLES_BY_INDUSTRY[industry] || [] : [];
+
   const handleSelect = (title) => {
     onSelect(title);
     onClose();
@@ -35,7 +43,7 @@ const PreferredJobTitleModal = ({ isVisible, onClose, onSelect, selected }) => {
         </View>
 
         <FlatList
-          data={JOB_TITLES}
+          data={data}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (

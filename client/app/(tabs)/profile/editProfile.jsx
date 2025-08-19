@@ -117,24 +117,37 @@ const EditProfile = () => {
           keyboardVerticalOffset={80}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView>
-              <View className="px-6 py-3 mt-5 border-b border-gray-200 dark:border-b-gray-500">
+            <ScrollView className="h-[85%]">
+              <View className="px-6 py-2 mt-5 border-b border-gray-200 dark:border-b-gray-500">
                 <Text className="mb-2 text-base text-gray-600 font-poppins-500 dark:text-white">
                   {user?.role === "recruiter" ? "Company name" : "Name"}
                 </Text>
                 <TextInput
                   className="text-base border border-gray-300 rounded-lg font-poppins dark:text-white"
-                  value={changes.name ?? user?.name ?? ""}
+                  value={
+                    user?.role === "recruiter"
+                      ? changes.companyName ?? user?.companyName ?? ""
+                      : changes.name ?? user?.name ?? ""
+                  }
                   style={{ borderWidth: 0 }}
                   onChangeText={(text) => {
-                    setChanges((prev) => ({ ...prev, name: text }));
-                    setUser((prev) => ({ ...prev, name: text }));
+                    if (user?.role === "recruiter") {
+                      setChanges((prev) => ({ ...prev, companyName: text }));
+                      setUser((prev) => ({ ...prev, companyName: text }));
+                    } else {
+                      setChanges((prev) => ({ ...prev, name: text }));
+                      setUser((prev) => ({ ...prev, name: text }));
+                    }
                   }}
-                  placeholder="Enter your name"
+                  placeholder={
+                    user?.role === "recruiter"
+                      ? "Enter company name"
+                      : "Enter your name"
+                  }
                 />
               </View>
 
-              <View className="flex-row items-center justify-between px-6 py-3 mt-5 border-b border-gray-200 dark:border-b-gray-500">
+              <View className="flex-row items-center justify-between px-6 py-2 mt-5 border-b border-gray-200 dark:border-b-gray-500">
                 <View className="gap-2">
                   <Text className="text-base text-black font-poppins-500 dark:text-white">
                     Email
@@ -182,14 +195,23 @@ const EditProfile = () => {
                 onPress={() => {}}
               />
 
-              <View className="flex-row items-center justify-between px-6 py-3 mt-5 border-b border-gray-200 dark:border-b-gray-500">
+              <ProfileField
+                label="Industry"
+                value={user?.industry}
+                onPress={() => {}}
+              />
+
+              <View className="flex-row items-center justify-between px-6 py-2 mt-5 border-b border-gray-200 dark:border-b-gray-500">
                 <View className="gap-2">
                   <Text className="text-base text-black font-poppins-500 dark:text-white">
                     {user?.role === "recruiter" ? "Job Description" : "Bio"}
                   </Text>
                   <TextInput
-                    className="text-gray-600 font-poppins dark:text-white"
+                    className="text-gray-400 font-poppins "
                     style={{ borderWidth: 0 }}
+                    placeholderTextColor={
+                      colorScheme === "dark" ? "#9CA3AF" : "#9CA3AF"
+                    }
                     value={
                       changes.bio ??
                       (user?.role === "recruiter"
@@ -209,7 +231,7 @@ const EditProfile = () => {
                 </View>
               </View>
 
-              <View className="px-6 py-6">
+              <View className="px-6 py-5">
                 <Text className="mb-2 text-base font-poppins-500 dark:text-white">
                   Skills
                 </Text>

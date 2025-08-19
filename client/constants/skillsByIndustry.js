@@ -1,4 +1,13 @@
 export const SKILLS_BY_INDUSTRY = {
+  General: [
+    "Communication",
+    "Problem Solving",
+    "Teamwork",
+    "Leadership",
+    "Time Management",
+    "Adaptability",
+    "MS Office",
+  ],
   "Information Technology": [
     "JavaScript",
     "TypeScript",

@@ -1,4 +1,4 @@
-import { View, Text, Modal, Image, Pressable } from "react-native";
+import { View, Text, Modal, Image, Pressable, Alert } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { getUserRole } from "../utils/secureUser";
 import JobCard from "./JobCard";
@@ -11,15 +11,7 @@ import Button from "../components/Button";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useRefetch } from "../contexts/RefetchContext";
 import { ActivityIndicator } from "react-native-paper";
-
-const shuffleArray = (array) => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 const SwipeDeck = () => {
   const [role, setRole] = useState(null);
@@ -176,6 +168,73 @@ const SwipeDeck = () => {
         }
         disableTopSwipe
         disableBottomSwipe
+        animateOverlayLabelsOpacity
+        animateOverlayLabelsScale
+        overlayOpacityHorizontalThreshold={10}
+        overlayLabels={{
+          left: {
+            element: (
+              <View
+                className="px-4 py-2 rounded-lg"
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "black",
+                  borderWidth: 1,
+                  borderColor: "gray",
+                }}
+              >
+                <Text className="text-3xl text-white font-poppins-700">
+                  NOPE
+                </Text>
+              </View>
+            ),
+            style: {
+              wrapper: {
+                flexDirection: "column",
+                alignItems: "flex-end",
+                justifyContent: "flex-start",
+                marginTop: 20,
+                marginLeft: -20,
+              },
+            },
+          },
+          right: {
+            element: (
+              <View
+                className="px-6 py-2 rounded-lg"
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "black",
+                  borderWidth: 1,
+                  borderColor: "gray",
+                }}
+              >
+                <Text className="text-3xl text-white font-poppins-700">
+                  LIKE
+                </Text>
+              </View>
+            ),
+            style: {
+              label: {
+                backgroundColor: "green",
+                color: "white",
+                fontSize: 24,
+                fontWeight: "bold",
+                padding: 10,
+                borderRadius: 6,
+              },
+              wrapper: {
+                flexDirection: "column",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+                marginTop: 20,
+                marginLeft: 20,
+              },
+            },
+          },
+        }}
       />
 
       {matchedUser && (

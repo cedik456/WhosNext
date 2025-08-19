@@ -13,14 +13,14 @@ const JobCard = ({ data, color }) => {
     <View
       className={`${
         Platform.OS === "ios" ? "h-[90%]" : "h-[100%]"
-      }  shadow-sm rounded-2xl`}
+      }  shadow-sm rounded-xl overflow-hidden`}
       style={{ backgroundColor: color || "#fff" }}
     >
       {data.companyPicture ? (
         <Image
           source={{ uri: data.companyPicture }}
           resizeMode="cover"
-          className="w-full h-[50%]"
+          className="w-full h-[50%] "
         />
       ) : (
         <View className="w-full h-[60%] bg-gray-100 items-center justify-center">

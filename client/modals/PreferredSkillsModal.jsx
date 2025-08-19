@@ -1,51 +1,19 @@
 import { AntDesign } from "@expo/vector-icons";
+import { useMemo } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
+import { SKILLS_BY_INDUSTRY } from "../constants/skillsByIndustry";
 
-const skillsList = [
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Vue.js",
-  "Angular",
-  "Node.js",
-  "Express.js",
-  "Python",
-  "Django",
-  "Flask",
-  "PHP",
-  "Laravel",
-  "Ruby on Rails",
-  "Java",
-  "Spring Boot",
-  "C#",
-  ".NET",
-  "Swift",
-  "Kotlin",
-  "UI/UX Design",
-  "Figma",
-  "Adobe XD",
-  "Photoshop",
-  "Illustrator",
-  "SQL",
-  "MongoDB",
-  "Firebase",
-  "AWS",
-  "Google Cloud",
-  "DevOps",
-  "Docker",
-  "Kubernetes",
-  "Git",
-  "Agile Methodologies",
-  "Scrum",
-  "Project Management",
-  "Product Management",
-  "Sales",
-  "Customer Service",
-  "Other",
-];
+const PreferredSkillsModal = ({
+  isVisible,
+  onClose,
+  selected,
+  onUpdate,
+  industry = "General",
+}) => {
+  const options =
+    SKILLS_BY_INDUSTRY[industry] || SKILLS_BY_INDUSTRY["General"] || [];
 
-const PreferredSkillsModal = ({ isVisible, onClose, selected, onUpdate }) => {
   const toggleSkill = (skill) => {
     if (selected.includes(skill)) {
       onUpdate(selected.filter((s) => s !== skill));
@@ -78,7 +46,7 @@ const PreferredSkillsModal = ({ isVisible, onClose, selected, onUpdate }) => {
         </View>
 
         <FlatList
-          data={skillsList}
+          data={options}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item}
           renderItem={({ item }) => {
@@ -91,9 +59,7 @@ const PreferredSkillsModal = ({ isVisible, onClose, selected, onUpdate }) => {
               >
                 <Text
                   className={`text-base font-poppins-500 ${
-                    isSelected === item
-                      ? "text-black font-semibold "
-                      : "text-gray-600"
+                    isSelected ? "text-black font-semibold " : "text-gray-600"
                   }`}
                 >
                   {item}

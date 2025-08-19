@@ -81,26 +81,28 @@ const Name = () => {
       </View>
 
       <View className="justify-between flex-1 px-6 ">
-        <View className="gap-4">
+        <View>
           <Text className="text-3xl font-poppins-600">
             {role === "recruiter"
               ? "What’s your\ncompany name?"
               : "What’s your\nfirst name?"}
           </Text>
-          <TextInput
-            className="py-4 border-b-2 border-gray-300 font-poppins-500"
-            placeholder={
-              role === "recruiter" ? "eg: Who's Next" : "eg: Charles"
-            }
-            value={name}
-            onChangeText={setName}
-            autoCapitalize="words"
-          />
-          <Text className="text-gray-400 font-poppins">
-            This is how it will appear on your profile
-          </Text>
-          <Text className="font-semibold text-black font-poppins-500">
-            It cannot be changed later.
+          <View className="gap-2">
+            <TextInput
+              className="py-4 border-b-2 border-gray-300 font-poppins-500"
+              placeholder={
+                role === "recruiter" ? "eg: Who's Next" : "eg: Charles"
+              }
+              value={name}
+              onChangeText={setName}
+              autoCapitalize="words"
+            />
+            <Text className="text-gray-400 font-poppins">
+              This is how it will appear on your profile
+            </Text>
+          </View>
+          <Text className="text-sm font-semibold text-blue-600 font-poppins-500">
+            You can edit this in the profile settings later.
           </Text>
         </View>
         <Button

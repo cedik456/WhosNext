@@ -1,24 +1,20 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
-import React, { useState } from "react";
+import { Text, View, ScrollView, Alert, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Chip } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 import Button from "../../../components/Button";
-import { JOB_TITLES } from "../../../constants/jobTitles";
 import { AntDesign } from "@expo/vector-icons";
+import { JOB_TITLES_BY_INDUSTRY } from "../../../constants/jobTitlesByIndustry";
 
 const JobTitle = () => {
   const router = useRouter();
+
+  const [industry, setIndustry] = useState("");
   const [selectedJobTitle, setSelectedJobTitle] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const toggleSelect = (title) => {
     setSelectedJobTitle(title);
@@ -54,6 +50,36 @@ const JobTitle = () => {
       Alert.alert("Network Error", "Failed to save job title. Try again.");
     }
   };
+
+  useEffect(() => {
+    const fetchIndustry = async () => {
+      try {
+        const token = await getToken();
+        const response = await api.get("/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const saved = response.data?.data?.industry;
+
+        if (!saved) {
+          setLoading(false);
+          router.replace("/industry");
+          return;
+        }
+        setIndustry(saved);
+      } catch (error) {
+        Alert.alert("Error", "Couldn't load industry");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchIndustry();
+  }, []);
+
+  const titleOptions = industry ? JOB_TITLES_BY_INDUSTRY[industry] || [] : [];
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center justify-between p-5">
@@ -67,14 +93,17 @@ const JobTitle = () => {
       <View className="justify-between flex-1 px-6 ">
         <View>
           <Text className="mb-2 text-3xl font-poppins-600">
-            What job are you hiring for?
+            What type of job{"\n"}are you hiring for?
           </Text>
-          <Text className="mb-4 text-base text-gray-600 font-poppins-500">
+          <Text className="mb-2 text-base text-gray-600 font-poppins-500">
             Select one job title from the list below.
+          </Text>
+          <Text className="mb-4 text-sm text-blue-600 font-poppins-500">
+            You can edit this in the profile settings later.
           </Text>
           <ScrollView showsVerticalScrollIndicator={false} className="h-[70%]">
             <View className="mb-5 ">
-              {JOB_TITLES.map((title) => (
+              {titleOptions.map((title) => (
                 <Chip
                   key={title}
                   onPress={() => toggleSelect(title)}
@@ -108,6 +137,14 @@ const JobTitle = () => {
           onPress={handleSubmit}
         />
       </View>
+
+      {loading && (
+        <View className="absolute inset-0 z-10 items-center justify-center">
+          <Text className="text-gray-500 font-poppins-500">
+            Loading job titles based on industry...
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

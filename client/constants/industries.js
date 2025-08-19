@@ -1,4 +1,5 @@
 export const INDUSTRIES = [
+  "General",
   "Information Technology",
   "Design & Creative",
   "Healthcare",
