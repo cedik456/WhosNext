@@ -33,6 +33,7 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  emailVerifiedAt: { type: Date },
   isOnboarded: {
     type: Boolean,
     default: false,
