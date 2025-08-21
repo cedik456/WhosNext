@@ -50,7 +50,7 @@ const Register = () => {
       const result = await register(email, password);
 
       if (result.success) {
-        router.replace("/role");
+        router.replace("/verifyCode");
       }
     } catch (error) {
       Alert.alert("Something went wrong", error.message);

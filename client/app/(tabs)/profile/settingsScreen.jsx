@@ -102,7 +102,7 @@ const SettingsScreen = () => {
               router.push("/login");
             }}
             title="Log out"
-            className="items-center w-full py-4 bg-red-500 rounded-full"
+            className="items-center w-full py-4 bg-red-500 rounded-lg"
             textClassName="text-base text-white font-poppins-600"
           />
         </View>

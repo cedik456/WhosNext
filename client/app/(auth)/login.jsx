@@ -43,8 +43,15 @@ const Login = () => {
     try {
       const result = await login(email, password);
 
+      console.log(result);
+
       if (result.success) {
-        if (result.isOnboarded) {
+        if (!result.user.isVerified) {
+          router.replace("/verifyCode");
+          return;
+        }
+
+        if (result.user.isOnboarded) {
           router.replace("/home");
         } else {
           router.replace("/role");
@@ -55,7 +62,7 @@ const Login = () => {
     } catch (error) {
       Alert.alert("Something went wrong", error.message);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 

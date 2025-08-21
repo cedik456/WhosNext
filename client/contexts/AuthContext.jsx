@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
 
       setUser({ token, ...user });
 
-      return { success: true, isOnboarded: user.isOnboarded };
+      return { success: true, user, token };
     } catch (error) {
       console.error("Login error:", error);
       return { success: false, message: error?.response?.data?.message };
@@ -56,7 +56,7 @@ export function AuthProvider({ children }) {
 
       setUser({ token, ...user });
 
-      return { success: true, isOnboarded: user.isOnboarded };
+      return { success: true, user, token };
     } catch (error) {
       console.error("Register error:", error);
       return { success: false, message: error?.response?.data?.message };

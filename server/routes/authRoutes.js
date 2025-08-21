@@ -6,6 +6,8 @@ const {
   login,
   phoneAuth,
   me,
+  verifyEmailCode,
+  sendEmailCode,
 } = require("../controllers/authController");
 const auth = require("../middlewares/authMiddleware");
 
@@ -19,6 +21,8 @@ router.get("/me", auth, me);
 router.post("/register", validate(registerSchema), register);
 
 router.post("/login", validate(loginSchema), login);
+
+router.post("/verify", auth, verifyEmailCode);
 
 router.post("/phone", phoneAuth);
 
