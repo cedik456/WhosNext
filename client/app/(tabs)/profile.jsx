@@ -39,12 +39,12 @@ const Profile = () => {
   return (
     <SafeAreaView className="flex-1 dark:bg-black">
       <View className="dark:bg-black">
-        <View className="flex-row items-center justify-between px-6 mt-5">
+        <View className="flex-row items-center justify-between px-6 mt-4">
           <Text className="text-2xl font-poppins-600 dark:text-white">
             Profile
           </Text>
           <ProfileItem
-            onPress={() => router.push("profile/settingsScreen")}
+            onPress={() => router.replace("profile/settingsScreen")}
             value=""
             icon="settings-sharp"
             iconSet={Ionicons}
@@ -87,7 +87,14 @@ const Profile = () => {
                 showStatus={true}
               />
               <ProfileItem
-                onPress={() => router.push("profile/editProfile")}
+                onPress={async () => {
+                  const role = profile?.role;
+                  if (role === "recruiter") {
+                    router.push("profile/editProfileRecruiter");
+                  } else {
+                    router.push("profile/editProfile");
+                  }
+                }}
                 label="Edit Profile"
                 value=""
                 icon="user-alt"

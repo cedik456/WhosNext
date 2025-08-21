@@ -29,9 +29,9 @@ const Skills = () => {
     if (selectedSkills.includes(skill)) {
       setSelectedSkills(selectedSkills.filter((s) => s !== skill));
     } else {
-      if (selectedSkills.length >= 6) {
+      if (selectedSkills.length >= 8) {
         Alert.alert(
-          "You can only select up to 6 skills, Choose your best ones!"
+          "You can only select up to 8 skills, Choose your best ones!"
         );
         return;
       }
@@ -142,7 +142,7 @@ const Skills = () => {
             {role === "recruiter" ? " \npreferred skills?" : " \nskills?"}
           </Text>
           <Text className="mb-4 text-base text-gray-600 font-poppins-500">
-            Select 1 to 6 skills that match your{" "}
+            Select skills that match your{" "}
             {role === "recruiter" ? "requirements" : "expertise "}
           </Text>
 

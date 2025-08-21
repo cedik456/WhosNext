@@ -1,5 +1,5 @@
-import { Image, Platform, Text, View } from "react-native";
-import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { Image, Platform, Text, TouchableOpacity, View } from "react-native";
+import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
 
 const ProfileCard = ({ card, color }) => {
   // if (!card) return null;
@@ -70,14 +70,9 @@ const ProfileCard = ({ card, color }) => {
           </View>
         </View>
       )}
-      <Text className="mb-1 text-base font-poppins-600">About me</Text>
-      <Text
-        numberOfLines={2}
-        ellipsizeMode="tail"
-        className="mb-2 text-sm text-gray-500 font-poppins-500"
-      >
-        {card.bio || "No bio"}
-      </Text>
+      <TouchableOpacity className="flex-row items-center mt-2">
+        <Text className="mr-1 font-poppins-500"> See more...</Text>
+      </TouchableOpacity>
     </View>
   );
 };

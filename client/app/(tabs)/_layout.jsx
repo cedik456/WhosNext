@@ -131,6 +131,12 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen
+        name="profile/editProfileRecruiter"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="profile/changeAvatar"
         options={{
           href: null,
