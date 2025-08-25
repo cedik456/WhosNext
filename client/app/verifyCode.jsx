@@ -69,7 +69,7 @@ const VerifyCode = () => {
         if (user.isOnboarded) {
           router.replace("/home");
         } else {
-          router.replace("/role");
+          router.replace("/termsAndCondition");
         }
       } else {
         Alert.alert("Error", message || "Verification failed.");

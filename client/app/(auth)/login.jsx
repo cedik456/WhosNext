@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,14 +26,24 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const timerRef = useRef(null);
+  const onPressLogin = () => {
+    if (loading) return;
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(handleSubmit, 300);
+  };
+
   const handleSubmit = async () => {
-    if (!email || !password) {
+    const e = email.trim().toLowerCase();
+    const p = password.trim();
+
+    if (!e || !p) {
       Alert.alert("Email and password required");
       return;
     }
 
     const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(e)) {
       Alert.alert("Please enter a valid email address.");
       return;
     }
@@ -41,9 +51,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const result = await login(email, password);
-
-      console.log(result);
+      const result = await login(e, p);
 
       if (result.success) {
         if (!result.user.isVerified) {
@@ -93,9 +101,14 @@ const Login = () => {
               placeholder="Enter your email"
               placeholderTextColor="#9ca3af"
               value={email}
+              autoCorrect={false}
+              autoComplete="email"
+              inputMode="email"
               onChangeText={setEmail}
               autoCapitalize="none"
+              returnKeyType="next"
               keyboardType="email-address"
+              textContentType="emailAddress"
             />
           </View>
 
@@ -110,6 +123,11 @@ const Login = () => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
+              textContentType="password"
+              maxLength={128}
+              returnKeyType="go"
+              autoComplete="password"
+              onSubmitEditing={onPressLogin}
             />
 
             <Pressable
@@ -138,14 +156,16 @@ const Login = () => {
                 Remember me
               </Text>
             </Pressable>
-            <Text className="text-sm text-blue-500 font-poppins-500">
-              Forgot password?
-            </Text>
+            <Pressable onPress={() => router.replace("/forgotPassword")}>
+              <Text className="text-sm text-blue-500 font-poppins-500">
+                Forgot password?
+              </Text>
+            </Pressable>
           </View>
 
           <Pressable
             className="p-5 bg-black border rounded-full"
-            onPress={handleSubmit}
+            onPress={onPressLogin}
             disabled={loading}
           >
             {loading ? (

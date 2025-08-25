@@ -23,7 +23,7 @@ const JobCard = ({ data, color, onSeeMore }) => {
   return (
     <View
       className={`${
-        Platform.OS === "ios" ? "h-[90%]" : "h-[100%]"
+        Platform.OS === "ios" ? "h-[87%]" : "h-[100%]"
       }  shadow-sm rounded-xl overflow-hidden`}
       style={{ backgroundColor: color || "#fff" }}
     >

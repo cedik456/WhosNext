@@ -6,7 +6,7 @@ const ProfileCard = ({ card, color }) => {
   return (
     <View
       className={`${
-        Platform.OS === "ios" ? "h-[90%]" : "h-[100%]"
+        Platform.OS === "ios" ? "h-[87%]" : "h-[100%]"
       } p-5 shadow-sm rounded-2xl`}
       style={{ backgroundColor: color || "#fbfbfb" }}
     >

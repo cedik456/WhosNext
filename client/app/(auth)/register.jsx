@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,19 +27,35 @@ const Register = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const timerRef = useRef(null);
+  const onPressSignup = () => {
+    if (loading) return;
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(handleSubmit, 300);
+  };
+
   const handleSubmit = async () => {
-    if (!email || !password || !confirmPassword) {
+    const e = email.trim().toLowerCase();
+    const p = password.trim();
+    const cp = confirmPassword.trim();
+
+    if (!e || !p || !cp) {
       Alert.alert("All inputs are required");
       return;
     }
 
     const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(e)) {
       Alert.alert("Please enter a valid email address.");
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (p.length < 8) {
+      Alert.alert("Password must be at least 8 characters.");
+      return;
+    }
+
+    if (p !== cp) {
       Alert.alert("Passwords do not match.");
       return;
     }
@@ -47,10 +63,12 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const result = await register(email, password);
+      const result = await register(e, p);
 
       if (result.success) {
         router.replace("/verifyCode");
+      } else {
+        Alert.alert("Sign up failed", result.message || "Please try again.");
       }
     } catch (error) {
       Alert.alert("Something went wrong", error.message);
@@ -88,7 +106,12 @@ const Register = () => {
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
+              autoCorrect={false}
               keyboardType="email-address"
+              textContentType="emailAddress"
+              autoComplete="email"
+              inputMode="email"
+              returnKeyType="next"
             />
           </View>
 
@@ -104,6 +127,10 @@ const Register = () => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
+              textContentType="password"
+              autoComplete="password"
+              maxLength={128}
+              returnKeyType="next"
             />
 
             <Pressable
@@ -130,6 +157,11 @@ const Register = () => {
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               secureTextEntry={!showConfirmPassword}
+              textContentType="password"
+              autoComplete="password"
+              maxLength={128}
+              returnKeyType="go"
+              onSubmitEditing={onPressSignup}
             />
 
             <Pressable
@@ -146,7 +178,8 @@ const Register = () => {
 
           <Pressable
             className="p-5 bg-black border rounded-full"
-            onPress={handleSubmit}
+            onPress={onPressSignup}
+            disabled={loading}
           >
             {loading ? (
               <ActivityIndicator color="#ffffff" />
