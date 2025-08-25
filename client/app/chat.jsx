@@ -18,6 +18,8 @@ import { getToken } from "../utils/storage";
 import api from "../utils/axiosInstance";
 import socket from "../utils/socket";
 import { useColorScheme } from "nativewind";
+import { formatDateDivider } from "../utils/formatDateDivider";
+import dayjs from "dayjs";
 
 const Chat = () => {
   const router = useRouter();
@@ -27,6 +29,8 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
   const { matchId, name, avatar } = useLocalSearchParams();
+
+  const [expandedMessageId, setExpandedMessageId] = useState(null);
 
   const { colorScheme } = useColorScheme();
 
@@ -136,18 +140,53 @@ const Chat = () => {
     }
   };
 
-  const renderMessage = ({ item }) => {
+  const renderMessage = ({ item, index }) => {
     const senderIsMe = item.sender?._id === currentUserId;
+    const isExpanded = expandedMessageId === item._id;
+
+    const prevMsg = messages[index - 1];
+
+    // Show divider if it's the first message OR different day
+    const isFirstToday =
+      dayjs(item.createdAt).isToday() &&
+      (!prevMsg || !dayjs(prevMsg.createdAt).isSame(item.createdAt, "day"));
+
+    const dividerText = formatDateDivider(item.createdAt, isFirstToday);
 
     return (
-      <View
-        className={`px-3 py-2 rounded-2xl my-1 max-w-[60%] ${
-          senderIsMe
-            ? "bg-gray-200 self-end rounded-tr-none"
-            : "bg-gray-100 self-start rounded-tl-none"
-        }`}
-      >
-        <Text className="text-base font-poppins">{item.text}</Text>
+      <View>
+        {/* Date Divider */}
+        {dividerText && (
+          <Text className="self-center my-3 text-sm text-gray-400 font-poppins">
+            {dividerText}
+          </Text>
+        )}
+
+        {/* Bubble */}
+        <Pressable
+          onPress={() => setExpandedMessageId(isExpanded ? null : item._id)}
+        >
+          <View
+            className={`px-4 py-2 rounded-full my-1 max-w-[70%] dark:bg-[#4C4C4C]  ${
+              senderIsMe ? "bg-gray-200 self-end " : "bg-gray-100 self-start "
+            }`}
+          >
+            <Text className="text-base font-poppins dark:text-white">
+              {item.text}
+            </Text>
+          </View>
+
+          {/* Timestamp under bubble (tap to toggle) */}
+          {isExpanded && (
+            <Text
+              className={`text-xs text-gray-400 font-poppins mt-1 ${
+                senderIsMe ? "self-end mr-2" : "self-start ml-2"
+              }`}
+            >
+              {dayjs(item.createdAt).format("dddd, MMM D [at] h:mm A")}
+            </Text>
+          )}
+        </Pressable>
       </View>
     );
   };
