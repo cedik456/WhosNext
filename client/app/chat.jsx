@@ -26,6 +26,7 @@ const Chat = () => {
   const flatListRef = useRef(null);
 
   const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
   const [messages, setMessages] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
   const { matchId, name, avatar } = useLocalSearchParams();
@@ -100,13 +101,16 @@ const Chat = () => {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!text.trim()) return;
+    if (sending) return; // block double presses
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    setSending(true);
 
     try {
       const token = await getToken();
       const response = await api.post(
         "/messages",
-        { matchId, text },
+        { matchId, text: trimmed },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -123,6 +127,8 @@ const Chat = () => {
       }
     } catch (error) {
       console.error("Send message error:", error.message);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -248,7 +254,10 @@ const Chat = () => {
                   value={text}
                   onChangeText={setText}
                 />
-                <Pressable onPress={sendMessage}>
+                <Pressable
+                  onPress={sendMessage}
+                  disabled={sending || text.trim().length === 0}
+                >
                   <Ionicons
                     name="send"
                     size={22}

@@ -29,9 +29,9 @@ const Skills = () => {
     if (selectedSkills.includes(skill)) {
       setSelectedSkills(selectedSkills.filter((s) => s !== skill));
     } else {
-      if (selectedSkills.length >= 8) {
+      if (selectedSkills.length >= 5) {
         Alert.alert(
-          "You can only select up to 8 skills, Choose your best ones!"
+          "You can only select up to 5-6 skills, Choose your best ones!"
         );
         return;
       }

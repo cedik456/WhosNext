@@ -26,13 +26,6 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const timerRef = useRef(null);
-  const onPressLogin = () => {
-    if (loading) return;
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(handleSubmit, 300);
-  };
-
   const handleSubmit = async () => {
     const e = email.trim().toLowerCase();
     const p = password.trim();
@@ -102,13 +95,10 @@ const Login = () => {
               placeholderTextColor="#9ca3af"
               value={email}
               autoCorrect={false}
-              autoComplete="email"
               inputMode="email"
               onChangeText={setEmail}
               autoCapitalize="none"
-              returnKeyType="next"
               keyboardType="email-address"
-              textContentType="emailAddress"
             />
           </View>
 
@@ -123,11 +113,7 @@ const Login = () => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
-              textContentType="password"
               maxLength={128}
-              returnKeyType="go"
-              autoComplete="password"
-              onSubmitEditing={onPressLogin}
             />
 
             <Pressable
@@ -148,10 +134,14 @@ const Login = () => {
               className="flex-row items-center gap-2"
             >
               <View
-                className={`w-5 h-5 rounded border border-gray-400 ${
-                  rememberMe ? "bg-black" : "bg-white"
+                className={`w-5 h-5 rounded border  items-center justify-center ${
+                  rememberMe
+                    ? "bg-black border-black"
+                    : "bg-white border-gray-400"
                 }`}
-              />
+              >
+                {rememberMe && <Feather name="check" size={14} color="#fff" />}
+              </View>
               <Text className="text-gray-700 font-poppins-500">
                 Remember me
               </Text>
@@ -165,7 +155,7 @@ const Login = () => {
 
           <Pressable
             className="p-5 bg-black border rounded-full"
-            onPress={onPressLogin}
+            onPress={handleSubmit}
             disabled={loading}
           >
             {loading ? (

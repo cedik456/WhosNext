@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,13 +26,6 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
-
-  const timerRef = useRef(null);
-  const onPressSignup = () => {
-    if (loading) return;
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(handleSubmit, 300);
-  };
 
   const handleSubmit = async () => {
     const e = email.trim().toLowerCase();
@@ -108,10 +101,7 @@ const Register = () => {
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="email-address"
-              textContentType="emailAddress"
-              autoComplete="email"
               inputMode="email"
-              returnKeyType="next"
             />
           </View>
 
@@ -127,10 +117,7 @@ const Register = () => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
-              textContentType="password"
-              autoComplete="password"
               maxLength={128}
-              returnKeyType="next"
             />
 
             <Pressable
@@ -157,11 +144,7 @@ const Register = () => {
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               secureTextEntry={!showConfirmPassword}
-              textContentType="password"
-              autoComplete="password"
               maxLength={128}
-              returnKeyType="go"
-              onSubmitEditing={onPressSignup}
             />
 
             <Pressable
@@ -178,7 +161,7 @@ const Register = () => {
 
           <Pressable
             className="p-5 bg-black border rounded-full"
-            onPress={onPressSignup}
+            onPress={handleSubmit}
             disabled={loading}
           >
             {loading ? (
