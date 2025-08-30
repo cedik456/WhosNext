@@ -53,7 +53,7 @@ const Login = () => {
         }
 
         if (result.user.isOnboarded) {
-          router.replace("/home");
+          router.replace("/home?justLoggedIn=1");
         } else {
           router.replace("/role");
         }

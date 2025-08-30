@@ -8,7 +8,7 @@ import Button from "../components/Button";
 const TermsAndConditions = () => {
   const router = useRouter();
   const [agreed, setAgreed] = useState(false);
-  const [atEnd, setAtEnd] = useState(false); // gate: scrolled to bottom
+  const [atEnd, setAtEnd] = useState(false);
 
   const handleContinue = () => {
     if (!agreed) return;

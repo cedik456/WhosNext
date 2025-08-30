@@ -1,12 +1,31 @@
 import api from "../utils/axiosInstance";
-import { createContext, useState } from "react";
-import { removeToken, saveToken } from "../utils/storage";
+import { createContext, useEffect, useState } from "react";
+import { getToken, removeToken, saveToken } from "../utils/storage";
 import { removeUserRole, saveUserRole } from "../utils/secureUser";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [initializing, setInitializing] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = await getToken();
+        if (!token) return;
+        const res = await api.get("/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const me = res?.data?.data;
+        if (me?._id) setUser({ token, ...me });
+      } catch (e) {
+        console.log("[Auth] hydrate failed:", e?.message);
+      } finally {
+        setInitializing(false);
+      }
+    })();
+  }, []);
 
   async function login(email, password) {
     try {
@@ -70,7 +89,9 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, setUser, login, register, logout, initializing }}
+    >
       {children}
     </AuthContext.Provider>
   );

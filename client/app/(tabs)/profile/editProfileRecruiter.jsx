@@ -36,14 +36,14 @@ const EditProfileRecruiter = () => {
     try {
       const token = await getToken();
 
-      const response = await api.patch("/profile/", changes, {
+      const { data } = await api.patch("/profile/", changes, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       Alert.alert("Success", "Profile updated successfully");
-      setUser(response.data.data);
+      setUser((prev) => ({ ...prev, ...(data?.data || {}) }));
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Failed to update profile.");
@@ -170,19 +170,15 @@ const EditProfileRecruiter = () => {
             {/* Location, WorkType, WorkEnv, Experience */}
             <ProfileField
               label="Location"
-              value={user?.location || user?.hiringCriteria?.location || "N/A"}
+              value={user?.hiringCriteria?.location || "N/A"}
             />
             <ProfileField
               label="Work Type"
-              value={user?.workType || user?.hiringCriteria?.workType || "N/A"}
+              value={user?.hiringCriteria?.workType || "N/A"}
             />
             <ProfileField
               label="Work Environment"
-              value={
-                user?.workEnvironment ||
-                user?.hiringCriteria?.workEnvironment ||
-                "N/A"
-              }
+              value={user?.hiringCriteria?.workEnvironment || "N/A"}
             />
             <ProfileField
               label="Experience"

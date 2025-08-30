@@ -48,12 +48,26 @@ const io = new Server(server, {
   },
 });
 
+app.set("io", io);
+
 io.on("connection", (socket) => {
   console.log("User connected: ", socket.id);
 
   socket.on("join", (matchId) => {
     socket.join(matchId);
     console.log(`Joined room: ${matchId}`);
+  });
+
+  socket.on("register", (userId) => {
+    if (!userId) return;
+    socket.join(userId.toString());
+    console.log(`Socket ${socket.id} registered to user room: ${userId}`);
+  });
+
+  socket.on("unregister", (userId) => {
+    if (!userId) return;
+    socket.leave(userId.toString());
+    console.log(`Socket ${socket.id} left user room: ${userId}`);
   });
 
   socket.on("sendMessage", ({ matchId, message }) => {

@@ -25,7 +25,7 @@ const Complete = () => {
       const { success } = response.data;
 
       if (success) {
-        router.replace("/home");
+        router.replace("/home?justLoggedIn=1");
       } else {
         Alert.alert("Error", "Could not complete onboarding.");
       }

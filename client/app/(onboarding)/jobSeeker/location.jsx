@@ -67,7 +67,7 @@ const Location = () => {
             Enable Location
           </Text>
           <Text className="mb-4 text-center text-gray-500 font-poppins-500">
-            We'll use your location to recommend nearby jobs
+            We'll use your location to recommend{"\n"} nearby jobs.
           </Text>
 
           <Image

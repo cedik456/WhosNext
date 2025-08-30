@@ -12,8 +12,11 @@ import api from "../../utils/axiosInstance";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useRouter } from "expo-router";
 import { formatMessengerStyleTime } from "../../utils/formatTime";
+import { useNotifStore } from "../../stores/notifStore";
 
 const Matches = () => {
+  const resetBadge = useNotifStore((s) => s.reset);
+
   const [matches, setMatches] = useState([]);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,9 +78,10 @@ const Matches = () => {
 
   useFocusEffect(
     useCallback(() => {
+      resetBadge();
       fetchConversations();
       fetchMatches();
-    }, [])
+    }, [resetBadge])
   );
 
   const renderMatches = ({ item }) => {
@@ -190,7 +194,7 @@ const Matches = () => {
                               <Text
                                 numberOfLines={1}
                                 ellipsizeMode="tail"
-                                className={`font-poppins dark:text-white ${
+                                className={`font-poppins  ${
                                   isUnread > 0
                                     ? "text-black font-poppins-500"
                                     : "text-gray-500"

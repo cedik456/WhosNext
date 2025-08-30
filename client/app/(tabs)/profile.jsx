@@ -13,10 +13,13 @@ import {
 import { router } from "expo-router";
 import ProfileItem from "../../components/ProfileItem";
 import { useColorScheme } from "nativewind";
+import Button from "../../components/Button";
+import { useNotifier } from "../../contexts/NotifierContext";
 
 const Profile = () => {
   const { colorScheme } = useColorScheme();
   const [profile, setProfile] = useState(null);
+  const notify = useNotifier();
 
   useEffect(() => {
     const fetchProfile = async () => {
