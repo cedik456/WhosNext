@@ -8,16 +8,37 @@ const SideNav = () => {
         <p className="text-lg">who'snext</p>
       </div>
 
-      <nav className="flex flex-col gap-6  text-[#9B9B9B] ">
-        <NavLink to="/" className="flex items-center gap-2 text-base ">
+      <nav className="flex flex-col gap-6 text-[#9B9B9B]">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `flex items-center gap-2 text-base p-2 rounded ${
+              isActive ? "text-gray-900" : "text-[#9B9B9B]"
+            }`
+          }
+        >
           <FaHome />
           Home
         </NavLink>
-        <NavLink to="/jobSeeker" className="flex items-center gap-2 text-base ">
+        <NavLink
+          to="/jobSeeker"
+          className={({ isActive }) =>
+            `flex items-center gap-2 text-base p-2 rounded ${
+              isActive ? "text-gray-900" : "text-[#9B9B9B]"
+            }`
+          }
+        >
           <FaUserTie />
           Job Seeker
         </NavLink>
-        <NavLink to="/recruiter" className="flex items-center gap-2 text-base ">
+        <NavLink
+          to="/recruiter"
+          className={({ isActive }) =>
+            `flex items-center gap-2 text-base p-2 rounded ${
+              isActive ? "text-gray-900" : "text-[#9B9B9B]"
+            }`
+          }
+        >
           <FaBriefcase />
           Recruiter
         </NavLink>

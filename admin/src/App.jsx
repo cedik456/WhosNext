@@ -12,8 +12,8 @@ function App() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "240px 1fr 320px",
-          gap: "1.5rem",
+          gridTemplateColumns: "240px 1fr 340px",
+          gap: "1rem",
         }}
       >
         <SideNav />

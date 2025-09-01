@@ -52,9 +52,11 @@ const Home = () => {
         {stats.map((s) => (
           <div
             key={s.label}
-            className="flex items-center gap-4 px-4 py-3 bg-white shadow-sm rounded-2xl "
+            className="flex items-center gap-4 px-4 py-3 bg-gray-100 shadow-sm rounded-2xl "
           >
-            <div className="flex items-center justify-center ">{s.icon}</div>
+            <div className="flex items-center justify-center p-4 mr-4 bg-gray-300 rounded-full">
+              {s.icon}
+            </div>
             <div className="leading-tight">
               <div className="text-slate-500">{s.label}</div>
               <div className="text-lg font-semibold">{s.value}</div>
