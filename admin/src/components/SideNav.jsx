@@ -1,7 +1,22 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaBriefcase, FaHome, FaSignOutAlt, FaUserTie } from "react-icons/fa";
+import { useEffect } from "react";
 
 const SideNav = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   return (
     <aside className="flex flex-col justify-between h-screen px-6 py-8 bg-white border-r border-gray-200 top-4 w-60">
       <div className="flex items-center gap-2">
@@ -10,7 +25,7 @@ const SideNav = () => {
 
       <nav className="flex flex-col gap-6 text-[#9B9B9B]">
         <NavLink
-          to="/"
+          to="/home"
           className={({ isActive }) =>
             `flex items-center gap-2 text-base p-2 rounded ${
               isActive ? "text-gray-900" : "text-[#9B9B9B]"
@@ -44,10 +59,13 @@ const SideNav = () => {
         </NavLink>
       </nav>
 
-      <p className="flex items-center gap-2 text-sm text-[#9B9B9B]">
+      <button
+        onClick={handleLogout}
+        className="flex items-center gap-2 text-sm cursor-pointer text-[#9B9B9B]"
+      >
         <FaSignOutAlt className="text-base" />
         Logout
-      </p>
+      </button>
     </aside>
   );
 };

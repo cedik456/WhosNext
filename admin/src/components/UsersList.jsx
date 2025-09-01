@@ -1,70 +1,33 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { FaEllipsisH } from "react-icons/fa";
 
 const UsersList = ({ limit = 6 }) => {
-  const mockUsers = [
-    {
-      _id: "1",
-      email: "alice@example.com",
-      role: "admin",
-      createdAt: "2024-08-01T10:00:00Z",
-    },
-    {
-      _id: "2",
-      email: "bob@example.com",
-      role: "recruiter",
-      createdAt: "2024-08-02T11:00:00Z",
-    },
-    {
-      _id: "3",
-      email: "carol@example.com",
-      role: "jobseeker",
-      createdAt: "2024-08-03T12:00:00Z",
-    },
-    {
-      _id: "4",
-      email: "dan@example.com",
-      role: "recruiter",
-      createdAt: "2024-08-04T13:00:00Z",
-    },
-    {
-      _id: "5",
-      email: "eve@example.com",
-      role: "jobseeker",
-      createdAt: "2024-08-05T14:00:00Z",
-    },
-    {
-      _id: "6",
-      email: "frank@example.com",
-      role: "admin",
-      createdAt: "2024-08-06T15:00:00Z",
-    },
-  ];
-
-  const [users] = useState(mockUsers);
+  const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [openMenuId, setOpenMenuId] = useState(null);
   const totalPages = Math.ceil(users.length / limit);
 
-  //   useEffect(() => {
-  //     (async () => {
-  //       try {
-  //         const token = localStorage.getItem("token");
-  //         const res = await fetch("http://localhost:3000/api/admin/users", {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //         });
-  //         const json = await res.json();
-  //         if (json.success) {
-  //           setUsers(json.data || []);
-  //         }
-  //       } catch (err) {
-  //         console.error("Failed to fetch users:", err);
-  //       }
-  //     })();
-  //   }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:3000/api/admin/users", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const json = await res.json();
+        if (json.success) {
+          setUsers(json.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch users:", err);
+      }
+    })();
+  }, []);
 
   const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const handleNext = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   const toggleMenu = (id) => {
     setOpenMenuId(openMenuId === id ? null : id);
@@ -81,18 +44,21 @@ const UsersList = ({ limit = 6 }) => {
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold">Recent Users</h2>
-        <span className="text-sm text-slate-500">
+        <h2 className="text-base font-semibold">Current Users</h2>
+        <span className="text-xs text-slate-500">
           Showing {limit} of {users.length}
         </span>
       </div>
 
-      <div className="overflow-y-auto max-h-64">
+      <div className="mb-4 overflow-y-auto max-h-64">
         {users
           .slice((currentPage - 1) * limit, currentPage * limit)
           .map((u) => (
-            <div key={u._id} className="relative grid items-center grid-cols-4 px-4 py-2 text-sm">
-              <div>{u.email || "-"}</div>
+            <div
+              key={u._id}
+              className="relative grid items-center grid-cols-4 px-4 py-2 text-sm"
+            >
+              <div className="truncate w-45">{u.email || "-"}</div>
               <div
                 className={`text-center font-medium ${
                   u.role === "admin"
@@ -104,7 +70,7 @@ const UsersList = ({ limit = 6 }) => {
               >
                 {u.role || "unassigned"}
               </div>
-              <div className="text-right">
+              <div className="text-xs text-right">
                 {new Date(u.createdAt).toLocaleDateString(undefined, {
                   year: "numeric",
                   month: "short",
@@ -114,7 +80,7 @@ const UsersList = ({ limit = 6 }) => {
               <div className="flex justify-end">
                 <button
                   onClick={() => toggleMenu(u._id)}
-                  className="flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full"
+                  className="flex items-center justify-center "
                 >
                   <FaEllipsisH className="text-gray-600" />
                 </button>
@@ -139,21 +105,21 @@ const UsersList = ({ limit = 6 }) => {
           ))}
       </div>
 
-      <div className="flex items-center justify-between px-4 mt-2">
+      <div className="flex items-center justify-between px-4 ">
         <button
           onClick={handlePrev}
           disabled={currentPage === 1}
-          className="px-2 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className="p-2 text-xs bg-gray-200 rounded cursor-pointer disabled:opacity-50"
         >
           Prev
         </button>
-        <span className="text-sm text-slate-600">
+        <span className="text-xs text-slate-600">
           Page {currentPage} of {totalPages}
         </span>
         <button
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className="px-2 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className="p-2 text-xs bg-gray-200 rounded cursor-pointer disabled:opacity-50"
         >
           Next
         </button>
