@@ -1,15 +1,15 @@
-import React from "react";
 import { useState } from "react";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError("");
+    setShowToast(false);
 
     try {
       const res = await fetch("http://localhost:3000/api/auth/login", {
@@ -22,6 +22,8 @@ const LoginPage = () => {
 
       if (!json.success) {
         setError(json.message || "Login failed");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
         return;
       }
 
@@ -32,16 +34,22 @@ const LoginPage = () => {
     } catch (error) {
       console.error(error);
       setError("Server error");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
     }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-slate-50 ">
+      {showToast && (
+        <div className="fixed z-50 px-6 py-3 text-white transition transform -translate-x-1/2 bg-red-500 rounded-lg shadow-lg top-4 left-1/2">
+          {error}
+        </div>
+      )}
       <form
         onSubmit={handleSubmit}
         className="p-6 space-y-4 bg-white shadow-md rounded-xl w-80"
       >
-        {error && <p className="text-sm text-red-600">{error}</p>}
         <h1 className="text-lg">Admin Login</h1>
 
         <div className="flex flex-col gap-4 ">

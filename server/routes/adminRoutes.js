@@ -7,6 +7,7 @@ const {
   getStats,
   getUsers,
   deleteUser,
+  getMatchesTimeseries,
 } = require("../controllers/adminController");
 
 router.get("/ping", auth, isAdmin, (req, res) => {
@@ -16,5 +17,6 @@ router.get("/ping", auth, isAdmin, (req, res) => {
 router.get("/stats", auth, isAdmin, getStats);
 router.get("/users", auth, isAdmin, getUsers);
 router.delete("/users/:id", auth, isAdmin, deleteUser);
+router.get("/metrics/matches", auth, isAdmin, getMatchesTimeseries);
 
 module.exports = router;

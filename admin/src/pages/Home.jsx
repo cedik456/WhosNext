@@ -15,15 +15,23 @@ import { FaRegCalendar } from "react-icons/fa";
 import { useState } from "react";
 
 const Home = () => {
-  const data = [
-    { name: "Sun", matched: 60, recruiters: 88 },
-    { name: "Mon", matched: 12, recruiters: 40 },
-    { name: "Tue", matched: 22, recruiters: 50 },
-    { name: "Wed", matched: 45, recruiters: 70 },
-    { name: "Thu", matched: 82, recruiters: 95 },
-    { name: "Fri", matched: 30, recruiters: 55 },
-    { name: "Sat", matched: 78, recruiters: 30 },
-  ];
+  const [series, setSeries] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(
+          "http://localhost:3000/api/admin/metrics/matches",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const json = await res.json();
+        if (json.success) setSeries(json.data || []);
+      } catch (error) {
+        console.error("Failed to load matches series", error);
+      }
+    })();
+  }, []);
 
   const [stats, setStats] = useState([
     { label: "Users", value: 0, icon: <FaUser /> },
@@ -56,7 +64,7 @@ const Home = () => {
           ]);
         }
       } catch (error) {
-        console.error("Failed to fetch stats:", err);
+        console.error("Failed to fetch stats:", error);
       }
     };
     fetchStats();
@@ -101,15 +109,15 @@ const Home = () => {
       </div>
 
       <div className="h-[350px]">
-        <h2 className="mb-3 font-semibold">Matched</h2>
+        <h2 className="mb-3 font-semibold">Matches</h2>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
+          <LineChart data={series}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis allowDecimals={false} />
             <Tooltip />
             <Line type="monotone" dataKey="matched" stroke="#3b82f6" />
-            <Line type="monotone" dataKey="recruiters" stroke="#ef4444" />
+            {/* <Line type="monotone" dataKey="recruiters" stroke="#ef4444" /> */}
           </LineChart>
         </ResponsiveContainer>
       </div>
