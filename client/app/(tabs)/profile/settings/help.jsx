@@ -18,7 +18,10 @@ const Help = () => {
         } text-2xl  font-poppins-600 `}
       >
         <View className="relative flex-row items-center justify-center px-6 mt-5">
-          <Pressable onPress={() => router.back()} className="absolute left-6 ">
+          <Pressable
+            onPress={() => router.replace("profile/settingsScreen")}
+            className="absolute left-6 "
+          >
             <FontAwesome6
               name="chevron-left"
               size={24}
@@ -70,17 +73,13 @@ const Help = () => {
             onPress={() => Linking.openURL("https://docs.whosnext.com")}
             showDivider
           />
-          <ProfileItem
-            label="Feedback"
-            icon="chatbubbles-outline"
-            iconSet={Ionicons}
-            onPress={() => router.push("profile/settings/help/feedback")}
-          />
         </View>
       </ScrollView>
 
       <View className="items-center py-4 mt-auto">
-        <Text className="text-3xl font-bold text-black dark:text-white">WN</Text>
+        <Text className="text-3xl font-bold text-black dark:text-white">
+          WN
+        </Text>
         <Text className="text-base text-gray-600 dark:text-gray-400">
           Beta version
         </Text>

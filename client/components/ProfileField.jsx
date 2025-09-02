@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import { View, Text, Touchable, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 const ProfileField = ({ label, value, onPress }) => {
   return (

@@ -268,9 +268,6 @@ const SwipeDeck = () => {
         >
           <View className="items-center justify-center flex-1 bg-white">
             <View className="items-center w-11/12 p-6 bg-white rounded-xl">
-              {/* <View className="flex-row items-center justify-center mb-6">
-            
-            </View> */}
               <Text className="gap-6 mb-2 text-3xl text-center font-poppins-700">
                 It's a match!
               </Text>
@@ -317,8 +314,8 @@ const SwipeDeck = () => {
         onRequestClose={() => setSeeMoreVisible(false)}
       >
         <View className="justify-end flex-1 bg-black/50">
-          <View className="bg-white dark:bg-black rounded-t-2xl p-6 max-h-[80%]">
-            <Text className="mb-4 text-xl font-poppins-600">
+          <View className="bg-white dark:bg-[#242526] rounded-t-2xl p-6 max-h-[80%]">
+            <Text className="mb-4 text-xl font-poppins-600 dark:text-white">
               Job Description
             </Text>
 
@@ -338,27 +335,6 @@ const SwipeDeck = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {/* <View className="flex-1 p-6 bg-white">
-          <Text className="mb-4 text-2xl font-poppins-600">
-            Job Description
-          </Text>
-
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <Text className="text-base leading-6 text-gray-600 dark:text-gray-300 font-poppins">
-              {selectedJob?.hiringCriteria?.jobDescription ||
-                "No description available"}
-            </Text>
-          </ScrollView>
-
-          <Pressable
-            className="px-4 py-2 mt-6 bg-blue-600 rounded-lg"
-            onPress={() => setSeeMoreVisible(false)}
-          >
-            <Text className="text-center text-white font-poppins-500">
-              Close
-            </Text>
-          </Pressable>
-        </View> */}
       </Modal>
     </View>
   );

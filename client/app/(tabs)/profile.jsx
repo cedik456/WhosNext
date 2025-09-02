@@ -108,17 +108,6 @@ const Profile = () => {
 
           <View className="p-5">
             <View className="py-6 px-5 rounded-xl bg-gray-50 dark:bg-[#242526]">
-              {/* <ProfileItem
-                onPress={() => router.push("profile/workPreferences")}
-                label={`${
-                  profile?.role === "jobSeeker" ? "Work" : "Hiring"
-                } Preferences`}
-                value=""
-                icon="suitcase"
-                iconSet={FontAwesome}
-                showDivider={true}
-              /> */}
-
               <ProfileItem
                 onPress={() => router.push("profile/notifSounds")}
                 label="Notifications & Sounds"
@@ -137,19 +126,20 @@ const Profile = () => {
                 showDivider={true}
               />
               <ProfileItem
-                onPress={() => router.push("profile/accountSettings")}
-                label="Account Settings"
-                value=""
-                icon="settings-sharp"
-                iconSet={Ionicons}
-                showDivider={true}
-              />
-              <ProfileItem
                 onPress={() => router.push("profile/changeAvatar")}
                 label="Change Avatar"
                 value=""
                 icon="people-sharp"
                 iconSet={Ionicons}
+                showDivider={true}
+              />
+
+              <ProfileItem
+                onPress={() => router.push("profile/accountSettings")}
+                label="Send Feedback"
+                value=""
+                icon="feedback"
+                iconSet={MaterialIcons}
                 showDivider={false}
               />
             </View>

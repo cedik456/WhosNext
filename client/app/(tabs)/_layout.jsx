@@ -170,7 +170,7 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="profile/accountSettings"
+        name="profile/sendFeedback"
         options={{
           href: null,
         }}

@@ -143,7 +143,7 @@ export function NotifierProvider({ children, socket }) {
           {current && (
             <Pressable
               onPress={dismiss}
-              className="bg-black dark:bg-[#2A2A2A] rounded-2xl shadow-lg p-4 flex-row items-center"
+              className="bg-black dark:bg-[#242526] rounded-2xl shadow-lg p-4 flex-row items-center"
               style={{ elevation: 4 }}
             >
               {current?.avatar ? (
@@ -167,7 +167,7 @@ export function NotifierProvider({ children, socket }) {
                   {current.title ?? "Notification"}
                 </Text>
                 <Text
-                  className="text-sm text-gray-300 mt-0.5"
+                  className="text-sm text-gray-400 dark:text-gray-300 mt-0.5"
                   numberOfLines={2}
                 >
                   {current.body ?? ""}
