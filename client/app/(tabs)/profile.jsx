@@ -135,7 +135,7 @@ const Profile = () => {
               />
 
               <ProfileItem
-                onPress={() => router.push("profile/accountSettings")}
+                onPress={() => router.push("profile/sendFeedback")}
                 label="Send Feedback"
                 value=""
                 icon="feedback"
