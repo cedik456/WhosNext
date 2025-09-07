@@ -7,6 +7,7 @@ const {
   getRecommendations,
   getRecommendationsv2,
   getRecommendationsv3,
+  getRecommendationsv4,
 } = require("../controllers/cardController");
 
 // Recruiter card
@@ -23,5 +24,8 @@ router.get("/recommendations/v2", auth, getRecommendationsv2);
 
 // V3
 router.get("/recommendations/v3", auth, getRecommendationsv3);
+
+// V4 (Collaborative Filtering)
+router.get("/recommendations/v4", auth, getRecommendationsv4);
 
 module.exports = router;
