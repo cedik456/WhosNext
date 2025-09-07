@@ -18,7 +18,10 @@ const About = () => {
         } text-2xl  font-poppins-600 `}
       >
         <View className="relative flex-row items-center justify-center px-6 mt-5">
-          <Pressable onPress={() => router.back()} className="absolute left-6 ">
+          <Pressable
+            onPress={() => router.replace("profile/settingsScreen")}
+            className="absolute left-6 "
+          >
             <FontAwesome6
               name="chevron-left"
               size={24}

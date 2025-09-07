@@ -24,6 +24,8 @@ const matchRoutes = require("./routes/matchRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const preferenceRoutes = require("./routes/preferenceRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const feedbackRoutes = require("./routes/feedbackRoutes");
 
 //
 const { default: mongoose } = require("mongoose");
@@ -38,6 +40,8 @@ app.use("/api/matches/", matchRoutes);
 app.use("/api/messages/", messageRoutes);
 app.use("/api/profile/", profileRoutes);
 app.use("/api/preferences/", preferenceRoutes);
+app.use("/api/admin/", adminRoutes);
+app.use("/api/feedbacks/", feedbackRoutes);
 
 // socket.io setup
 
@@ -48,12 +52,26 @@ const io = new Server(server, {
   },
 });
 
+app.set("io", io);
+
 io.on("connection", (socket) => {
   console.log("User connected: ", socket.id);
 
   socket.on("join", (matchId) => {
     socket.join(matchId);
     console.log(`Joined room: ${matchId}`);
+  });
+
+  socket.on("register", (userId) => {
+    if (!userId) return;
+    socket.join(userId.toString());
+    console.log(`Socket ${socket.id} registered to user room: ${userId}`);
+  });
+
+  socket.on("unregister", (userId) => {
+    if (!userId) return;
+    socket.leave(userId.toString());
+    console.log(`Socket ${socket.id} left user room: ${userId}`);
   });
 
   socket.on("sendMessage", ({ matchId, message }) => {

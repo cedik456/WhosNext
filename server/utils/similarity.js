@@ -163,4 +163,30 @@ const computeRecruiterSimilarity = (
   return totalWeight > 0 ? score / totalWeight : 0;
 };
 
-module.exports = { computeJobSeekerSimilarity, computeRecruiterSimilarity };
+// cosineSimilarity
+
+function cosineSimilarity(vecA, vecB) {
+  const intersection = Object.keys(vecA).filter((k) => vecB[k]);
+
+  let dot = 0,
+    magA = 0,
+    magB = 0;
+
+  for (const key in vecA) {
+    magA += vecA[key] * vecA[key];
+    if (vecB[key]) {
+      dot += vecA[key] * vecB[key];
+    }
+  }
+  for (const key in vecB) {
+    magB += vecB[key] * vecB[key];
+  }
+
+  return dot / (Math.sqrt(magA) * Math.sqrt(magB));
+}
+
+module.exports = {
+  computeJobSeekerSimilarity,
+  computeRecruiterSimilarity,
+  cosineSimilarity,
+};

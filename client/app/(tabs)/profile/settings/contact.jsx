@@ -18,7 +18,10 @@ const Contact = () => {
         } text-2xl  font-poppins-600 `}
       >
         <View className="relative flex-row items-center justify-center px-6 mt-5">
-          <Pressable onPress={() => router.back()} className="absolute left-6 ">
+          <Pressable
+            onPress={() => router.replace("profile/settingsScreen")}
+            className="absolute left-6 "
+          >
             <FontAwesome6
               name="chevron-left"
               size={24}
@@ -46,9 +49,7 @@ const Contact = () => {
               value="support@whosnext.com"
               icon="mail-outline"
               iconSet={Ionicons}
-              onPress={() =>
-                Linking.openURL("mailto:support@whosnext.com")
-              }
+              onPress={() => Linking.openURL("mailto:support@whosnext.com")}
               showDivider
             />
             <ProfileItem
@@ -56,9 +57,7 @@ const Contact = () => {
               value="+63 9091234567"
               icon="call-outline"
               iconSet={Ionicons}
-              onPress={() =>
-                Linking.openURL("tel:+639191234567")
-              }
+              onPress={() => Linking.openURL("tel:+639191234567")}
               showDivider
             />
             <ProfileItem
@@ -66,9 +65,7 @@ const Contact = () => {
               value="www.whosnext.com"
               icon="globe-outline"
               iconSet={Ionicons}
-              onPress={() =>
-                Linking.openURL("https://www.whosnext.com")
-              }
+              onPress={() => Linking.openURL("https://www.whosnext.com")}
               showDivider
             />
             <ProfileItem

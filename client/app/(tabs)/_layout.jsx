@@ -10,11 +10,14 @@ import { useAuth } from "../../hooks/useAuth";
 import { ActivityIndicator } from "react-native-paper";
 import { useColorScheme } from "nativewind";
 import { View, TouchableOpacity } from "react-native";
+import { useNotifStore } from "../../stores/notifStore";
 
 const TabsLayout = () => {
   const { user } = useAuth();
   const { colorScheme } = useColorScheme();
   const segments = useSegments();
+
+  const badge = useNotifStore((s) => s.count);
 
   const hideTabs =
     segments.includes("settings") || segments.includes("settingsScreen");
@@ -102,6 +105,18 @@ const TabsLayout = () => {
         name="matches"
         options={{
           tabBarLabel: "Matches",
+          tabBarBadge: badge > 0 ? badge : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: "red",
+            color: "white",
+            fontSize: 11,
+            fontWeight: "600",
+            minWidth: 18,
+            height: 18,
+            borderRadius: 9,
+            textAlign: "center",
+            lineHeight: 18,
+          },
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name="chatbubble-sharp"
@@ -131,6 +146,12 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen
+        name="profile/editProfileRecruiter"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="profile/changeAvatar"
         options={{
           href: null,
@@ -149,7 +170,7 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="profile/accountSettings"
+        name="profile/sendFeedback"
         options={{
           href: null,
         }}

@@ -2,16 +2,20 @@ import { Pressable, Text, View } from "react-native";
 import SwipeDeck from "../../components/SwipeDeck";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { useEffect, useRef, useState } from "react";
 import { getUserRole } from "../../utils/secureUser";
 import { useColorScheme } from "nativewind";
+import { useNotifier } from "../../contexts/NotifierContext";
 
 const Home = () => {
   const router = useRouter();
   const { colorScheme } = useColorScheme();
-
+  const { notify } = useNotifier();
   const [role, setRole] = useState(null);
+  const welcomedRef = useRef(false);
+
+  const { justLoggedIn } = useLocalSearchParams();
 
   useEffect(() => {
     const fetchRole = async () => {
@@ -22,6 +26,22 @@ const Home = () => {
     };
     fetchRole();
   }, []);
+
+  useEffect(() => {
+    if (welcomedRef.current || !justLoggedIn) return;
+
+    welcomedRef.current = true;
+
+    const timer = setTimeout(() => {
+      notify({
+        title: "Welcome to Who's Next!",
+        body: "Swipe to discover your next match.",
+        duration: 3000,
+      });
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [notify, justLoggedIn]);
 
   const handleFilterPress = () => {
     if (!role) return;

@@ -18,9 +18,6 @@ import { useEffect, useState } from "react";
 import api from "../../../utils/axiosInstance";
 import { getToken } from "../../../utils/storage";
 import { useColorScheme } from "nativewind";
-import PreferredSkillsModal from "../../../modals/PreferredSkillsModal";
-import PreferredLocationModal from "../../../modals/PreferredLocationModal";
-import ExperienceLevelModal from "../../../modals/ExperienceLevelModal";
 
 const EditProfile = () => {
   const { colorScheme } = useColorScheme();
@@ -107,7 +104,7 @@ const EditProfile = () => {
             Edit Profile
           </Text>
 
-          <Pressable>
+          <Pressable onPress={handleSave}>
             <Text className="text-sm text-blue-600 font-poppins-500">Save</Text>
           </Pressable>
         </View>
@@ -213,20 +210,27 @@ const EditProfile = () => {
                       colorScheme === "dark" ? "#9CA3AF" : "#9CA3AF"
                     }
                     value={
-                      changes.bio ??
-                      (user?.role === "recruiter"
-                        ? user?.jobDescription
-                        : user?.bio) ??
-                      ""
+                      user?.role === "recruiter"
+                        ? changes.jobDescription ?? user?.jobDescription ?? ""
+                        : changes.bio ?? user?.bio ?? ""
                     }
                     placeholder={
                       user?.role === "recruiter"
                         ? "Add a job description"
                         : "Add a bio"
                     }
-                    onChangeText={(text) =>
-                      setChanges((prev) => ({ ...prev, bio: text }))
-                    }
+                    multiline
+                    numberOfLines={4}
+                    onChangeText={(text) => {
+                      if (user?.role === "recruiter") {
+                        setChanges((prev) => ({
+                          ...prev,
+                          jobDescription: text,
+                        }));
+                      } else {
+                        setChanges((prev) => ({ ...prev, bio: text }));
+                      }
+                    }}
                   />
                 </View>
               </View>

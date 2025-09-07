@@ -16,6 +16,7 @@
     "dayjs": "^1.11.13",
     "expo": "~53.0.9",
     "expo-constants": "~17.1.6",
+    "expo-haptics": "^14.1.4",
     "expo-image-picker": "~16.1.4",
     "expo-linking": "~7.1.5",
     "expo-location": "~18.1.5",
@@ -31,6 +32,7 @@
     "react-native-deck-swiper": "^2.0.18",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-modal": "^14.0.0-rc.1",
     "react-native-paper": "^5.14.5",
     "react-native-reanimated": "~3.17.4",
@@ -38,7 +40,8 @@
     "react-native-screens": "~4.11.1",
     "resend": "^6.0.1",
     "socket.io-client": "^4.8.1",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

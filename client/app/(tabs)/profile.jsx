@@ -13,10 +13,13 @@ import {
 import { router } from "expo-router";
 import ProfileItem from "../../components/ProfileItem";
 import { useColorScheme } from "nativewind";
+import Button from "../../components/Button";
+import { useNotifier } from "../../contexts/NotifierContext";
 
 const Profile = () => {
   const { colorScheme } = useColorScheme();
   const [profile, setProfile] = useState(null);
+  const notify = useNotifier();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -39,12 +42,12 @@ const Profile = () => {
   return (
     <SafeAreaView className="flex-1 dark:bg-black">
       <View className="dark:bg-black">
-        <View className="flex-row items-center justify-between px-6 mt-5">
+        <View className="flex-row items-center justify-between px-6 mt-4">
           <Text className="text-2xl font-poppins-600 dark:text-white">
             Profile
           </Text>
           <ProfileItem
-            onPress={() => router.push("profile/settingsScreen")}
+            onPress={() => router.replace("profile/settingsScreen")}
             value=""
             icon="settings-sharp"
             iconSet={Ionicons}
@@ -87,7 +90,14 @@ const Profile = () => {
                 showStatus={true}
               />
               <ProfileItem
-                onPress={() => router.push("profile/editProfile")}
+                onPress={async () => {
+                  const role = profile?.role;
+                  if (role === "recruiter") {
+                    router.push("profile/editProfileRecruiter");
+                  } else {
+                    router.push("profile/editProfile");
+                  }
+                }}
                 label="Edit Profile"
                 value=""
                 icon="user-alt"
@@ -98,17 +108,6 @@ const Profile = () => {
 
           <View className="p-5">
             <View className="py-6 px-5 rounded-xl bg-gray-50 dark:bg-[#242526]">
-              {/* <ProfileItem
-                onPress={() => router.push("profile/workPreferences")}
-                label={`${
-                  profile?.role === "jobSeeker" ? "Work" : "Hiring"
-                } Preferences`}
-                value=""
-                icon="suitcase"
-                iconSet={FontAwesome}
-                showDivider={true}
-              /> */}
-
               <ProfileItem
                 onPress={() => router.push("profile/notifSounds")}
                 label="Notifications & Sounds"
@@ -127,19 +126,20 @@ const Profile = () => {
                 showDivider={true}
               />
               <ProfileItem
-                onPress={() => router.push("profile/accountSettings")}
-                label="Account Settings"
-                value=""
-                icon="settings-sharp"
-                iconSet={Ionicons}
-                showDivider={true}
-              />
-              <ProfileItem
                 onPress={() => router.push("profile/changeAvatar")}
                 label="Change Avatar"
                 value=""
                 icon="people-sharp"
                 iconSet={Ionicons}
+                showDivider={true}
+              />
+
+              <ProfileItem
+                onPress={() => router.push("profile/sendFeedback")}
+                label="Send Feedback"
+                value=""
+                icon="feedback"
+                iconSet={MaterialIcons}
                 showDivider={false}
               />
             </View>

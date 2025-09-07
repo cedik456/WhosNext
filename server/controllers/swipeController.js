@@ -88,15 +88,32 @@ exports.handleSwipe = async (req, res) => {
     }
 
     let createdMatch = null;
+    let wasCreated = false;
 
     if (jobSeekerId && recruiterId) {
       let match = await Match.findOne({ jobSeekerId, recruiterId });
 
       if (!match) {
         match = await Match.create({ jobSeekerId, recruiterId });
+        wasCreated = true;
       }
 
       createdMatch = match;
+    }
+
+    if (createdMatch && wasCreated) {
+      const io = req.app.get("io"); // thanks to app.set("io", io)
+      if (io) {
+        // notify current user
+        io.to(currentUser._id.toString()).emit("matchFound", {
+          matchId: createdMatch._id,
+          // optional: add partner info later
+        });
+        // notify the other user
+        io.to(targetUser._id.toString()).emit("matchFound", {
+          matchId: createdMatch._id,
+        });
+      }
     }
 
     return res.status(201).json({

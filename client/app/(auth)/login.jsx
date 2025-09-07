@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,13 +27,16 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!email || !password) {
+    const e = email.trim().toLowerCase();
+    const p = password.trim();
+
+    if (!e || !p) {
       Alert.alert("Email and password required");
       return;
     }
 
     const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(e)) {
       Alert.alert("Please enter a valid email address.");
       return;
     }
@@ -41,9 +44,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const result = await login(email, password);
-
-      console.log(result);
+      const result = await login(e, p);
 
       if (result.success) {
         if (!result.user.isVerified) {
@@ -52,7 +53,7 @@ const Login = () => {
         }
 
         if (result.user.isOnboarded) {
-          router.replace("/home");
+          router.replace("/home?justLoggedIn=1");
         } else {
           router.replace("/role");
         }
@@ -93,6 +94,8 @@ const Login = () => {
               placeholder="Enter your email"
               placeholderTextColor="#9ca3af"
               value={email}
+              autoCorrect={false}
+              inputMode="email"
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address"
@@ -110,6 +113,7 @@ const Login = () => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
+              maxLength={128}
             />
 
             <Pressable
@@ -130,17 +134,23 @@ const Login = () => {
               className="flex-row items-center gap-2"
             >
               <View
-                className={`w-5 h-5 rounded border border-gray-400 ${
-                  rememberMe ? "bg-black" : "bg-white"
+                className={`w-5 h-5 rounded border  items-center justify-center ${
+                  rememberMe
+                    ? "bg-black border-black"
+                    : "bg-white border-gray-400"
                 }`}
-              />
+              >
+                {rememberMe && <Feather name="check" size={14} color="#fff" />}
+              </View>
               <Text className="text-gray-700 font-poppins-500">
                 Remember me
               </Text>
             </Pressable>
-            <Text className="text-sm text-blue-500 font-poppins-500">
-              Forgot password?
-            </Text>
+            <Pressable onPress={() => router.replace("/forgotPassword")}>
+              <Text className="text-sm text-blue-500 font-poppins-500">
+                Forgot password?
+              </Text>
+            </Pressable>
           </View>
 
           <Pressable

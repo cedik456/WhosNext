@@ -16,6 +16,10 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { RefetchProvider } from "../contexts/RefetchContext";
 import { ActivityIndicator } from "react-native";
 import { useColorScheme } from "nativewind";
+import SocketBridge from "../providers/SocketBridge";
+import RegisterSocketRoom from "../providers/RegisterSocketRoom";
+import { NotifierProvider } from "../contexts/NotifierContext";
+import socket from "../utils/socket";
 
 const RootLayout = () => {
   const { colorScheme } = useColorScheme();
@@ -36,13 +40,17 @@ const RootLayout = () => {
       <RefetchProvider>
         <SafeAreaProvider>
           <PaperProvider>
-            <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                gestureEnabled: false,
-              }}
-            />
+            <NotifierProvider socket={socket}>
+              <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  gestureEnabled: false,
+                }}
+              />
+              <RegisterSocketRoom />
+              <SocketBridge />
+            </NotifierProvider>
           </PaperProvider>
         </SafeAreaProvider>
       </RefetchProvider>

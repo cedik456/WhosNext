@@ -1,4 +1,12 @@
-import { View, Text, Modal, Image, Pressable, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+  Alert,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { getUserRole } from "../utils/secureUser";
 import JobCard from "./JobCard";
@@ -12,6 +20,7 @@ import { useFocusEffect, useRouter } from "expo-router";
 import { useRefetch } from "../contexts/RefetchContext";
 import { ActivityIndicator } from "react-native-paper";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { Modal } from "react-native";
 
 const SwipeDeck = () => {
   const [role, setRole] = useState(null);
@@ -24,6 +33,9 @@ const SwipeDeck = () => {
   const { shouldRefetch, setShouldRefetch } = useRefetch();
 
   const [loading, setLoading] = useState(true);
+
+  const [seeMoreVisible, setSeeMoreVisible] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
 
   const bgColors = [
     "#fefce8",
@@ -138,7 +150,15 @@ const SwipeDeck = () => {
         cards={cards}
         renderCard={(card, index) => {
           if (card.companyName) {
-            return <JobCard data={card} />;
+            return (
+              <JobCard
+                data={card}
+                onSeeMore={() => {
+                  setSelectedJob(card);
+                  setSeeMoreVisible(true);
+                }}
+              />
+            );
           } else if (card.userId) {
             return (
               <ProfileCard
@@ -166,6 +186,8 @@ const SwipeDeck = () => {
         onSwipedLeft={(cardIndex) =>
           handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "nope")
         }
+        disableLeftSwipe={seeMoreVisible}
+        disableRightSwipe={seeMoreVisible}
         disableTopSwipe
         disableBottomSwipe
         animateOverlayLabelsOpacity
@@ -185,7 +207,7 @@ const SwipeDeck = () => {
                 }}
               >
                 <Text className="text-3xl text-white font-poppins-700">
-                  NOPE
+                  NEXT
                 </Text>
               </View>
             ),
@@ -246,9 +268,6 @@ const SwipeDeck = () => {
         >
           <View className="items-center justify-center flex-1 bg-white">
             <View className="items-center w-11/12 p-6 bg-white rounded-xl">
-              {/* <View className="flex-row items-center justify-center mb-6">
-            
-            </View> */}
               <Text className="gap-6 mb-2 text-3xl text-center font-poppins-700">
                 It's a match!
               </Text>
@@ -287,6 +306,36 @@ const SwipeDeck = () => {
           </View>
         </Modal>
       )}
+
+      <Modal
+        visible={seeMoreVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setSeeMoreVisible(false)}
+      >
+        <View className="justify-end flex-1 bg-black/50">
+          <View className="bg-white dark:bg-[#242526] rounded-t-2xl p-6 max-h-[80%]">
+            <Text className="mb-4 text-xl font-poppins-600 dark:text-white">
+              Job Description
+            </Text>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text className="text-base leading-6 text-gray-600 dark:text-gray-300 font-poppins">
+                {selectedJob?.jobDescription || "No description available"}
+              </Text>
+            </ScrollView>
+
+            <TouchableOpacity
+              onPress={() => setSeeMoreVisible(false)}
+              className="items-center py-3 mt-6 bg-blue-600 rounded-xl"
+            >
+              <Text className="text-base text-white font-poppins-600">
+                Close
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
