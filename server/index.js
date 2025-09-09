@@ -26,6 +26,7 @@ const profileRoutes = require("./routes/profileRoutes");
 const preferenceRoutes = require("./routes/preferenceRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
+const jobRoutes = require("./routes/jobRoutes");
 
 //
 const { default: mongoose } = require("mongoose");
@@ -42,6 +43,7 @@ app.use("/api/profile/", profileRoutes);
 app.use("/api/preferences/", preferenceRoutes);
 app.use("/api/admin/", adminRoutes);
 app.use("/api/feedbacks/", feedbackRoutes);
+app.use("/api/jobs/", jobRoutes);
 
 // socket.io setup
 
