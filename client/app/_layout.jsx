@@ -1,6 +1,6 @@
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams, useSegments } from "expo-router";
 import "../global.css";
 import { AuthProvider } from "../contexts/AuthContext";
 import { StatusBar } from "expo-status-bar";
@@ -24,6 +24,8 @@ import socket from "../utils/socket";
 const RootLayout = () => {
   const { colorScheme } = useColorScheme();
 
+  const { matchId } = useLocalSearchParams();
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_700Bold,
@@ -40,7 +42,7 @@ const RootLayout = () => {
       <RefetchProvider>
         <SafeAreaProvider>
           <PaperProvider>
-            <NotifierProvider socket={socket}>
+            <NotifierProvider socket={socket} activeMatchId={matchId}>
               <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
               <Stack
                 screenOptions={{

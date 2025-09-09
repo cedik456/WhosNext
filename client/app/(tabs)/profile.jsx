@@ -1,6 +1,6 @@
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
 import {
@@ -10,16 +10,17 @@ import {
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import ProfileItem from "../../components/ProfileItem";
 import { useColorScheme } from "nativewind";
 import Button from "../../components/Button";
 import { useNotifier } from "../../contexts/NotifierContext";
+import socket from "../../utils/socket";
 
 const Profile = () => {
   const { colorScheme } = useColorScheme();
   const [profile, setProfile] = useState(null);
-  const notify = useNotifier();
+  const { notify } = useNotifier();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -38,6 +39,25 @@ const Profile = () => {
 
     fetchProfile();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onNewMessage = (payload) => {
+        notify({
+          title: payload?.senderName ?? "New message",
+          body: payload?.text ?? "You received a message",
+          avatar: payload?.senderAvatar,
+          variant: "message",
+        });
+      };
+
+      socket.on("newMessage", onNewMessage);
+
+      return () => {
+        socket.off("newMessage", onNewMessage);
+      };
+    }, [notify])
+  );
 
   return (
     <SafeAreaView className="flex-1 dark:bg-black">

@@ -20,6 +20,7 @@ import socket from "../utils/socket";
 import { useColorScheme } from "nativewind";
 import { formatDateDivider } from "../utils/formatDateDivider";
 import dayjs from "dayjs";
+import { useNotifier } from "../contexts/NotifierContext";
 
 const Chat = () => {
   const router = useRouter();
@@ -36,6 +37,13 @@ const Chat = () => {
   const { colorScheme } = useColorScheme();
 
   useEffect(() => {
+    if (!matchId) return;
+    fetchCurrentUser();
+  }, [matchId]);
+
+  useEffect(() => {
+    if (!matchId || !currentUserId) return;
+
     const fetchMessages = async () => {
       try {
         const token = await getToken();
@@ -71,13 +79,29 @@ const Chat = () => {
     };
 
     const handleNewMessage = (message) => {
+      console.log("CHAT EVENT", message);
+      // Skip if it's my own message
+      if (
+        message.sender &&
+        message.sender._id &&
+        message.sender._id.toString() === currentUserId.toString()
+      )
+        return;
+
+      // Skip if already in state
       setMessages((prev) => {
-        if (prev.some((m) => m._id === message._id)) {
-          console.log("⚠️ Duplicate skipped:", message._id);
+        if (prev.some((m) => m._id?.toString() === message._id?.toString()))
           return prev;
-        }
         return [...prev, message];
       });
+
+      // If I'm not in this chat, then notify
+      // if (message.matchId !== matchId) {
+      //   notify?.({
+      //     title: "New message",
+      //     body: message.text,
+      //   });
+      // }
     };
 
     socket.emit("join", matchId);
@@ -92,7 +116,7 @@ const Chat = () => {
     return () => {
       socket.off("newMessage", handleNewMessage);
     };
-  }, [matchId]);
+  }, [matchId, currentUserId]);
 
   useEffect(() => {
     if (flatListRef.current && messages.length > 0) {

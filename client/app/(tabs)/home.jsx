@@ -2,11 +2,12 @@ import { Pressable, Text, View } from "react-native";
 import SwipeDeck from "../../components/SwipeDeck";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getUserRole } from "../../utils/secureUser";
 import { useColorScheme } from "nativewind";
 import { useNotifier } from "../../contexts/NotifierContext";
+import socket from "../../utils/socket";
 
 const Home = () => {
   const router = useRouter();
@@ -52,6 +53,26 @@ const Home = () => {
       router.push("/filters/jobSeeker");
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const onNewMessage = (payload) => {
+        notify({
+          title: payload?.senderName ?? "New message",
+          body: payload?.text ?? "You received a message",
+          avatar: payload?.senderAvatar,
+          variant: "message",
+        });
+      };
+
+      socket.on("newMessage", onNewMessage);
+
+      // cleanup when screen loses focus
+      return () => {
+        socket.off("newMessage", onNewMessage);
+      };
+    }, [notify])
+  );
 
   return (
     <SafeAreaView className="flex-1 dark:bg-black">
