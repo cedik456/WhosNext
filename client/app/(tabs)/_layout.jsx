@@ -5,6 +5,7 @@ import {
   FontAwesome6,
   Ionicons,
   MaterialCommunityIcons,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import { useAuth } from "../../hooks/useAuth";
 import { ActivityIndicator } from "react-native-paper";
@@ -20,7 +21,9 @@ const TabsLayout = () => {
   const badge = useNotifStore((s) => s.count);
 
   const hideTabs =
-    segments.includes("settings") || segments.includes("settingsScreen");
+    segments.includes("settings") ||
+    segments.includes("settingsScreen") ||
+    segments.includes("createJobs");
 
   if (user === undefined) {
     return (
@@ -101,6 +104,29 @@ const TabsLayout = () => {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="jobs/index"
+        options={{
+          tabBarLabel: "Jobs",
+          href: user?.role === "recruiter" ? undefined : null, // 🔑 Hides for seekers
+          tabBarIcon: ({ focused }) =>
+            user?.role === "recruiter" ? (
+              <MaterialIcons
+                name="work"
+                size={26}
+                color={
+                  focused
+                    ? colorScheme === "dark"
+                      ? "white"
+                      : "black"
+                    : "#9ca3af"
+                }
+              />
+            ) : null,
+        }}
+      />
+
       <Tabs.Screen
         name="matches"
         options={{
@@ -209,6 +235,14 @@ const TabsLayout = () => {
       />
       <Tabs.Screen
         name="profile/settings/terms"
+        options={{
+          href: null,
+        }}
+      />
+
+      {/* Jobs */}
+      <Tabs.Screen
+        name="jobs/createJobs"
         options={{
           href: null,
         }}

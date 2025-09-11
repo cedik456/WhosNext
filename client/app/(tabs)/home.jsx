@@ -77,7 +77,7 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1 dark:bg-black">
       <View className="px-5">
-        <View className="absolute z-10 top-5 left-5 right-5 ">
+        <View className="absolute z-10 top-5 left-5 right-7 ">
           <View className="flex-row items-center justify-between">
             <Text className="text-2xl font-poppins dark:text-gray-100">
               who'snext?
