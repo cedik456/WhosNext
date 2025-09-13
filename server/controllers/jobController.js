@@ -15,7 +15,6 @@ exports.createJob = async (req, res) => {
       title,
       description,
       requiredSkills,
-      industry,
       location,
       experienceLevel,
       workType,
@@ -23,7 +22,7 @@ exports.createJob = async (req, res) => {
       salaryRange,
     } = req.body;
 
-    if (!title || !description || !requiredSkills || !industry || !location) {
+    if (!title || !description || !requiredSkills || !location) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
@@ -35,7 +34,6 @@ exports.createJob = async (req, res) => {
       title: title.trim(),
       description: description.trim(),
       requiredSkills,
-      industry,
       location: location.trim(),
       experienceLevel,
       workType,

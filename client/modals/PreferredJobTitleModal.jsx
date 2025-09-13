@@ -33,13 +33,15 @@ const PreferredJobTitleModal = ({
           borderTopRightRadius: 24,
         }}
       >
-        <View className="flex-row items-center mb-4">
-          <Pressable onPress={onClose} className="mr-16">
+        <View className="relative flex-row items-center mb-4">
+          <Pressable onPress={onClose} className="absolute left-0">
             <AntDesign name="arrowleft" size={20} />
           </Pressable>
-          <Text className="text-lg font-semibold">
-            Select Preferred Job Title
-          </Text>
+          <View className="items-center flex-1">
+            <Text className="text-lg font-semibold">
+              Select Preferred Job Title
+            </Text>
+          </View>
         </View>
 
         <FlatList

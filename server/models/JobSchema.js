@@ -21,27 +21,26 @@ const JobSchema = new Schema(
       default: [],
       required: true,
     },
-    industry: {
-      type: String,
-      required: true,
-    },
+    // industry: {
+    //   type: String,
+    //   required: true,
+    // },
     location: {
       type: String,
       required: true,
     },
     experienceLevel: {
       type: String,
-      enum: ["Entry", "Mid", "Senior"],
       required: true,
     },
     workType: {
       type: String,
-      enum: ["Remote", "Hybrid", "On-site"],
+      enum: ["Full-time", "Part-time", "Internship", "Freelance"],
       required: true,
     },
     workEnvironment: {
       type: String,
-      enum: ["Full-time", "Part-time", "Freelance"],
+      enum: ["Remote", "Hybrid", "On-site"],
       required: true,
     },
     salaryRange: {

@@ -2,7 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 
-const JobPostCard = ({ job }) => {
+const JobPostCard = ({ job, onDelete }) => {
   return (
     <View className="p-4 mx-4 my-3 bg-white shadow-sm rounded-xl dark:bg-neutral-900">
       <Text className="text-lg font-poppins-600 dark:text-white">
@@ -40,7 +40,7 @@ const JobPostCard = ({ job }) => {
             Edit
           </Text>
         </Pressable>
-        <Pressable onPress={() => console.log("Delete", job.id)}>
+        <Pressable onPress={() => onDelete(job._id)}>
           <Text className="text-red-600 dark:text-red-400 font-poppins-500">
             Delete
           </Text>
