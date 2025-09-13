@@ -35,7 +35,15 @@ const JobPostCard = ({ job, onDelete }) => {
       </View>
 
       <View className="flex-row justify-end mt-3">
-        <Pressable className="mr-4" onPress={() => {}}>
+        <Pressable
+          className="mr-4"
+          onPress={() =>
+            router.push({
+              pathname: "/(tabs)/jobs/updateJobs",
+              params: { id: job._id },
+            })
+          }
+        >
           <Text className="text-blue-600 dark:text-blue-400 font-poppins-500">
             Edit
           </Text>

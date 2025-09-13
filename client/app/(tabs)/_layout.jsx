@@ -23,7 +23,8 @@ const TabsLayout = () => {
   const hideTabs =
     segments.includes("settings") ||
     segments.includes("settingsScreen") ||
-    segments.includes("createJobs");
+    segments.includes("createJobs") ||
+    segments.includes("updateJobs");
 
   if (user === undefined) {
     return (
@@ -243,6 +244,13 @@ const TabsLayout = () => {
       {/* Jobs */}
       <Tabs.Screen
         name="jobs/createJobs"
+        options={{
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="jobs/updateJobs"
         options={{
           href: null,
         }}

@@ -1,4 +1,4 @@
-const { jaccardSimilarity } = require("../server/utils/similarity");
+const { jaccardSimilarity } = require("../utils/similarity");
 
 const computeSimilarity = (preferences, candidate) => {
   let score = 0;

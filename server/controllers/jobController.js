@@ -156,3 +156,37 @@ exports.deleteJob = async (req, res) => {
     });
   }
 };
+
+exports.getJobById = async (req, res) => {
+  try {
+    const recruiterId = req.user.id;
+    const { id } = req.params;
+
+    if (req.user.role !== "recruiter") {
+      return res.status(403).json({
+        success: false,
+        message: "Only recruiters can view their jobs",
+      });
+    }
+
+    const job = await Job.findOne({ _id: id, recruiterId });
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found or not authorized",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: job,
+    });
+  } catch (error) {
+    console.error("Error fetching job:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while fetching job",
+    });
+  }
+};
