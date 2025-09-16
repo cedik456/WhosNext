@@ -7,7 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getUserRole } from "../utils/secureUser";
 import JobCard from "./JobCard";
 import ProfileCard from "./ProfileCard";
@@ -37,6 +37,8 @@ const SwipeDeck = () => {
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
 
+  const [isProcessingMatch, setIsProcessingMatch] = useState(false);
+
   const bgColors = [
     "#fefce8",
     "#f0f9ff",
@@ -45,6 +47,8 @@ const SwipeDeck = () => {
     "#f1f5f9",
     "#fff7ed",
   ];
+
+  const swiperRef = useRef(null);
 
   const fetchCards = async () => {
     try {
@@ -55,7 +59,7 @@ const SwipeDeck = () => {
       const token = await getToken();
       if (!token) return;
 
-      const response = await api.get("/card/recommendations/v3", {
+      const response = await api.get("/card/recommendations/v4", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -85,8 +89,12 @@ const SwipeDeck = () => {
     }
   }, [shouldRefetch]);
 
-  const handleSwipe = async (targetId, action) => {
+  const handleSwipe = async (targetId, action, cardIndex) => {
+    if (isProcessingMatch) return;
+
     try {
+      setIsProcessingMatch(true);
+
       const token = await getToken();
       if (!token) return;
 
@@ -101,14 +109,12 @@ const SwipeDeck = () => {
       );
 
       if (response.data.match) {
-        console.log("🎯 MATCH DETECTED:", response.data.match);
+        // 🔎 find the card data
         const matchedCard = cards.find(
           (c) => c.userId === targetId || c._id === targetId
         );
 
-        console.log("Matched Card:", matchedCard);
-
-        setMatchedUser({
+        const newMatch = {
           name:
             matchedCard?.userId?.name ||
             matchedCard?.companyName ||
@@ -118,12 +124,16 @@ const SwipeDeck = () => {
             matchedCard?.avatar ||
             matchedCard?.companyPicture,
           matchId: response.data.match,
-        });
+        };
 
+        setMatchedUser(newMatch);
         setMatchModalVisible(true);
+      } else {
+        setIsProcessingMatch(false);
       }
     } catch (error) {
       console.error("Swipe:", error);
+      setIsProcessingMatch(false);
       Alert.alert("Something went wrong.");
     }
   };
@@ -146,6 +156,7 @@ const SwipeDeck = () => {
   return (
     <View className="flex-1 ">
       <Swiper
+        ref={swiperRef}
         key={`deck-${role}-${cards.length}`}
         cards={cards}
         renderCard={(card, index) => {
@@ -181,13 +192,25 @@ const SwipeDeck = () => {
         backgroundColor="transparent"
         verticalSwipe={false}
         onSwipedRight={(cardIndex) =>
-          handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "like")
+          handleSwipe(
+            cards[cardIndex]?.userId || cards[cardIndex]?._id,
+            "like",
+            cardIndex
+          )
         }
         onSwipedLeft={(cardIndex) =>
-          handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "nope")
+          handleSwipe(
+            cards[cardIndex]?.userId || cards[cardIndex]?._id,
+            "nope",
+            cardIndex
+          )
         }
-        disableLeftSwipe={seeMoreVisible}
-        disableRightSwipe={seeMoreVisible}
+        disableLeftSwipe={
+          seeMoreVisible || matchModalVisible || isProcessingMatch
+        }
+        disableRightSwipe={
+          seeMoreVisible || matchModalVisible || isProcessingMatch
+        }
         disableTopSwipe
         disableBottomSwipe
         animateOverlayLabelsOpacity
@@ -282,6 +305,7 @@ const SwipeDeck = () => {
                   className="w-full rounded-full"
                   textClassName="text-center"
                   onPress={() => {
+                    setIsProcessingMatch(false);
                     setMatchModalVisible(false);
                     router.push({
                       pathname: "/chat",
@@ -296,6 +320,7 @@ const SwipeDeck = () => {
                 <Button
                   title="Skip for now"
                   onPress={() => {
+                    setIsProcessingMatch(false);
                     setMatchModalVisible(false);
                   }}
                   className="w-full bg-gray-300 rounded-full"
