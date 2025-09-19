@@ -38,11 +38,15 @@ const PreferredSkillsModal = ({
           borderTopRightRadius: 24,
         }}
       >
-        <View className="flex-row items-center mb-4">
-          <Pressable onPress={onClose} className="mr-16">
-            <AntDesign name="arrowleft" size={20} />
+        <View className="relative flex-row items-center mb-4">
+          <Pressable onPress={onClose} className="absolute left-0">
+            <AntDesign name="arrowleft" size={20} color="gray" />
           </Pressable>
-          <Text className="text-lg font-semibold">Select Preferred Skills</Text>
+          <View className="items-center flex-1">
+            <Text className="text-lg font-semibold dark:text-white">
+              Select Preferred Skills
+            </Text>
+          </View>
         </View>
 
         <FlatList
@@ -58,7 +62,7 @@ const PreferredSkillsModal = ({
                 className="flex-row items-center justify-between px-2 py-3 "
               >
                 <Text
-                  className={`text-base font-poppins-500 ${
+                  className={`text-base font-poppins-500  ${
                     isSelected ? "text-black font-semibold " : "text-gray-600"
                   }`}
                 >

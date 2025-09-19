@@ -100,3 +100,62 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+exports.updateJobSeekerProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const {
+      name,
+      bio,
+      skills,
+      location,
+      experience,
+      education,
+      industry,
+      workEnvironment,
+      workType,
+    } = req.body;
+
+    // Build User updates
+    const userUpdates = {};
+    if (name !== undefined) userUpdates.name = name;
+
+    if (Object.keys(userUpdates).length > 0) {
+      await User.findByIdAndUpdate(
+        userId,
+        { $set: userUpdates },
+        { new: true }
+      );
+    }
+
+    // Build JobSeeker updates
+    const seekerUpdates = {};
+    if (bio !== undefined) seekerUpdates.bio = bio;
+    if (skills !== undefined) seekerUpdates.skills = skills;
+    if (location !== undefined) seekerUpdates.location = location;
+    if (experience !== undefined) seekerUpdates.experience = experience;
+    if (education !== undefined) seekerUpdates.education = education;
+    if (industry !== undefined) seekerUpdates.industry = industry;
+    if (workEnvironment !== undefined)
+      seekerUpdates.workEnvironment = workEnvironment;
+    if (workType !== undefined) seekerUpdates.workType = workType;
+
+    if (Object.keys(seekerUpdates).length > 0) {
+      await JobSeeker.findOneAndUpdate(
+        { userId },
+        { $set: seekerUpdates },
+        { new: true, runValidators: true }
+      );
+    }
+
+    // Return merged profile
+    const user = await User.findById(userId).select("-password");
+    const jobSeeker = await JobSeeker.findOne({ userId });
+    const profile = { ...user._doc, ...jobSeeker._doc };
+
+    res.status(200).json({ success: true, data: profile });
+  } catch (error) {
+    console.error("Update JobSeeker error:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
