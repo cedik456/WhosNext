@@ -12,8 +12,11 @@ import { useCallback, useEffect, useState } from "react";
 import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 import { router, useFocusEffect } from "expo-router";
+import { useColorScheme } from "nativewind";
 
 const Jobs = () => {
+  const { colorScheme } = useColorScheme();
+
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -73,7 +76,11 @@ const Jobs = () => {
           </Text>
 
           <Pressable onPress={() => router.replace("/jobs/createJobs")}>
-            <FontAwesome5 size={24} name="plus" />
+            <FontAwesome5
+              size={24}
+              name="plus"
+              color={colorScheme === "dark" ? "#fff" : "000"}
+            />
           </Pressable>
         </View>
       </View>
