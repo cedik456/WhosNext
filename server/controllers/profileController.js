@@ -159,3 +159,69 @@ exports.updateJobSeekerProfile = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+exports.updateRecruiterProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const {
+      companyName,
+      jobDescription,
+      jobTitle,
+      industry,
+      location,
+      experienceLevel,
+      workEnvironment,
+      workType,
+      requiredSkills,
+      salaryRange,
+    } = req.body;
+
+    const updates = {};
+    if (companyName !== undefined) updates.companyName = companyName;
+    if (jobDescription !== undefined) updates.jobDescription = jobDescription;
+    if (jobTitle !== undefined) updates.jobTitle = jobTitle;
+    if (industry !== undefined) updates.industry = industry;
+
+    // Handle nested hiringCriteria safely
+    const hiringCriteriaUpdates = {};
+    if (location !== undefined) hiringCriteriaUpdates.location = location;
+    if (experienceLevel !== undefined)
+      hiringCriteriaUpdates.experienceLevel = experienceLevel;
+    if (workEnvironment !== undefined)
+      hiringCriteriaUpdates.workEnvironment = workEnvironment;
+    if (workType !== undefined) hiringCriteriaUpdates.workType = workType;
+    if (requiredSkills !== undefined)
+      hiringCriteriaUpdates.requiredSkills = requiredSkills;
+    if (salaryRange !== undefined)
+      hiringCriteriaUpdates.salaryRange = salaryRange;
+
+    const recruiter = await Recruiter.findOneAndUpdate(
+      { userId },
+      {
+        $set: {
+          ...updates,
+          hiringCriteria: {
+            ...((await Recruiter.findOne({ userId }))?.hiringCriteria || {}),
+            ...hiringCriteriaUpdates,
+          },
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!recruiter) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Recruiter not found" });
+    }
+
+    const user = await User.findById(userId).select("-password");
+    const profile = { ...user._doc, ...recruiter._doc };
+
+    res.status(200).json({ success: true, data: profile });
+  } catch (error) {
+    console.error("Update Recruiter error:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

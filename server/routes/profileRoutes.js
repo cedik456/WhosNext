@@ -5,11 +5,12 @@ const {
   getProfile,
   updateProfile,
   updateJobSeekerProfile,
+  updateRecruiterProfile,
 } = require("../controllers/profileController");
 
 router.get("/", auth, getProfile);
 router.patch("/", auth, updateProfile);
 router.patch("/jobSeeker", auth, updateJobSeekerProfile);
-router.patch("/recruiter", auth);
+router.patch("/recruiter", auth, updateRecruiterProfile);
 
 module.exports = router;
