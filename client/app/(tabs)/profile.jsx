@@ -1,4 +1,4 @@
-import { Image, Text, View, TouchableOpacity } from "react-native";
+import { Image, Text, View, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback, useEffect, useState } from "react";
 import { getToken } from "../../utils/storage";
@@ -16,29 +16,34 @@ import { useColorScheme } from "nativewind";
 import Button from "../../components/Button";
 import { useNotifier } from "../../contexts/NotifierContext";
 import socket from "../../utils/socket";
+import * as ImagePicker from "expo-image-picker";
+
+const CLOUD_NAME = "datadgjo1";
+const UPLOAD_PRESET = "unsigned-logo";
 
 const Profile = () => {
   const { colorScheme } = useColorScheme();
   const [profile, setProfile] = useState(null);
   const { notify } = useNotifier();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const token = await getToken();
+  const [localLogo, setLocalLogo] = useState(null); // 👈 preview state
+  const [uploading, setUploading] = useState(false);
 
-      const response = await api.get("/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  useFocusEffect(
+    useCallback(() => {
+      const fetchProfile = async () => {
+        const token = await getToken();
+        const response = await api.get("/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.data.success) {
+          setProfile(response.data.data);
+        }
+      };
 
-      if (response.data.success) {
-        setProfile(response.data.data);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+      fetchProfile();
+    }, [])
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -59,6 +64,56 @@ const Profile = () => {
     }, [notify])
   );
 
+  const handleRecruiterLogoUpload = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled) {
+      const pickedUri = result.assets[0].uri;
+      setLocalLogo(pickedUri); // show preview immediately
+      setUploading(true);
+
+      try {
+        const data = new FormData();
+        data.append("file", {
+          uri: pickedUri,
+          type: "image/jpeg",
+          name: "logo.jpg",
+        });
+        data.append("upload_preset", UPLOAD_PRESET);
+
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+          { method: "POST", body: data }
+        );
+        const cloudinaryData = await res.json();
+
+        if (cloudinaryData.secure_url) {
+          const token = await getToken();
+          await api.patch(
+            "/profile/companyLogoUpload",
+            { companyPicture: cloudinaryData.secure_url },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setProfile({ ...profile, companyPicture: cloudinaryData.secure_url });
+          setLocalLogo(null); // clear temp preview
+          Alert.alert("Success", "Logo updated successfully!");
+        } else {
+          throw new Error("Cloudinary upload failed");
+        }
+      } catch (err) {
+        console.error(err);
+        Alert.alert("Error", "Failed to upload logo. Please try again.");
+      } finally {
+        setUploading(false);
+      }
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 dark:bg-black">
       <View className="dark:bg-black">
@@ -78,14 +133,26 @@ const Profile = () => {
         <View className="">
           <View className="items-center">
             <View className="relative">
-              <Image
-                source={
-                  profile?.role === "jobSeeker"
-                    ? { uri: profile?.avatar }
-                    : { uri: profile?.companyPicture }
-                }
-                className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black dark:bg-white "
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  if (profile?.role === "jobSeeker") {
+                    router.push("profile/selectAvatar");
+                  } else {
+                    handleRecruiterLogoUpload();
+                  }
+                }}
+              >
+                <Image
+                  source={
+                    localLogo
+                      ? { uri: localLogo }
+                      : profile?.role === "jobSeeker"
+                      ? { uri: profile?.avatar }
+                      : { uri: profile?.companyPicture }
+                  }
+                  className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black dark:bg-white "
+                />
+              </TouchableOpacity>
             </View>
             <Text className="mt-2 text-3xl font-poppins-600 dark:text-white">
               {profile?.name || profile?.companyName}

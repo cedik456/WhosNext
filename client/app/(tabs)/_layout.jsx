@@ -24,7 +24,9 @@ const TabsLayout = () => {
     segments.includes("settings") ||
     segments.includes("settingsScreen") ||
     segments.includes("createJobs") ||
-    segments.includes("updateJobs");
+    segments.includes("updateJobs") ||
+    segments.includes("uploadLogo") ||
+    segments.includes("selectAvatar");
 
   if (user === undefined) {
     return (
@@ -251,6 +253,20 @@ const TabsLayout = () => {
 
       <Tabs.Screen
         name="jobs/updateJobs"
+        options={{
+          href: null,
+        }}
+      />
+
+      {/* Upload Avatar/Logo */}
+      <Tabs.Screen
+        name="profile/selectAvatar"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/uploadLogo"
         options={{
           href: null,
         }}

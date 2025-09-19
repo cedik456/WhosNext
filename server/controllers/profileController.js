@@ -225,3 +225,58 @@ exports.updateRecruiterProfile = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+exports.uploadCompanyLogo = async (req, res) => {
+  console.log("📥 [uploadCompanyLogo] Request received with body:", req.body);
+
+  try {
+    const { companyPicture } = req.body;
+
+    const recruiter = await Recruiter.findOneAndUpdate(
+      { userId: req.user.id }, // 👈 match recruiter by linked userId
+      { companyPicture },
+      { new: true }
+    );
+
+    if (!recruiter) {
+      console.log("⚠️ No recruiter found for user:", req.user.id);
+      return res
+        .status(404)
+        .json({ success: false, message: "Recruiter not found" });
+    }
+
+    console.log("✅ Recruiter logo updated:", recruiter.companyPicture);
+
+    res.json({ success: true, data: recruiter });
+  } catch (err) {
+    console.error("❌ Error in uploadCompanyLogo:", err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+exports.uploadAvatar = async (req, res) => {
+  console.log("📥 [uploadAvatar] body:", req.body);
+
+  try {
+    const { avatar } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { avatar },
+      { new: true }
+    );
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    console.log("✅ Job Seeker avatar updated:", user.avatar);
+
+    res.json({ success: true, data: user });
+  } catch (err) {
+    console.error("❌ Error in uploadAvatar:", err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
