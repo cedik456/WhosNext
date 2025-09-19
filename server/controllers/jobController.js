@@ -1,9 +1,9 @@
 const Job = require("../models/JobSchema");
+const Recruiter = require("../models/RecruiterSchema");
 
+// CREATE JOB
 exports.createJob = async (req, res) => {
   try {
-    const recruiterId = req.user.id;
-
     if (req.user.role !== "recruiter") {
       return res.status(403).json({
         success: false,
@@ -29,8 +29,18 @@ exports.createJob = async (req, res) => {
       });
     }
 
+    // find recruiter profile
+    const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
+    if (!recruiterProfile) {
+      return res.status(404).json({
+        success: false,
+        message: "Recruiter profile not found",
+      });
+    }
+
+    // create new job
     const job = new Job({
-      recruiterId,
+      recruiterId: recruiterProfile._id,
       title: title.trim(),
       description: description.trim(),
       requiredSkills,
@@ -42,6 +52,10 @@ exports.createJob = async (req, res) => {
     });
 
     await job.save();
+
+    // link to recruiter profile
+    recruiterProfile.jobs.push(job._id);
+    await recruiterProfile.save();
 
     return res.status(201).json({
       success: true,
@@ -57,18 +71,27 @@ exports.createJob = async (req, res) => {
   }
 };
 
+// GET MY JOBS
 exports.getMyJobs = async (req, res) => {
   try {
-    const recruiterId = req.user.id;
-
     if (req.user.role !== "recruiter") {
       return res.status(403).json({
         success: false,
-        message: "Only recruiter can view their jobs",
+        message: "Only recruiters can view their jobs",
       });
     }
 
-    const jobs = await Job.find({ recruiterId }).sort({ createdAt: -1 });
+    const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
+    if (!recruiterProfile) {
+      return res.status(404).json({
+        success: false,
+        message: "Recruiter profile not found",
+      });
+    }
+
+    const jobs = await Job.find({ recruiterId: recruiterProfile._id }).sort({
+      createdAt: -1,
+    });
 
     return res.status(200).json({
       success: true,
@@ -84,11 +107,9 @@ exports.getMyJobs = async (req, res) => {
   }
 };
 
+// UPDATE JOB
 exports.updateJob = async (req, res) => {
   try {
-    const recruiterId = req.user.id;
-    const { id } = req.params;
-
     if (req.user.role !== "recruiter") {
       return res.status(403).json({
         success: false,
@@ -96,16 +117,27 @@ exports.updateJob = async (req, res) => {
       });
     }
 
-    const job = await Job.findOne({ _id: id, recruiterId });
+    const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
+    if (!recruiterProfile) {
+      return res.status(404).json({
+        success: false,
+        message: "Recruiter profile not found",
+      });
+    }
+
+    const { id } = req.params;
+    const job = await Job.findOne({
+      _id: id,
+      recruiterId: recruiterProfile._id,
+    });
 
     if (!job) {
       return res
         .status(404)
-        .json({ success: false, message: "Job not found or authorized" });
+        .json({ success: false, message: "Job not found or unauthorized" });
     }
 
     Object.assign(job, req.body);
-
     await job.save();
 
     return res.status(200).json({
@@ -122,12 +154,9 @@ exports.updateJob = async (req, res) => {
   }
 };
 
+// DELETE JOB
 exports.deleteJob = async (req, res) => {
   try {
-    const recruiterId = req.user.id;
-
-    const { id } = req.params;
-
     if (req.user.role !== "recruiter") {
       return res.status(403).json({
         success: false,
@@ -135,12 +164,24 @@ exports.deleteJob = async (req, res) => {
       });
     }
 
-    const job = await Job.findOneAndDelete({ _id: id, recruiterId });
+    const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
+    if (!recruiterProfile) {
+      return res.status(404).json({
+        success: false,
+        message: "Recruiter profile not found",
+      });
+    }
+
+    const { id } = req.params;
+    const job = await Job.findOneAndDelete({
+      _id: id,
+      recruiterId: recruiterProfile._id,
+    });
 
     if (!job) {
       return res.status(404).json({
         success: false,
-        message: "Job not found or not authorized",
+        message: "Job not found or unauthorized",
       });
     }
 
@@ -157,11 +198,9 @@ exports.deleteJob = async (req, res) => {
   }
 };
 
+// GET JOB BY ID
 exports.getJobById = async (req, res) => {
   try {
-    const recruiterId = req.user.id;
-    const { id } = req.params;
-
     if (req.user.role !== "recruiter") {
       return res.status(403).json({
         success: false,
@@ -169,12 +208,24 @@ exports.getJobById = async (req, res) => {
       });
     }
 
-    const job = await Job.findOne({ _id: id, recruiterId });
+    const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
+    if (!recruiterProfile) {
+      return res.status(404).json({
+        success: false,
+        message: "Recruiter profile not found",
+      });
+    }
+
+    const { id } = req.params;
+    const job = await Job.findOne({
+      _id: id,
+      recruiterId: recruiterProfile._id,
+    });
 
     if (!job) {
       return res.status(404).json({
         success: false,
-        message: "Job not found or not authorized",
+        message: "Job not found or unauthorized",
       });
     }
 

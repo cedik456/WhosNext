@@ -67,6 +67,13 @@ const RecruiterSchema = new Schema({
     },
   },
 
+  jobs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Job",
+    },
+  ],
+
   createdAt: {
     type: Date,
     default: Date.now,

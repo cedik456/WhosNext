@@ -86,9 +86,6 @@ const Profile = () => {
                 }
                 className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black dark:bg-white "
               />
-              {/* <TouchableOpacity className="absolute bottom-0 right-0">
-            <FontAwesome name="camera" size={20} />
-          </TouchableOpacity> */}
             </View>
             <Text className="mt-2 text-3xl font-poppins-600 dark:text-white">
               {profile?.name || profile?.companyName}
@@ -145,14 +142,14 @@ const Profile = () => {
                 iconSet={MaterialIcons}
                 showDivider={true}
               />
-              <ProfileItem
+              {/* <ProfileItem
                 onPress={() => router.push("profile/changeAvatar")}
                 label="Change Avatar"
                 value=""
                 icon="people-sharp"
                 iconSet={Ionicons}
                 showDivider={true}
-              />
+              /> */}
 
               <ProfileItem
                 onPress={() => router.push("profile/sendFeedback")}

@@ -164,8 +164,8 @@ const SwipeDeck = () => {
             return (
               <JobCard
                 data={card}
-                onSeeMore={() => {
-                  setSelectedJob(card);
+                onSeeMore={(panel) => {
+                  setSelectedJob(panel);
                   setSeeMoreVisible(true);
                 }}
               />
@@ -346,7 +346,9 @@ const SwipeDeck = () => {
 
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text className="text-base leading-6 text-gray-600 dark:text-gray-300 font-poppins">
-                {selectedJob?.jobDescription || "No description available"}
+                {selectedJob?.description ||
+                  selectedJob?.jobDescription ||
+                  "No description available"}
               </Text>
             </ScrollView>
 

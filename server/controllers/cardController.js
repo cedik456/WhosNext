@@ -649,6 +649,7 @@ exports.getRecommendationsv4 = async (req, res) => {
 
       let matches = await Recruiter.find(query)
         .populate("userId", "name avatar")
+        .populate("jobs")
         .lean();
 
       matches = matches.map((candidate) => {
@@ -684,7 +685,7 @@ exports.getRecommendationsv4 = async (req, res) => {
     // Recruiter Logic
 
     if (user.role === "recruiter") {
-      const recruiter = await Recruiter.findOne({ userId });
+      const recruiter = await Recruiter.findOne({ userId }).populate("jobs");
       if (!recruiter) {
         return res.status(404).json({
           success: false,
@@ -767,8 +768,6 @@ exports.getRecommendationsv4 = async (req, res) => {
 
       return res.status(200).json({ success: true, data: matches });
     }
-
-    console.log("CF scores:", cfScores);
 
     return res.status(400).json({
       success: false,

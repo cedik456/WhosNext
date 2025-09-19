@@ -14,11 +14,10 @@ import {
 } from "@expo/vector-icons";
 import { useState } from "react";
 import getSkillColor from "../utils/getSkillColor";
+import JobPostCarousel from "./JobPostCarousel";
 
 const JobCard = ({ data, color, onSeeMore }) => {
   // if (!data) return null;
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
     <View
@@ -52,68 +51,7 @@ const JobCard = ({ data, color, onSeeMore }) => {
           />
         </View>
 
-        {data.jobTitle && (
-          <Text className="mb-1 text-lg text-gray-700 font-poppins-500">
-            {data.jobTitle}
-          </Text>
-        )}
-
-        {(data.hiringCriteria?.workEnvironment ||
-          data.hiringCriteria?.workType) && (
-          <View className="flex-row items-center gap-2 mb-2 text-gray-700 font-poppins-500">
-            {data.hiringCriteria?.workEnvironment && (
-              <Text>{data.hiringCriteria.workEnvironment} |</Text>
-            )}
-            {data.hiringCriteria?.workType && (
-              <Text>{data.hiringCriteria.workType}</Text>
-            )}
-          </View>
-        )}
-
-        {/* <Text className="mb-2 text-xl text-blue-600 font-poppins-500">
-          ₱25-30K/mo
-        </Text> */}
-
-        {data.hiringCriteria?.location && (
-          <Text className="gap-2 mb-2 text-gray-700 ">
-            <FontAwesome6 name="location-dot" size={15} /> Based in{" "}
-            {data.hiringCriteria.location}
-          </Text>
-        )}
-
-        {data.hiringCriteria?.experienceLevel && (
-          <View className="self-start px-3 py-1 mb-2 bg-blue-100 border border-blue-400 rounded-full">
-            <Text className="text-sm text-blue-800 font-poppins-500">
-              {data.hiringCriteria.experienceLevel}
-            </Text>
-          </View>
-        )}
-
-        <Text className="mb-2 text-base font-poppins-600">
-          Preferred Skills
-        </Text>
-
-        {data.hiringCriteria?.requiredSkills.length > 0 && (
-          <View className="flex-row flex-wrap gap-2 mb-3">
-            {data.hiringCriteria.requiredSkills?.map((skill, index) => (
-              <View
-                key={index}
-                className={`px-3 py-1  rounded-full ${getSkillColor(skill)}`}
-              >
-                <Text className="text-sm text-gray-800">{skill}</Text>
-              </View>
-            ))}
-          </View>
-        )}
-        <TouchableOpacity
-          onPress={onSeeMore}
-          className="flex-row items-center mt-2"
-        >
-          <Text className="mr-1 text-gray-600 font-poppins-500">
-            {" "}
-            See more...
-          </Text>
-        </TouchableOpacity>
+        <JobPostCarousel recruiter={data} onSeeMore={onSeeMore} />
       </View>
     </View>
   );
