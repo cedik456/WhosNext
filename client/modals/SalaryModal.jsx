@@ -1,18 +1,21 @@
 import { AntDesign } from "@expo/vector-icons";
 import { View, Text, Pressable, TextInput } from "react-native";
 import Modal from "react-native-modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const SalaryModal = ({ isVisible, onClose, onSave, selected }) => {
+const SalaryModal = ({ isVisible, onClose, onChange, selected }) => {
   const [min, setMin] = useState(selected?.min?.toString() || "");
   const [max, setMax] = useState(selected?.max?.toString() || "");
 
-  const handleSave = () => {
-    const minVal = parseInt(min) || 0;
-    const maxVal = parseInt(max) || 0;
-    onSave({ min: minVal, max: maxVal });
-    onClose();
-  };
+  // Whenever inputs change → update parent state immediately
+  useEffect(() => {
+    if (onChange) {
+      onChange({
+        min: parseInt(min) || 0,
+        max: parseInt(max) || 0,
+      });
+    }
+  }, [min, max]);
 
   return (
     <Modal
@@ -20,48 +23,52 @@ const SalaryModal = ({ isVisible, onClose, onSave, selected }) => {
       onBackdropPress={onClose}
       style={{ justifyContent: "flex-end", margin: 0 }}
     >
-      <View className="p-5 bg-white rounded-t-3xl" style={{ height: "40%" }}>
+      <View
+        className="p-6 bg-white rounded-t-3xl"
+        style={{
+          minHeight: "54%",
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+        }}
+      >
         {/* Header */}
-        <View className="relative flex-row items-center mb-4">
+        <View className="relative flex-row items-center mb-6">
           <Pressable onPress={onClose} className="absolute left-0">
-            <AntDesign name="arrowleft" size={20} />
+            <AntDesign name="arrowleft" size={22} color="black" />
           </Pressable>
           <View className="items-center flex-1">
-            <Text className="text-lg font-semibold">Set Salary Range</Text>
+            <Text className="text-lg font-poppins-600">Set Salary Range</Text>
           </View>
         </View>
 
-        {/* Min/Max Inputs */}
+        {/* Inputs */}
         <View className="flex-row justify-between gap-4">
           <View className="flex-1">
-            <Text className="mb-2">Min Salary</Text>
+            <Text className="mb-2 text-sm text-gray-600 font-poppins-500">
+              Minimum Salary
+            </Text>
             <TextInput
-              className="p-2 border border-gray-300 rounded-lg"
+              className="w-full px-4 py-3 text-base border border-gray-300 rounded-xl font-poppins"
+              placeholder="₱0"
               keyboardType="numeric"
               value={min}
               onChangeText={setMin}
-              placeholder="0"
             />
           </View>
+
           <View className="flex-1">
-            <Text className="mb-2">Max Salary</Text>
+            <Text className="mb-2 text-sm text-gray-600 font-poppins-500">
+              Maximum Salary
+            </Text>
             <TextInput
-              className="p-2 border border-gray-300 rounded-lg"
+              className="w-full px-4 py-3 text-base border border-gray-300 rounded-xl font-poppins"
+              placeholder="₱0"
               keyboardType="numeric"
               value={max}
               onChangeText={setMax}
-              placeholder="0"
             />
           </View>
         </View>
-
-        {/* Save Button */}
-        <Pressable
-          onPress={handleSave}
-          className="p-3 mt-6 bg-blue-600 rounded-xl"
-        >
-          <Text className="font-semibold text-center text-white">Save</Text>
-        </Pressable>
       </View>
     </Modal>
   );

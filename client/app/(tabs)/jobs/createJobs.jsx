@@ -187,6 +187,29 @@ const CreateJob = () => {
           />
         </View>
 
+        {/* Salary */}
+        <View className="mb-5">
+          <Text className="mb-2 text-sm text-gray-600 font-poppins-500 dark:text-gray-300">
+            Salary Range
+          </Text>
+          <View className="flex-row justify-between">
+            <TextInput
+              placeholder="Min Salary"
+              value={salaryMin}
+              onChangeText={setSalaryMin}
+              keyboardType="numeric"
+              className="flex-1 p-4 mr-2 border border-gray-200 rounded-xl dark:bg-neutral-900 dark:text-white"
+            />
+            <TextInput
+              placeholder="Max Salary"
+              value={salaryMax}
+              onChangeText={setSalaryMax}
+              keyboardType="numeric"
+              className="flex-1 p-4 ml-2 border border-gray-200 rounded-xl dark:bg-neutral-900 dark:text-white"
+            />
+          </View>
+        </View>
+
         {/* Experience Level (Modal) */}
         <View className="mb-5">
           <Text className="mb-2 text-sm text-gray-600 font-poppins-500 dark:text-gray-300">
@@ -217,29 +240,6 @@ const CreateJob = () => {
             </Text>
             <AntDesign name="right" size={20} color="gray" />
           </Pressable>
-        </View>
-
-        {/* Salary */}
-        <View className="mb-5">
-          <Text className="mb-2 text-sm text-gray-600 font-poppins-500 dark:text-gray-300">
-            Salary Range
-          </Text>
-          <View className="flex-row justify-between">
-            <TextInput
-              placeholder="Min Salary"
-              value={salaryMin}
-              onChangeText={setSalaryMin}
-              keyboardType="numeric"
-              className="flex-1 p-4 mr-2 border border-gray-200 rounded-xl dark:bg-neutral-900 dark:text-white"
-            />
-            <TextInput
-              placeholder="Max Salary"
-              value={salaryMax}
-              onChangeText={setSalaryMax}
-              keyboardType="numeric"
-              className="flex-1 p-4 ml-2 border border-gray-200 rounded-xl dark:bg-neutral-900 dark:text-white"
-            />
-          </View>
         </View>
 
         {/* Skills */}

@@ -47,13 +47,17 @@ const JobPostCarousel = ({ recruiter, onSeeMore }) => {
             </Text>
           </View>
           {current.location && (
-            <Text className="mb-1 text-base text-gray-600 font-poppins">
-              {current.location}
-            </Text>
+            <View className="flex-row items-center gap-2 mb-1">
+              <FontAwesome6 name="location-dot" size={15} />
+              <Text className="text-base text-gray-600 font-poppins">
+                {current.location}
+              </Text>
+            </View>
           )}
           <Text className="mt-1 text-base text-gray-600">
             {current.workType} | {current.workEnvironment}
           </Text>
+
           {current.requiredSkills?.length > 0 && (
             <View className="flex-row flex-wrap gap-2 mt-3">
               {current.requiredSkills.map((skill, idx) => (
@@ -79,7 +83,7 @@ const JobPostCarousel = ({ recruiter, onSeeMore }) => {
                 <Text
                   numberOfLines={1}
                   ellipsizeMode="tail"
-                  className="mt-1 text-gray-500 text-md font-poppins"
+                  className="mt-1 text-gray-500 text-md font-poppins w-80"
                 >
                   {current.description || current.jobDescription}
                 </Text>
@@ -102,9 +106,12 @@ const JobPostCarousel = ({ recruiter, onSeeMore }) => {
             </Text>
           </View>
           {current.location && (
-            <Text className="mb-1 text-base text-gray-600 font-poppins">
-              {current.location}
-            </Text>
+            <View className="flex-row items-center gap-2 mb-1">
+              <FontAwesome6 name="location-dot" size={15} />
+              <Text className="text-base text-gray-600 font-poppins">
+                {current.location}
+              </Text>
+            </View>
           )}
 
           <Text className="mt-1 text-base text-gray-600">

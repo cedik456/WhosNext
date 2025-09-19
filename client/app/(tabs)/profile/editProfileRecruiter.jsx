@@ -173,9 +173,7 @@ const EditProfileRecruiter = () => {
                 label="Salary Range"
                 value={
                   user?.hiringCriteria?.salaryRange
-                    ? `${user.hiringCriteria.salaryRange.min || 0} - ${
-                        user.hiringCriteria.salaryRange.max || 0
-                      } PHP`
+                    ? `₱${user.hiringCriteria.salaryRange.min?.toLocaleString()} - ₱${user.hiringCriteria.salaryRange.max?.toLocaleString()}`
                     : "N/A"
                 }
                 onPress={() => setIsSalaryModalOpen(true)}
@@ -365,7 +363,7 @@ const EditProfileRecruiter = () => {
         isVisible={isSalaryModalOpen}
         onClose={() => setIsSalaryModalOpen(false)}
         selected={user?.hiringCriteria?.salaryRange}
-        onSave={(range) => {
+        onChange={(range) => {
           setChanges((prev) => ({ ...prev, salaryRange: range }));
           setUser((prev) => ({
             ...prev,
