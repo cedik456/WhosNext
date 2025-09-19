@@ -1,7 +1,7 @@
 import { Image, Platform, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
 
-const ProfileCard = ({ card, color }) => {
+const ProfileCard = ({ card, color, onSeeBio }) => {
   // if (!card) return null;
   return (
     <View
@@ -47,7 +47,7 @@ const ProfileCard = ({ card, color }) => {
       )}
 
       {card.skills?.length > 0 && (
-        <View className="mb-3">
+        <View className="mb-2">
           <Text className="mb-2 text-base font-poppins-600">Skills</Text>
 
           <View className="flex-row flex-wrap gap-2 max-w-[280px]">
@@ -70,8 +70,14 @@ const ProfileCard = ({ card, color }) => {
           </View>
         </View>
       )}
-      <TouchableOpacity className="flex-row items-center mt-2">
-        <Text className="mr-1 font-poppins-500"> See more...</Text>
+      <TouchableOpacity onPress={() => onSeeBio(card.bio)}>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          className="mt-1 text-gray-500 font-poppins"
+        >
+          {card.bio || "No bio available"}
+        </Text>
       </TouchableOpacity>
     </View>
   );

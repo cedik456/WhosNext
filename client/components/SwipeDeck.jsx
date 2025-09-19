@@ -37,6 +37,9 @@ const SwipeDeck = () => {
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
 
+  const [bioVisible, setBioVisible] = useState(false);
+  const [selectedBio, setSelectedBio] = useState(null);
+
   const [isProcessingMatch, setIsProcessingMatch] = useState(false);
 
   const bgColors = [
@@ -174,6 +177,10 @@ const SwipeDeck = () => {
             return (
               <ProfileCard
                 card={card}
+                onSeeBio={(bio) => {
+                  setSelectedBio(bio);
+                  setBioVisible(true);
+                }}
                 color={bgColors[index % bgColors.length]}
               />
             );
@@ -332,6 +339,8 @@ const SwipeDeck = () => {
         </Modal>
       )}
 
+      {/* Recruiters bio */}
+
       <Modal
         visible={seeMoreVisible}
         transparent={true}
@@ -354,6 +363,37 @@ const SwipeDeck = () => {
 
             <TouchableOpacity
               onPress={() => setSeeMoreVisible(false)}
+              className="items-center py-3 mt-6 bg-blue-600 rounded-xl"
+            >
+              <Text className="text-base text-white font-poppins-600">
+                Close
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Job seekers bio */}
+      <Modal
+        visible={bioVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setBioVisible(false)}
+      >
+        <View className="justify-end flex-1 bg-black/50">
+          <View className="bg-white dark:bg-[#242526] rounded-t-2xl p-6 max-h-[80%]">
+            <Text className="mb-4 text-xl font-poppins-600 dark:text-white">
+              About me
+            </Text>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text className="text-base leading-6 text-gray-600 dark:text-gray-300 font-poppins">
+                {selectedBio || "No bio provided"}
+              </Text>
+            </ScrollView>
+
+            <TouchableOpacity
+              onPress={() => setBioVisible(false)}
               className="items-center py-3 mt-6 bg-blue-600 rounded-xl"
             >
               <Text className="text-base text-white font-poppins-600">
