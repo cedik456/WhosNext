@@ -136,19 +136,6 @@ export function NotifierProvider({ children, socket, activeMatchId = null }) {
               className="bg-black dark:bg-[#242526] rounded-2xl shadow-lg p-4 flex-row items-center"
               style={{ elevation: 4 }}
             >
-              {current?.avatar ? (
-                <Image
-                  source={{ uri: current.avatar }}
-                  style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 16,
-                    marginRight: 10,
-                  }}
-                />
-              ) : (
-                <View className="w-8 h-8 mr-2 bg-gray-200 rounded-full dark:bg-gray-600" />
-              )}
               <View className="flex-1">
                 <Text
                   className="text-base font-semibold text-white"

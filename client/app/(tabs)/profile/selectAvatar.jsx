@@ -28,7 +28,7 @@ const SelectAvatar = () => {
   const [selected, setSelected] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  const { colorScheme } = useColorScheme;
+  const { colorScheme } = useColorScheme();
 
   const saveAvatar = async () => {
     if (!selected) {
@@ -65,15 +65,11 @@ const SelectAvatar = () => {
           <FontAwesome6
             name="chevron-left"
             size={24}
-            color={colorScheme === "dark" ? "white" : "black"}
+            color={colorScheme === "dark" ? "#fff" : "black"}
           />
         </Pressable>
 
-        <Text
-          className={`${
-            colorScheme === "dark" ? "text-white" : "text-black"
-          } text-2xl  font-poppins-600 `}
-        >
+        <Text className="text-2xl font-poppins-600 dark:text-white">
           Change your avatar
         </Text>
       </View>
@@ -86,11 +82,14 @@ const SelectAvatar = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => setSelected(item)}
-            className={`m-2 rounded-lg border ${
-              selected === item ? "border-black border" : "border-gray-400"
+            className={`m-2 rounded-full border ${
+              selected === item ? "border-blue-700 border" : "border-gray-400"
             }`}
           >
-            <Image source={{ uri: item }} className="rounded-full w-28 h-28" />
+            <Image
+              source={{ uri: item }}
+              className="rounded-full w-28 h-28 dark:bg-white"
+            />
           </TouchableOpacity>
         )}
       />
@@ -100,8 +99,8 @@ const SelectAvatar = () => {
           title={saving ? "Saving..." : "Save Avatar"}
           onPress={saveAvatar}
           disabled={saving || !selected}
-          textClassName="text-center"
-          className="mt-4 rounded-full"
+          textClassName="text-center dark:text-black"
+          className="mt-4 rounded-full dark:bg-white"
         />
       </View>
     </SafeAreaView>

@@ -152,6 +152,13 @@ const Profile = () => {
                   }
                   className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black dark:bg-white "
                 />
+                <View className="absolute bottom-0 right-0 items-center justify-center w-8 h-8 bg-black border-2 border-white rounded-full dark:border-black dark:bg-white ">
+                  <Ionicons
+                    name="add"
+                    size={18}
+                    color={colorScheme === "dark" ? "black" : "white"}
+                  />
+                </View>
               </TouchableOpacity>
             </View>
             <Text className="mt-2 text-3xl font-poppins-600 dark:text-white">
