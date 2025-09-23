@@ -6,8 +6,9 @@ const User = require("../models/UserSchema");
 
 exports.handleSwipe = async (req, res) => {
   try {
-    const { targetId, action } = req.body;
+    const { targetId, action, jobId } = req.body;
     const userId = req.user.id;
+    const normalizedJobId = jobId || null; // ✅ normalize once
 
     if (!targetId || !action) {
       return res.status(400).json({
@@ -40,7 +41,11 @@ exports.handleSwipe = async (req, res) => {
       });
     }
 
-    const existingSwipe = await Swipe.findOne({ userId, targetId });
+    const existingSwipe = await Swipe.findOne({
+      userId,
+      targetId,
+      jobId: normalizedJobId,
+    });
 
     if (existingSwipe) {
       return res.status(400).json({
@@ -49,67 +54,75 @@ exports.handleSwipe = async (req, res) => {
       });
     }
 
-    await Swipe.create({ userId, targetId, action });
+    await Swipe.create({ userId, targetId, jobId: normalizedJobId, action });
 
-    let isMatch = false;
-    let mutual = null;
-    let jobSeekerId = null;
-    let recruiterId = null;
+    let createdMatch = null; // ✅ declare here
+    let wasCreated = false;
 
     if (action === "like") {
-      mutual = await Swipe.findOne({
+      const mutual = await Swipe.findOne({
         userId: targetId,
         targetId: userId,
         action: "like",
+        jobId: normalizedJobId, // ✅ must be same jobId to match
       });
-    }
 
-    if (mutual) {
-      isMatch = true;
+      if (mutual) {
+        let jobSeekerId = null;
+        let recruiterId = null;
 
-      if (currentUser.role === "jobSeeker" && targetUser.role === "recruiter") {
-        const jobSeeker = await JobSeeker.findOne({ userId: currentUser._id });
-        const recruiter = await Recruiter.findOne({ userId: targetUser._id });
-        if (jobSeeker && recruiter) {
-          jobSeekerId = jobSeeker._id;
-          recruiterId = recruiter._id;
+        if (
+          currentUser.role === "jobSeeker" &&
+          targetUser.role === "recruiter"
+        ) {
+          const jobSeeker = await JobSeeker.findOne({
+            userId: currentUser._id,
+          });
+          const recruiter = await Recruiter.findOne({ userId: targetUser._id });
+          if (jobSeeker && recruiter) {
+            jobSeekerId = jobSeeker._id;
+            recruiterId = recruiter._id;
+          }
+        } else if (
+          currentUser.role === "recruiter" &&
+          targetUser.role === "jobSeeker"
+        ) {
+          const recruiter = await Recruiter.findOne({
+            userId: currentUser._id,
+          });
+          const jobSeeker = await JobSeeker.findOne({ userId: targetUser._id });
+          if (recruiter && jobSeeker) {
+            recruiterId = recruiter._id;
+            jobSeekerId = jobSeeker._id;
+          }
         }
-      } else if (
-        currentUser.role === "recruiter" &&
-        targetUser.role === "jobSeeker"
-      ) {
-        const recruiter = await Recruiter.findOne({ userId: currentUser._id });
-        const jobSeeker = await JobSeeker.findOne({ userId: targetUser._id });
-        if (recruiter && jobSeeker) {
-          recruiterId = recruiter._id;
-          jobSeekerId = jobSeeker._id;
+
+        if (jobSeekerId && recruiterId) {
+          let match = await Match.findOne({
+            jobSeekerId,
+            recruiterId,
+            jobId: normalizedJobId,
+          });
+
+          if (!match) {
+            match = await Match.create({
+              jobSeekerId,
+              recruiterId,
+              jobId: normalizedJobId,
+            });
+            wasCreated = true;
+          }
+          createdMatch = match;
         }
       }
-    }
-
-    let createdMatch = null;
-    let wasCreated = false;
-
-    if (jobSeekerId && recruiterId) {
-      let match = await Match.findOne({ jobSeekerId, recruiterId });
-
-      if (!match) {
-        match = await Match.create({ jobSeekerId, recruiterId });
-        wasCreated = true;
-      }
-
-      createdMatch = match;
     }
 
     if (createdMatch && wasCreated) {
-      const io = req.app.get("io"); // thanks to app.set("io", io)
+      const io = req.app.get("io");
       if (io) {
-        // notify current user
         io.to(currentUser._id.toString()).emit("matchFound", {
           matchId: createdMatch._id,
-          // optional: add partner info later
         });
-        // notify the other user
         io.to(targetUser._id.toString()).emit("matchFound", {
           matchId: createdMatch._id,
         });

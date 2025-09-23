@@ -150,7 +150,7 @@ const Profile = () => {
                       ? { uri: profile?.avatar }
                       : { uri: profile?.companyPicture }
                   }
-                  className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-black dark:bg-white "
+                  className="w-[100px] h-[100px] rounded-full dark:border-gray-500 dark:border bg-gray-300 "
                 />
                 <View className="absolute bottom-0 right-0 items-center justify-center w-8 h-8 bg-black border-2 border-white rounded-full dark:border-black dark:bg-white ">
                   <Ionicons

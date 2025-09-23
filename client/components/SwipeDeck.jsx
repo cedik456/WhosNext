@@ -101,9 +101,20 @@ const SwipeDeck = () => {
       const token = await getToken();
       if (!token) return;
 
+      const card = cards[cardIndex];
+      let jobId = null;
+
+      if (
+        card.jobs &&
+        card.jobs.length > 0 &&
+        card.currentJobIndex !== undefined
+      ) {
+        jobId = card.jobs[card.currentJobIndex]?._id || null;
+      }
+
       const response = await api.post(
         "/swipe",
-        { targetId, action },
+        { targetId, action, jobId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -116,7 +127,6 @@ const SwipeDeck = () => {
         const matchedCard = cards.find(
           (c) => c.userId === targetId || c._id === targetId
         );
-
         const newMatch = {
           name:
             matchedCard?.userId?.name ||
@@ -127,6 +137,9 @@ const SwipeDeck = () => {
             matchedCard?.avatar ||
             matchedCard?.companyPicture,
           matchId: response.data.match,
+          jobTitle:
+            matchedCard?.jobs?.find((job) => job._id === card.currentJobId)
+              ?.title || null, // 👈 attach title if swiped on a job
         };
 
         setMatchedUser(newMatch);
@@ -303,7 +316,9 @@ const SwipeDeck = () => {
               </Text>
 
               <Text className="mb-2 text-lg text-center font-poppins-500">
-                You and {matchedUser.name} liked each other!
+                {matchedUser.jobTitle
+                  ? `You and ${matchedUser.name} liked each other for ${matchedUser.jobTitle}!`
+                  : `You and ${matchedUser.name} liked each other!`}
               </Text>
 
               <View className="w-full gap-3">

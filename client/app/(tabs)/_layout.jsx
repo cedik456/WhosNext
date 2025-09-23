@@ -109,28 +109,6 @@ const TabsLayout = () => {
       />
 
       <Tabs.Screen
-        name="jobs/index"
-        options={{
-          tabBarLabel: "Jobs",
-          href: user?.role === "recruiter" ? undefined : null, // 🔑 Hides for seekers
-          tabBarIcon: ({ focused }) =>
-            user?.role === "recruiter" ? (
-              <MaterialIcons
-                name="work"
-                size={26}
-                color={
-                  focused
-                    ? colorScheme === "dark"
-                      ? "white"
-                      : "black"
-                    : "#9ca3af"
-                }
-              />
-            ) : null,
-        }}
-      />
-
-      <Tabs.Screen
         name="matches"
         options={{
           tabBarLabel: "Matches",
@@ -244,6 +222,13 @@ const TabsLayout = () => {
       />
 
       {/* Jobs */}
+      <Tabs.Screen
+        name="jobs/index"
+        options={{
+          href: null,
+        }}
+      />
+
       <Tabs.Screen
         name="jobs/createJobs"
         options={{

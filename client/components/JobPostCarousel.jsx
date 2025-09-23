@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import getSkillColor from "../utils/getSkillColor";
 import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
 
-const JobPostCarousel = ({ recruiter, onSeeMore }) => {
+const JobPostCarousel = ({ recruiter, onSeeMore, getCurrentId }) => {
   const [index, setIndex] = useState(0);
 
   const panels = [
@@ -17,6 +17,12 @@ const JobPostCarousel = ({ recruiter, onSeeMore }) => {
   ];
 
   const current = panels[index];
+
+  useEffect(() => {
+    if (getCurrentId) {
+      getCurrentId(current.type === "job" ? current._id : null);
+    }
+  }, [index]);
 
   const handleNext = () => {
     setIndex((i) => (i + 1) % panels.length); // 👈 loop back to start

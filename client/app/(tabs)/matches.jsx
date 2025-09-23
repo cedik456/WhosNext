@@ -107,7 +107,7 @@ const Matches = () => {
       <View className="items-center mr-4">
         <Image
           source={{ uri: profileImage }}
-          className="w-20 h-20 border border-gray-400 rounded-full "
+          className="w-20 h-20 bg-gray-200 rounded-full "
         />
         <Text className="mt-1 text-base text-gray-700 font-poppins-500 dark:text-gray-200">
           {displayName}
@@ -184,7 +184,7 @@ const Matches = () => {
                         <View className="flex-row items-center mb-4">
                           <Image
                             source={{ uri: profileImage }}
-                            className="w-16 h-16 mr-3 bg-black rounded-full dark:bg-white"
+                            className="w-16 h-16 mr-3 bg-gray-200 rounded-full"
                           />
                           <View>
                             <Text className="text-lg text-gray-600 font-poppins-600 dark:text-white">

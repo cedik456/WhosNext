@@ -51,7 +51,13 @@ const JobCard = ({ data, color, onSeeMore }) => {
           />
         </View>
 
-        <JobPostCarousel recruiter={data} onSeeMore={onSeeMore} />
+        <JobPostCarousel
+          recruiter={data}
+          onSeeMore={onSeeMore}
+          getCurrentId={(jobId) => {
+            data.currentJobId = jobId; // 👈 attach the current jobId directly to the card data
+          }}
+        />
       </View>
     </View>
   );

@@ -12,12 +12,20 @@ const MatchSchema = new Schema({
     ref: "Recruiter",
     required: true,
   },
+  jobId: {
+    type: Schema.Types.ObjectId,
+    ref: "Job",
+    default: null,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-MatchSchema.index({ jobSeekerId: 1, recruiterId: 1 }, { unique: true });
+MatchSchema.index(
+  { jobSeekerId: 1, recruiterId: 1, jobId: 1 },
+  { unique: true }
+);
 
 module.exports = mongoose.model("Match", MatchSchema);

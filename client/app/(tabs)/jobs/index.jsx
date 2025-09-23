@@ -13,6 +13,7 @@ import { getToken } from "../../../utils/storage";
 import api from "../../../utils/axiosInstance";
 import { router, useFocusEffect } from "expo-router";
 import { useColorScheme } from "nativewind";
+import { getUserRole } from "../../../utils/secureUser";
 
 const Jobs = () => {
   const { colorScheme } = useColorScheme();
@@ -25,6 +26,11 @@ const Jobs = () => {
       const fetchJobs = async () => {
         try {
           const token = await getToken();
+
+          const role = await getUserRole();
+
+          if (role !== "recruiter") return;
+
           const response = await api.get("/jobs/my", {
             headers: {
               Authorization: `Bearer ${token}`,
