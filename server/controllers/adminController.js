@@ -119,3 +119,25 @@ exports.getMatchesTimeseries = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+exports.getRecruiters = async (req, res) => {
+  try {
+    const recruiters = await User.find({ role: "recruiter" })
+      .select("name email role isVerified isOnboarded companyName createdAt")
+      .sort({ createdAt: -1 });
+    res.json({ success: true, data: recruiters });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getJobSeekers = async (req, res) => {
+  try {
+    const jobSeekers = await User.find({ role: "jobSeeker" })
+      .select("name email role isVerified isOnboarded skills createdAt")
+      .sort({ createdAt: -1 });
+    res.json({ success: true, data: jobSeekers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
