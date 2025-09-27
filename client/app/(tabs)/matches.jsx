@@ -116,13 +116,7 @@ const Matches = () => {
     }
     hideActionSheet();
   };
-  const handlePinToTop = () => {
-    setMessages((prev) => {
-      const filtered = prev.filter((c) => c.matchId !== selectedConv.matchId);
-      return [selectedConv, ...filtered];
-    });
-    hideActionSheet();
-  };
+
   const handleUnmatch = async () => {
     try {
       const token = await getToken();
@@ -308,11 +302,6 @@ const Matches = () => {
             label: "Delete Chat",
             onPress: handleDeleteChat,
             icon: <AntDesign name="delete" size={20} color="#000" />,
-          },
-          {
-            label: "Pin to Top",
-            onPress: handlePinToTop,
-            icon: <MaterialIcons name="push-pin" size={20} color="#000" />,
           },
           {
             label: "Unmatch",
