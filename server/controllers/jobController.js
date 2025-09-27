@@ -4,12 +4,12 @@ const Recruiter = require("../models/RecruiterSchema");
 // CREATE JOB
 exports.createJob = async (req, res) => {
   try {
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can create jobs",
-      });
-    }
+    // if (req.user.role !== "recruiter") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Only recruiters can create jobs",
+    //   });
+    // }
 
     const {
       title,
@@ -74,12 +74,12 @@ exports.createJob = async (req, res) => {
 // GET MY JOBS
 exports.getMyJobs = async (req, res) => {
   try {
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can view their jobs",
-      });
-    }
+    // if (req.user.role !== "recruiter") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Only recruiters can view their jobs",
+    //   });
+    // }
 
     const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
     if (!recruiterProfile) {
@@ -110,12 +110,12 @@ exports.getMyJobs = async (req, res) => {
 // UPDATE JOB
 exports.updateJob = async (req, res) => {
   try {
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can update jobs",
-      });
-    }
+    // if (req.user.role !== "recruiter") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Only recruiters can update jobs",
+    //   });
+    // }
 
     const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
     if (!recruiterProfile) {
@@ -157,12 +157,12 @@ exports.updateJob = async (req, res) => {
 // DELETE JOB
 exports.deleteJob = async (req, res) => {
   try {
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can delete jobs",
-      });
-    }
+    // if (req.user.role !== "recruiter") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Only recruiters can delete jobs",
+    //   });
+    // }
 
     const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
     if (!recruiterProfile) {
@@ -201,12 +201,12 @@ exports.deleteJob = async (req, res) => {
 // GET JOB BY ID
 exports.getJobById = async (req, res) => {
   try {
-    if (req.user.role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can view their jobs",
-      });
-    }
+    // if (req.user.role !== "recruiter") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Only recruiters can view their jobs",
+    //   });
+    // }
 
     const recruiterProfile = await Recruiter.findOne({ userId: req.user.id });
     if (!recruiterProfile) {

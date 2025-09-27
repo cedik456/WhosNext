@@ -83,16 +83,30 @@ const Home = () => {
               who'snext?
             </Text>
 
-            <View className="flex-row items-center gap-5">
-              {role === "recruiter" && (
-                <View className="">
-                  <Pressable onPress={() => router.replace("/jobs/")}>
-                    <Ionicons
-                      name="briefcase" // suitcase-style icon
-                      size={25}
-                      color={colorScheme === "dark" ? "#D1D5DB" : "black"}
-                    />
-                    {/* <Text
+            <Pressable onPress={handleFilterPress}>
+              <Ionicons
+                name="options"
+                size={24}
+                color={colorScheme === "dark" ? "white" : "black"}
+              />
+            </Pressable>
+          </View>
+        </View>
+      </View>
+
+      <SwipeDeck />
+
+      {role === "recruiter" && (
+        <Pressable
+          onPress={() => router.replace("/jobs/")}
+          className="absolute z-20 p-4 bg-gray-900 rounded-full shadow-sm bottom-28 dark:bg-white right-10"
+        >
+          <Ionicons
+            name="briefcase" // suitcase-style icon
+            size={25}
+            color={colorScheme === "dark" ? "black" : "white"}
+          />
+          {/* <Text
                       className="text-xs font-poppins"
                       style={{
                         color: colorScheme === "dark" ? "#D1D5DB" : "black",
@@ -100,22 +114,8 @@ const Home = () => {
                     >
                       Jobs
                     </Text> */}
-                  </Pressable>
-                </View>
-              )}
-              <Pressable onPress={handleFilterPress}>
-                <Ionicons
-                  name="options"
-                  size={24}
-                  color={colorScheme === "dark" ? "#D1D5DB" : "black"}
-                />
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </View>
-
-      <SwipeDeck />
+        </Pressable>
+      )}
     </SafeAreaView>
   );
 };

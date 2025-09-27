@@ -14,7 +14,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 exports.me = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select(
-      "id name email avatar"
+      "id name email avatar role"
     );
     res.status(200).json({ success: true, data: user });
   } catch (error) {
