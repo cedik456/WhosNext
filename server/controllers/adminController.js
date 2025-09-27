@@ -69,9 +69,8 @@ exports.getMatchesTimeseries = async (req, res) => {
   try {
     const days = Number(req.query.days || 7);
     const dates = lastNDates(days);
-    const since = new Date(dates[0] + "T00:00:00.000Z"); // simple UTC cut
+    const since = new Date(dates[0] + "T00:00:00.000Z");
 
-    // group matches by day (using createdAt; change field if different)
     const agg = await Match.aggregate([
       { $match: { createdAt: { $gte: since } } },
       {
