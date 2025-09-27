@@ -2,6 +2,7 @@ const JobSeeker = require("../models/JobSeekerSchema");
 const Match = require("../models/MatchSchema");
 const Recruiter = require("../models/RecruiterSchema");
 const User = require("../models/UserSchema");
+const Message = require("../models/MessageSchema");
 
 exports.getMatches = async (req, res) => {
   try {
@@ -87,6 +88,26 @@ exports.getMatches = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Something went wrong while retrieving matches.",
+      error: error.message,
+    });
+  }
+};
+
+exports.unmatch = async (req, res) => {
+  try {
+    const { matchId } = req.params;
+    const match = await Match.findById(matchId);
+    if (!match) {
+      return res.status(404).json({ success: false, message: "Match not found" });
+    }
+    await Match.findByIdAndDelete(matchId);
+    await Message.deleteMany({ matchId });
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Unmatch error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while unmatching",
       error: error.message,
     });
   }

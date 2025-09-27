@@ -171,3 +171,18 @@ exports.markMessagesAsRead = async (req, res) => {
     });
   }
 };
+
+exports.deleteConversation = async (req, res) => {
+  try {
+    const { matchId } = req.params;
+    await Message.deleteMany({ matchId });
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Delete conversation error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while deleting conversation",
+      error: error.message,
+    });
+  }
+};

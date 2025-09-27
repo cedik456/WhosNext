@@ -6,6 +6,8 @@ import {
   Image,
   Pressable,
   ActivityIndicator,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
@@ -13,7 +15,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useRouter } from "expo-router";
 import { formatMessengerStyleTime } from "../../utils/formatTime";
 import { useNotifStore } from "../../stores/notifStore";
-import { getUserRole } from "../../utils/secureUser";
+
+import ActionSheet from "../../components/ActionSheet";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+
+
 
 const Matches = () => {
   const resetBadge = useNotifStore((s) => s.reset);
@@ -21,6 +27,8 @@ const Matches = () => {
   const [matches, setMatches] = useState([]);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [actionSheetVisible, setActionSheetVisible] = useState(false);
+  const [selectedConv, setSelectedConv] = useState(null);
 
   const [role, setRole] = useState(null);
 
@@ -99,6 +107,54 @@ const Matches = () => {
       fetchMatches();
     }, [resetBadge])
   );
+
+  const showActionSheet = (item) => {
+    setSelectedConv(item);
+    setActionSheetVisible(true);
+  };
+  const hideActionSheet = () => {
+    setActionSheetVisible(false);
+    setSelectedConv(null);
+  };
+
+  const handleDeleteChat = async () => {
+    try {
+      const token = await getToken();
+      const resp = await api.delete(
+        `/messages/conversations/${selectedConv.matchId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (resp.data.success) {
+        setMessages((prev) =>
+          prev.filter((c) => c.matchId !== selectedConv.matchId)
+        );
+      }
+    } catch (error) {
+      console.error("Delete chat error:", error);
+    }
+    hideActionSheet();
+  };
+
+  const handleUnmatch = async () => {
+    try {
+      const token = await getToken();
+      const resp = await api.delete(
+        `/matches/${selectedConv.matchId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (resp.data.success) {
+        setMatches((prev) =>
+          prev.filter((m) => m._id !== selectedConv.matchId)
+        );
+        setMessages((prev) =>
+          prev.filter((c) => c.matchId !== selectedConv.matchId)
+        );
+      }
+    } catch (error) {
+      console.error("Unmatch error:", error);
+    }
+    hideActionSheet();
+  };
 
   const renderMatches = ({ item }) => {
     const isJobSeeker = !!item.recruiterId;
@@ -195,6 +251,12 @@ const Matches = () => {
                           },
                         })
                       }
+                      onLongPress={() => showActionSheet(item)}
+                      android_ripple={{ color: "#e5e7eb" }}
+                      style={({ pressed }) => [
+                        pressed && { backgroundColor: "#e5e7eb" },
+                      ]}
+                      className="rounded-lg"
                     >
                       <View className="flex-row items-center justify-between">
                         <View className="flex-row items-center mb-4">
@@ -249,6 +311,24 @@ const Matches = () => {
           </View>
         </View>
       )}
+
+      <ActionSheet
+        visible={actionSheetVisible}
+        onClose={hideActionSheet}
+        options={[
+          {
+            label: "Delete Chat",
+            onPress: handleDeleteChat,
+            icon: <AntDesign name="delete" size={20} color="#000" />,
+          },
+          {
+            label: "Unmatch",
+            onPress: handleUnmatch,
+            textClassName: "text-red-500",
+            icon: <MaterialIcons name="person-remove" size={20} color="red" />,
+          },
+        ]}
+      />
     </SafeAreaView>
   );
 };
