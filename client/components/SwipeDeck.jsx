@@ -42,6 +42,8 @@ const SwipeDeck = () => {
 
   const [isProcessingMatch, setIsProcessingMatch] = useState(false);
 
+  const [activeJobId, setActiveJobId] = useState(null);
+
   const bgColors = [
     "#fefce8",
     "#f0f9ff",
@@ -102,31 +104,36 @@ const SwipeDeck = () => {
       if (!token) return;
 
       const card = cards[cardIndex];
-      let jobId = null;
 
-      if (
-        card.jobs &&
-        card.jobs.length > 0 &&
-        card.currentJobIndex !== undefined
-      ) {
-        jobId = card.jobs[card.currentJobIndex]?._id || null;
+      // 👇 Only attach jobId if the swiping user is a job seeker
+      let payload = { targetId, action };
+      if (role === "jobSeeker") {
+        payload.jobId = card.currentJobId || null;
       }
 
-      const response = await api.post(
-        "/swipe",
-        { targetId, action, jobId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.post("/swipe", payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.data.match) {
-        // 🔎 find the card data
         const matchedCard = cards.find(
           (c) => c.userId === targetId || c._id === targetId
         );
+
+        let jobTitle = null;
+
+        // 👇 Both recruiter & jobSeeker should see recruiter’s job (if available)
+        if (matchedCard?.jobs?.length) {
+          jobTitle =
+            matchedCard.jobs.find((j) => j._id === payload.jobId)?.title ||
+            null;
+        }
+
+        // 👇 Fallback: recruiter’s hiring criteria jobTitle
+        if (!jobTitle && matchedCard?.hiringCriteria?.jobTitle) {
+          jobTitle = matchedCard.hiringCriteria.jobTitle;
+        }
+
         const newMatch = {
           name:
             matchedCard?.userId?.name ||
@@ -137,10 +144,15 @@ const SwipeDeck = () => {
             matchedCard?.avatar ||
             matchedCard?.companyPicture,
           matchId: response.data.match,
-          jobTitle:
-            matchedCard?.jobs?.find((job) => job._id === card.currentJobId)
-              ?.title || null, // 👈 attach title if swiped on a job
+          jobTitle,
         };
+
+        console.log("DEBUG match:", {
+          payload,
+          jobTitle,
+          recruiterJobs: matchedCard?.jobs,
+          hiringCriteria: matchedCard?.hiringCriteria,
+        });
 
         setMatchedUser(newMatch);
         setMatchModalVisible(true);
@@ -316,9 +328,7 @@ const SwipeDeck = () => {
               </Text>
 
               <Text className="mb-2 text-lg text-center font-poppins-500">
-                {matchedUser.jobTitle
-                  ? `You and ${matchedUser.name} liked each other for ${matchedUser.jobTitle}!`
-                  : `You and ${matchedUser.name} liked each other!`}
+                You and {matchedUser.name} liked each other!
               </Text>
 
               <View className="w-full gap-3">

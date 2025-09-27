@@ -42,6 +42,7 @@ exports.getMatches = async (req, res) => {
             select: "name avatar",
           },
         })
+        .populate("jobId", "title")
         .sort({ createdAt: -1 });
     }
 
@@ -62,8 +63,20 @@ exports.getMatches = async (req, res) => {
             select: "name avatar companyName companyPicture",
           },
         })
+        .populate("jobId", "title")
         .sort({ createdAt: -1 });
     }
+
+    console.log(
+      "DEBUG getMatches result:",
+      matches.map((m) => ({
+        id: m._id,
+        jobId: m.jobId?._id || null,
+        jobTitle: m.jobId?.title || null,
+        recruiter: m.recruiterId?.companyName || m.recruiterId?.userId?.name,
+        jobSeeker: m.jobSeekerId?.userId?.name,
+      }))
+    );
 
     res.status(200).json({
       success: true,

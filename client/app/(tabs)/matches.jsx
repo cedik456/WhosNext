@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useRouter } from "expo-router";
 import { formatMessengerStyleTime } from "../../utils/formatTime";
 import { useNotifStore } from "../../stores/notifStore";
+import { getUserRole } from "../../utils/secureUser";
 
 const Matches = () => {
   const resetBadge = useNotifStore((s) => s.reset);
@@ -20,6 +21,8 @@ const Matches = () => {
   const [matches, setMatches] = useState([]);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [role, setRole] = useState(null);
 
   const router = useRouter();
 
@@ -36,6 +39,17 @@ const Matches = () => {
       const { success, data } = response.data;
 
       if (success) {
+        console.log(
+          "DEBUG Matches response:",
+          data.map((m) => ({
+            id: m._id,
+            jobId: m.jobId?._id || null,
+            jobTitle: m.jobId?.title || null,
+            recruiter:
+              m.recruiterId?.companyName || m.recruiterId?.userId?.name,
+            jobSeeker: m.jobSeekerId?.userId?.name,
+          }))
+        );
         setMatches(data);
       }
     } catch (error) {
@@ -69,6 +83,8 @@ const Matches = () => {
   };
   useEffect(() => {
     const loadInitial = async () => {
+      const userRole = await getUserRole();
+      setRole(userRole);
       setLoading(true);
       await fetchMatches();
       await fetchConversations();

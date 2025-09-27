@@ -71,6 +71,7 @@ const ProfileCard = ({ card, color, onSeeBio }) => {
         </View>
       )}
       <TouchableOpacity onPress={() => onSeeBio(card.bio)}>
+        <Text className="text-base font-poppins-500">About me</Text>
         <Text
           numberOfLines={1}
           ellipsizeMode="tail"

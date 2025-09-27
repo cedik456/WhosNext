@@ -20,8 +20,8 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       new Set(jobSeekerProfile.skills),
       new Set(recruiterProfile.hiringCriteria.requiredSkills)
     );
-    score += skillScore * 3.5;
-    totalWeight += 3.5;
+    score += skillScore * 4.0;
+    totalWeight += 4.0;
   }
 
   if (jobSeekerProfile.location && recruiterProfile.hiringCriteria?.location) {
@@ -29,9 +29,9 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       jobSeekerProfile.location.toLowerCase() ===
       recruiterProfile.hiringCriteria.location.toLowerCase()
     ) {
-      score += 1 * 0.5;
+      score += 1 * 1;
     }
-    totalWeight += 0.5;
+    totalWeight += 1;
   }
 
   if (
@@ -42,9 +42,9 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       jobSeekerProfile.experience.toLowerCase() ===
       recruiterProfile.hiringCriteria.experienceLevel.toLowerCase()
     ) {
-      score += 1 * 2.0;
+      score += 1 * 1.0;
     }
-    totalWeight += 2.0;
+    totalWeight += 1.0;
   }
 
   if (jobSeekerProfile.workType && recruiterProfile.hiringCriteria?.workType) {
@@ -52,9 +52,9 @@ const computeJobSeekerSimilarity = (jobSeekerProfile, recruiterProfile) => {
       jobSeekerProfile.workType.toLowerCase() ===
       recruiterProfile.hiringCriteria.workType.toLowerCase()
     ) {
-      score += 1 * 1.0;
+      score += 1 * 0.5;
     }
-    totalWeight += 1.0;
+    totalWeight += 0.5;
   }
 
   if (

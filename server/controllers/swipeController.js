@@ -8,7 +8,7 @@ exports.handleSwipe = async (req, res) => {
   try {
     const { targetId, action, jobId } = req.body;
     const userId = req.user.id;
-    const normalizedJobId = jobId || null; // ✅ normalize once
+    const normalizedJobId = jobId || null; // normalize once
 
     if (!targetId || !action) {
       return res.status(400).json({
@@ -41,12 +41,8 @@ exports.handleSwipe = async (req, res) => {
       });
     }
 
-    const existingSwipe = await Swipe.findOne({
-      userId,
-      targetId,
-      jobId: normalizedJobId,
-    });
-
+    // Check for duplicate swipe
+    const existingSwipe = await Swipe.findOne({ userId, targetId });
     if (existingSwipe) {
       return res.status(400).json({
         success: false,
@@ -54,9 +50,10 @@ exports.handleSwipe = async (req, res) => {
       });
     }
 
+    // Save swipe
     await Swipe.create({ userId, targetId, jobId: normalizedJobId, action });
 
-    let createdMatch = null; // ✅ declare here
+    let createdMatch = null;
     let wasCreated = false;
 
     if (action === "like") {
@@ -64,7 +61,6 @@ exports.handleSwipe = async (req, res) => {
         userId: targetId,
         targetId: userId,
         action: "like",
-        jobId: normalizedJobId, // ✅ must be same jobId to match
       });
 
       if (mutual) {
@@ -98,17 +94,22 @@ exports.handleSwipe = async (req, res) => {
         }
 
         if (jobSeekerId && recruiterId) {
-          let match = await Match.findOne({
-            jobSeekerId,
-            recruiterId,
-            jobId: normalizedJobId,
-          });
+          let match = await Match.findOne({ jobSeekerId, recruiterId });
 
           if (!match) {
+            // ✅ Always prefer jobId from the job seeker’s swipe
+            let finalJobId = null;
+
+            if (currentUser.role === "jobSeeker") {
+              finalJobId = normalizedJobId; // came from this swipe
+            } else if (targetUser.role === "jobSeeker") {
+              finalJobId = mutual.jobId || null; // came from the earlier swipe
+            }
+
             match = await Match.create({
               jobSeekerId,
               recruiterId,
-              jobId: normalizedJobId,
+              jobId: finalJobId,
             });
             wasCreated = true;
           }
@@ -117,6 +118,7 @@ exports.handleSwipe = async (req, res) => {
       }
     }
 
+    // Notify sockets
     if (createdMatch && wasCreated) {
       const io = req.app.get("io");
       if (io) {
@@ -128,6 +130,14 @@ exports.handleSwipe = async (req, res) => {
         });
       }
     }
+
+    console.log("Swipe received:", {
+      from: userId,
+      to: targetId,
+      action,
+      jobId,
+      normalizedJobId,
+    });
 
     return res.status(201).json({
       success: true,
