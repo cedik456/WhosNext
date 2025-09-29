@@ -49,7 +49,7 @@ const General = () => {
               value="MB"
               icon="server-outline"
               iconSet={Ionicons}
-              onPress={() => router.push("settings/storage")}
+              onPress={() => {}}
               showDivider
             />
             <ProfileItem
@@ -57,7 +57,7 @@ const General = () => {
               value="(English)"
               icon="language-outline"
               iconSet={Ionicons}
-              onPress={() => router.push("settings/language")}
+              onPress={() => {}}
               showDivider
             />
             <ProfileItem
@@ -65,7 +65,7 @@ const General = () => {
               value="Philippines"
               icon="location-outline"
               iconSet={Ionicons}
-              onPress={() => router.push("settings/country")}
+              onPress={() => {}}
             />
           </View>
         </View>

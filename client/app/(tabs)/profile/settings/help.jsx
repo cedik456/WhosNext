@@ -49,28 +49,28 @@ const Help = () => {
             label="FAQ"
             icon="help-outline"
             iconSet={Ionicons}
-            onPress={() => router.push("profile/settings/help/faq")}
+            onPress={() => {}}
             showDivider
           />
           <ProfileItem
             label="Getting Started"
             icon="book-outline"
             iconSet={Ionicons}
-            onPress={() => router.push("profile/settings/help/tutorials")}
+            onPress={() => {}}
             showDivider
           />
           <ProfileItem
             label="Troubleshooting"
             icon="construct-outline"
             iconSet={Ionicons}
-            onPress={() => router.push("profile/settings/help/troubleshoot")}
+            onPress={() => {}}
             showDivider
           />
           <ProfileItem
             label="Documentation"
             icon="document-text-outline"
             iconSet={Ionicons}
-            onPress={() => Linking.openURL("https://docs.whosnext.com")}
+            onPress={() => {}}
             showDivider
           />
         </View>

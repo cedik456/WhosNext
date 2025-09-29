@@ -19,8 +19,6 @@ import { useNotifStore } from "../../stores/notifStore";
 import ActionSheet from "../../components/ActionSheet";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 
-
-
 const Matches = () => {
   const resetBadge = useNotifStore((s) => s.reset);
 
@@ -138,10 +136,9 @@ const Matches = () => {
   const handleUnmatch = async () => {
     try {
       const token = await getToken();
-      const resp = await api.delete(
-        `/matches/${selectedConv.matchId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const resp = await api.delete(`/matches/${selectedConv.matchId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (resp.data.success) {
         setMatches((prev) =>
           prev.filter((m) => m._id !== selectedConv.matchId)

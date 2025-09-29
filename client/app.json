@@ -4,7 +4,7 @@
     "name": "client",
     "slug": "client",
     "extra": {
-      "EXPO_PUBLIC_API_URL": "http://192.168.1.2:3000/api",
+      "EXPO_PUBLIC_API_URL": "https://whosnextbackend.onrender.com/api",
       "router": {},
       "eas": {
         "projectId": "d9fe5ca0-3d1b-411a-ba5f-29b946615cf6"
