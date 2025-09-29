@@ -73,14 +73,14 @@ const Contact = () => {
               value="Bicol, Philippines"
               icon="location-outline"
               iconSet={Ionicons}
-              onPress={() => router.push("settings/report")}
+              onPress={() => {}}
               showDivider
             />
             <ProfileItem
               label="Report a Bug"
               icon="bug-outline"
               iconSet={Ionicons}
-              onPress={() => router.push("settings/report")}
+              onPress={() => {}}
             />
           </View>
         </View>

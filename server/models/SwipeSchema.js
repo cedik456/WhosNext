@@ -11,6 +11,7 @@ const SwipeSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  jobId: { type: mongoose.Schema.Types.ObjectId, ref: "Job", default: null },
   action: {
     type: String,
     enum: ["like", "nope"],

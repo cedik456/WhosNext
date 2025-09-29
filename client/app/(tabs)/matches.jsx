@@ -6,6 +6,8 @@ import {
   Image,
   Pressable,
   ActivityIndicator,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { getToken } from "../../utils/storage";
 import api from "../../utils/axiosInstance";
@@ -14,12 +16,19 @@ import { useFocusEffect, useRouter } from "expo-router";
 import { formatMessengerStyleTime } from "../../utils/formatTime";
 import { useNotifStore } from "../../stores/notifStore";
 
+import ActionSheet from "../../components/ActionSheet";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+
 const Matches = () => {
   const resetBadge = useNotifStore((s) => s.reset);
 
   const [matches, setMatches] = useState([]);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [actionSheetVisible, setActionSheetVisible] = useState(false);
+  const [selectedConv, setSelectedConv] = useState(null);
+
+  const [role, setRole] = useState(null);
 
   const router = useRouter();
 
@@ -36,6 +45,17 @@ const Matches = () => {
       const { success, data } = response.data;
 
       if (success) {
+        console.log(
+          "DEBUG Matches response:",
+          data.map((m) => ({
+            id: m._id,
+            jobId: m.jobId?._id || null,
+            jobTitle: m.jobId?.title || null,
+            recruiter:
+              m.recruiterId?.companyName || m.recruiterId?.userId?.name,
+            jobSeeker: m.jobSeekerId?.userId?.name,
+          }))
+        );
         setMatches(data);
       }
     } catch (error) {
@@ -69,6 +89,8 @@ const Matches = () => {
   };
   useEffect(() => {
     const loadInitial = async () => {
+      const userRole = await getUserRole();
+      setRole(userRole);
       setLoading(true);
       await fetchMatches();
       await fetchConversations();
@@ -83,6 +105,53 @@ const Matches = () => {
       fetchMatches();
     }, [resetBadge])
   );
+
+  const showActionSheet = (item) => {
+    setSelectedConv(item);
+    setActionSheetVisible(true);
+  };
+  const hideActionSheet = () => {
+    setActionSheetVisible(false);
+    setSelectedConv(null);
+  };
+
+  const handleDeleteChat = async () => {
+    try {
+      const token = await getToken();
+      const resp = await api.delete(
+        `/messages/conversations/${selectedConv.matchId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (resp.data.success) {
+        setMessages((prev) =>
+          prev.filter((c) => c.matchId !== selectedConv.matchId)
+        );
+      }
+    } catch (error) {
+      console.error("Delete chat error:", error);
+    }
+    hideActionSheet();
+  };
+
+  const handleUnmatch = async () => {
+    try {
+      const token = await getToken();
+      const resp = await api.delete(`/matches/${selectedConv.matchId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (resp.data.success) {
+        setMatches((prev) =>
+          prev.filter((m) => m._id !== selectedConv.matchId)
+        );
+        setMessages((prev) =>
+          prev.filter((c) => c.matchId !== selectedConv.matchId)
+        );
+      }
+    } catch (error) {
+      console.error("Unmatch error:", error);
+    }
+    hideActionSheet();
+  };
 
   const renderMatches = ({ item }) => {
     const isJobSeeker = !!item.recruiterId;
@@ -107,7 +176,7 @@ const Matches = () => {
       <View className="items-center mr-4">
         <Image
           source={{ uri: profileImage }}
-          className="w-20 h-20 border border-gray-400 rounded-full "
+          className="w-20 h-20 bg-gray-200 rounded-full "
         />
         <Text className="mt-1 text-base text-gray-700 font-poppins-500 dark:text-gray-200">
           {displayName}
@@ -179,12 +248,18 @@ const Matches = () => {
                           },
                         })
                       }
+                      onLongPress={() => showActionSheet(item)}
+                      android_ripple={{ color: "#e5e7eb" }}
+                      style={({ pressed }) => [
+                        pressed && { backgroundColor: "#e5e7eb" },
+                      ]}
+                      className="rounded-lg"
                     >
                       <View className="flex-row items-center justify-between">
                         <View className="flex-row items-center mb-4">
                           <Image
                             source={{ uri: profileImage }}
-                            className="w-16 h-16 mr-3 bg-black rounded-full dark:bg-white"
+                            className="w-16 h-16 mr-3 bg-gray-200 rounded-full"
                           />
                           <View>
                             <Text className="text-lg text-gray-600 font-poppins-600 dark:text-white">
@@ -233,6 +308,24 @@ const Matches = () => {
           </View>
         </View>
       )}
+
+      <ActionSheet
+        visible={actionSheetVisible}
+        onClose={hideActionSheet}
+        options={[
+          {
+            label: "Delete Chat",
+            onPress: handleDeleteChat,
+            icon: <AntDesign name="delete" size={20} color="#000" />,
+          },
+          {
+            label: "Unmatch",
+            onPress: handleUnmatch,
+            textClassName: "text-red-500",
+            icon: <MaterialIcons name="person-remove" size={20} color="red" />,
+          },
+        ]}
+      />
     </SafeAreaView>
   );
 };

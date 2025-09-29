@@ -29,7 +29,6 @@ export default function RegisterSocketRoom() {
 
     const register = () => {
       socket.emit("register", uid);
-      console.log("[RegisterSocketRoom] registered:", uid);
     };
 
     // Guard against Fast Refresh dupes

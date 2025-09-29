@@ -20,7 +20,7 @@ import * as Haptics from "expo-haptics";
 
 const NotifierContext = createContext(null);
 
-export function NotifierProvider({ children, socket }) {
+export function NotifierProvider({ children, socket, activeMatchId = null }) {
   const [queue, setQueue] = useState([]);
   const [current, setCurrent] = useState(null);
   const anim = useRef(new Animated.Value(-100)).current;
@@ -77,15 +77,6 @@ export function NotifierProvider({ children, socket }) {
   useEffect(() => {
     if (!socket) return;
 
-    const onNewMessage = (payload) => {
-      notify({
-        title: payload?.senderName ?? "New message",
-        body: payload?.text ?? "You received a message",
-        avatar: payload?.senderAvatar,
-        variant: "message",
-      });
-    };
-
     const onMatch = (payload) => {
       notify({
         title: "It’s a match!",
@@ -98,16 +89,15 @@ export function NotifierProvider({ children, socket }) {
     };
 
     // ✅ prevent duplicates before re-adding
-    socket.off("newMessage", onNewMessage);
+
     socket.off("matchFound", onMatch);
-    socket.on("newMessage", onNewMessage);
+
     socket.on("matchFound", onMatch);
 
     return () => {
-      socket.off("newMessage", onNewMessage);
       socket.off("matchFound", onMatch);
     };
-  }, [socket, notify]);
+  }, [socket, notify, activeMatchId]);
 
   // Optional: expose dismiss if you want manual close elsewhere
   const dismiss = useCallback(() => {
@@ -146,19 +136,6 @@ export function NotifierProvider({ children, socket }) {
               className="bg-black dark:bg-[#242526] rounded-2xl shadow-lg p-4 flex-row items-center"
               style={{ elevation: 4 }}
             >
-              {current?.avatar ? (
-                <Image
-                  source={{ uri: current.avatar }}
-                  style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 16,
-                    marginRight: 10,
-                  }}
-                />
-              ) : (
-                <View className="w-8 h-8 mr-2 bg-gray-200 rounded-full dark:bg-gray-600" />
-              )}
               <View className="flex-1">
                 <Text
                   className="text-base font-semibold text-white"

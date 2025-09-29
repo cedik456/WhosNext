@@ -11,7 +11,7 @@ const ProfileField = ({ label, value, onPress }) => {
         <Text className="text-base text-black font-poppins-500 dark:text-white">
           {label}
         </Text>
-        <Text className="text-gray-600 font-poppins">{value}</Text>
+        <Text className="text-gray-600 font-poppins w-80">{value}</Text>
       </View>
       <AntDesign name="right" size={20} color="#888" />
     </TouchableOpacity>

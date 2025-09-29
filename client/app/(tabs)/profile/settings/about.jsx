@@ -48,21 +48,21 @@ const About = () => {
               label="Acknowledgements"
               icon="ribbon-outline"
               iconSet={Ionicons}
-              onPress={() => router.push("settings/acknowledgements")}
+              onPress={() => {}}
               showDivider
             />
             <ProfileItem
               label="Support"
               icon="help-circle-outline"
               iconSet={Ionicons}
-              onPress={() => router.push("settings/support")}
+              onPress={() => {}}
               showDivider
             />
             <ProfileItem
               label="Connect with us"
               icon="chatbubbles-outline"
               iconSet={Ionicons}
-              onPress={() => router.push("settings/connect")}
+              onPress={() => {}}
             />
           </View>
         </View>

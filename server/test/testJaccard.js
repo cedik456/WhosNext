@@ -1,5 +1,5 @@
 // testJaccard.js
-const { jaccardSimilarity } = require("../server/utils/similarity");
+const { jaccardSimilarity } = require("../utils/similarity");
 
 const setA = new Set(["React", "Node", "MongoDB"]);
 const setB = new Set(["React", "Node", "Express"]);

@@ -7,7 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getUserRole } from "../utils/secureUser";
 import JobCard from "./JobCard";
 import ProfileCard from "./ProfileCard";
@@ -37,6 +37,13 @@ const SwipeDeck = () => {
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
 
+  const [bioVisible, setBioVisible] = useState(false);
+  const [selectedBio, setSelectedBio] = useState(null);
+
+  const [isProcessingMatch, setIsProcessingMatch] = useState(false);
+
+  const [activeJobId, setActiveJobId] = useState(null);
+
   const bgColors = [
     "#fefce8",
     "#f0f9ff",
@@ -45,6 +52,8 @@ const SwipeDeck = () => {
     "#f1f5f9",
     "#fff7ed",
   ];
+
+  const swiperRef = useRef(null);
 
   const fetchCards = async () => {
     try {
@@ -55,7 +64,7 @@ const SwipeDeck = () => {
       const token = await getToken();
       if (!token) return;
 
-      const response = await api.get("/card/recommendations/v3", {
+      const response = await api.get("/card/recommendations/v4", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -85,30 +94,47 @@ const SwipeDeck = () => {
     }
   }, [shouldRefetch]);
 
-  const handleSwipe = async (targetId, action) => {
+  const handleSwipe = async (targetId, action, cardIndex) => {
+    if (isProcessingMatch) return;
+
     try {
+      setIsProcessingMatch(true);
+
       const token = await getToken();
       if (!token) return;
 
-      const response = await api.post(
-        "/swipe",
-        { targetId, action },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const card = cards[cardIndex];
+
+      // 👇 Only attach jobId if the swiping user is a job seeker
+      let payload = { targetId, action };
+      if (role === "jobSeeker") {
+        payload.jobId = card.currentJobId || null;
+      }
+
+      const response = await api.post("/swipe", payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.data.match) {
-        console.log("🎯 MATCH DETECTED:", response.data.match);
         const matchedCard = cards.find(
           (c) => c.userId === targetId || c._id === targetId
         );
 
-        console.log("Matched Card:", matchedCard);
+        let jobTitle = null;
 
-        setMatchedUser({
+        // 👇 Both recruiter & jobSeeker should see recruiter’s job (if available)
+        if (matchedCard?.jobs?.length) {
+          jobTitle =
+            matchedCard.jobs.find((j) => j._id === payload.jobId)?.title ||
+            null;
+        }
+
+        // 👇 Fallback: recruiter’s hiring criteria jobTitle
+        if (!jobTitle && matchedCard?.hiringCriteria?.jobTitle) {
+          jobTitle = matchedCard.hiringCriteria.jobTitle;
+        }
+
+        const newMatch = {
           name:
             matchedCard?.userId?.name ||
             matchedCard?.companyName ||
@@ -118,12 +144,24 @@ const SwipeDeck = () => {
             matchedCard?.avatar ||
             matchedCard?.companyPicture,
           matchId: response.data.match,
+          jobTitle,
+        };
+
+        console.log("DEBUG match:", {
+          payload,
+          jobTitle,
+          recruiterJobs: matchedCard?.jobs,
+          hiringCriteria: matchedCard?.hiringCriteria,
         });
 
+        setMatchedUser(newMatch);
         setMatchModalVisible(true);
+      } else {
+        setIsProcessingMatch(false);
       }
     } catch (error) {
       console.error("Swipe:", error);
+      setIsProcessingMatch(false);
       Alert.alert("Something went wrong.");
     }
   };
@@ -146,6 +184,7 @@ const SwipeDeck = () => {
   return (
     <View className="flex-1 ">
       <Swiper
+        ref={swiperRef}
         key={`deck-${role}-${cards.length}`}
         cards={cards}
         renderCard={(card, index) => {
@@ -153,8 +192,8 @@ const SwipeDeck = () => {
             return (
               <JobCard
                 data={card}
-                onSeeMore={() => {
-                  setSelectedJob(card);
+                onSeeMore={(panel) => {
+                  setSelectedJob(panel);
                   setSeeMoreVisible(true);
                 }}
               />
@@ -163,6 +202,10 @@ const SwipeDeck = () => {
             return (
               <ProfileCard
                 card={card}
+                onSeeBio={(bio) => {
+                  setSelectedBio(bio);
+                  setBioVisible(true);
+                }}
                 color={bgColors[index % bgColors.length]}
               />
             );
@@ -181,13 +224,25 @@ const SwipeDeck = () => {
         backgroundColor="transparent"
         verticalSwipe={false}
         onSwipedRight={(cardIndex) =>
-          handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "like")
+          handleSwipe(
+            cards[cardIndex]?.userId || cards[cardIndex]?._id,
+            "like",
+            cardIndex
+          )
         }
         onSwipedLeft={(cardIndex) =>
-          handleSwipe(cards[cardIndex]?.userId || cards[cardIndex]?._id, "nope")
+          handleSwipe(
+            cards[cardIndex]?.userId || cards[cardIndex]?._id,
+            "nope",
+            cardIndex
+          )
         }
-        disableLeftSwipe={seeMoreVisible}
-        disableRightSwipe={seeMoreVisible}
+        disableLeftSwipe={
+          seeMoreVisible || matchModalVisible || isProcessingMatch
+        }
+        disableRightSwipe={
+          seeMoreVisible || matchModalVisible || isProcessingMatch
+        }
         disableTopSwipe
         disableBottomSwipe
         animateOverlayLabelsOpacity
@@ -282,6 +337,7 @@ const SwipeDeck = () => {
                   className="w-full rounded-full"
                   textClassName="text-center"
                   onPress={() => {
+                    setIsProcessingMatch(false);
                     setMatchModalVisible(false);
                     router.push({
                       pathname: "/chat",
@@ -296,6 +352,7 @@ const SwipeDeck = () => {
                 <Button
                   title="Skip for now"
                   onPress={() => {
+                    setIsProcessingMatch(false);
                     setMatchModalVisible(false);
                   }}
                   className="w-full bg-gray-300 rounded-full"
@@ -306,6 +363,8 @@ const SwipeDeck = () => {
           </View>
         </Modal>
       )}
+
+      {/* Recruiters bio */}
 
       <Modal
         visible={seeMoreVisible}
@@ -321,12 +380,45 @@ const SwipeDeck = () => {
 
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text className="text-base leading-6 text-gray-600 dark:text-gray-300 font-poppins">
-                {selectedJob?.jobDescription || "No description available"}
+                {selectedJob?.description ||
+                  selectedJob?.jobDescription ||
+                  "No description available"}
               </Text>
             </ScrollView>
 
             <TouchableOpacity
               onPress={() => setSeeMoreVisible(false)}
+              className="items-center py-3 mt-6 bg-blue-600 rounded-xl"
+            >
+              <Text className="text-base text-white font-poppins-600">
+                Close
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Job seekers bio */}
+      <Modal
+        visible={bioVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setBioVisible(false)}
+      >
+        <View className="justify-end flex-1 bg-black/50">
+          <View className="bg-white dark:bg-[#242526] rounded-t-2xl p-6 max-h-[80%]">
+            <Text className="mb-4 text-xl font-poppins-600 dark:text-white">
+              About me
+            </Text>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text className="text-base leading-6 text-gray-600 dark:text-gray-300 font-poppins">
+                {selectedBio || "No bio provided"}
+              </Text>
+            </ScrollView>
+
+            <TouchableOpacity
+              onPress={() => setBioVisible(false)}
               className="items-center py-3 mt-6 bg-blue-600 rounded-xl"
             >
               <Text className="text-base text-white font-poppins-600">
