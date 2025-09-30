@@ -669,6 +669,8 @@ exports.getRecommendationsv4 = async (req, res) => {
           swipeIds
         );
 
+        console.log("CF Scores:", cfScores);
+
         matches = matches.map((m) => {
           const tid = m.userId?._id?.toString() || m.userId?.toString();
           const cfScore = cfScores[tid] || 0;
@@ -755,6 +757,8 @@ exports.getRecommendationsv4 = async (req, res) => {
           similarUsers,
           swipeIds
         );
+
+        console.log("CF Scores:", cfScores);
 
         matches = matches.map((m) => {
           const tid = m.userId?._id?.toString() || m.userId?.toString();

@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AuthButton from "../components/AuthButton";
 import { AntDesign, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
+import GoogleButton from "../components/GoogleButton";
 
 const LandingPage = () => {
   const [logoReady, setLogoReady] = useState(false);
@@ -51,11 +52,17 @@ const LandingPage = () => {
               onPress={() => router.replace("/login")}
               icon={<MaterialIcons name="email" size={24} color="white" />}
             />
-            <AuthButton
-              label="Sign in with Google"
-              onPress={() => {}}
-              icon={<AntDesign name="google" size={24} color="white" />}
+            <GoogleButton
+              onLoginSuccess={(data) => {
+                // save JWT + user, then route
+                if (!data.user.isOnboarded) {
+                  router.replace("/role");
+                } else {
+                  router.replace("/home?justLoggedIn=1");
+                }
+              }}
             />
+
             <AuthButton
               label="Sign in with phone number"
               onPress={() => {}}

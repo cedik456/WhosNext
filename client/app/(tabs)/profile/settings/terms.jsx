@@ -317,15 +317,14 @@ const Terms = () => {
       </ScrollView>
 
       <View className="items-center py-4 mt-auto">
-        <Image
-          source={require("../../../../assets/logown.png")}
-          className="w-16 h-16"
-        />
+        <Text className="text-3xl font-bold text-black dark:text-white">
+          WN
+        </Text>
         <Text className="text-base text-gray-600 dark:text-gray-400">
           Beta version
         </Text>
         <Text className="text-base text-gray-600 dark:text-gray-400">
-          Created with the hybridevs
+          Created with the passion
         </Text>
       </View>
     </SafeAreaView>
