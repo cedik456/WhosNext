@@ -43,6 +43,7 @@ const TabsLayout = () => {
   return (
     <Tabs
       screenOptions={{
+        gestureEnabled: false,
         headerShown: false,
         tabBarShowLabel: true,
         tabBarActiveTintColor: colorScheme === "dark" ? "white" : "black",

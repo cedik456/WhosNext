@@ -1,5 +1,5 @@
-export const LOCATIONS = [
-  "Legazpi City, Bicol",
+const LOCATIONS = [
+  "Legazpi City, Albay",
   "Daraga, Albay",
   "Tabaco City, Albay",
   "Guinobatan, Albay",
@@ -18,3 +18,5 @@ export const LOCATIONS = [
   "Jovellar, Albay",
   "Rapu-Rapu, Albay",
 ];
+
+module.exports = { LOCATIONS };

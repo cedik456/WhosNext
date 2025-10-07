@@ -4,7 +4,7 @@
     "name": "client",
     "slug": "client",
     "extra": {
-      "EXPO_PUBLIC_API_URL": "http://192.168.1.2:3000/api",
+      "EXPO_PUBLIC_API_URL": "http://10.76.216.195:3000/api",
       "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "1019023179441-2rrjsttrv25b4kr51qp2lejh6jt03vg9.apps.googleusercontent.com",
       "router": {},
       "eas": {

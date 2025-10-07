@@ -87,6 +87,7 @@ export const SKILLS_BY_INDUSTRY = {
     "Cybersecurity",
     "Penetration Testing",
     "OWASP",
+    "Blockchain",
 
     "AI/ML",
     "TensorFlow",

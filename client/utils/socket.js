@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://whosnextbackend.onrender.com", {
+const socket = io("http://10.79.183.195:3000", {
   transports: ["websocket"],
 });
 
