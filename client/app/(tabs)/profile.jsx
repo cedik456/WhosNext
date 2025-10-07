@@ -117,17 +117,17 @@ const Profile = () => {
   return (
     <SafeAreaView className="flex-1 dark:bg-black">
       <View className="dark:bg-black">
-        <View className="flex-row items-center justify-between px-6 mt-4">
+        <View className="flex-row items-center justify-between px-6 mt-5">
           <Text className="text-2xl font-poppins-600 dark:text-white">
             Profile
           </Text>
-          <ProfileItem
-            onPress={() => router.replace("profile/settingsScreen")}
+          {/* <ProfileItem
+            onPress={() => router.push("profile/settingsScreen")}
             value=""
             icon="settings-sharp"
             iconSet={Ionicons}
             iconOnly
-          />
+          /> */}
         </View>
 
         <View className="">
@@ -231,6 +231,15 @@ const Profile = () => {
                 value=""
                 icon="feedback"
                 iconSet={MaterialIcons}
+                showDivider={true}
+              />
+
+              <ProfileItem
+                onPress={() => router.push("profile/settingsScreen")}
+                label="Account Settings"
+                value=""
+                icon="settings-sharp"
+                iconSet={Ionicons}
                 showDivider={false}
               />
             </View>

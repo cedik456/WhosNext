@@ -8,8 +8,11 @@ const {
   sendVerificationCode,
 } = require("../utils/sendVerificationEmail");
 const VerificationCode = require("../models/VerificationCodeSchema");
+const { OAuth2Client } = require("google-auth-library");
 
 const JWT_SECRET = process.env.JWT_SECRET;
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.me = async (req, res) => {
   try {
@@ -139,6 +142,59 @@ exports.login = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Something went wrong during login",
+    });
+  }
+};
+
+exports.googleAuth = async (req, res) => {
+  try {
+    const { idToken } = req.body;
+
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { sub, email, name } = payload;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        name,
+        email,
+        googleId: sub,
+        isVerified: true,
+        role: "jobSeeker",
+        avatar: getRandomAvatar(),
+      });
+    }
+
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Google authentication successful",
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        isOnboarded: user.isOnboarded,
+        isVerified: user.isVerified,
+        avatar: user.avatar,
+      },
+    });
+  } catch (error) {
+    console.error("Google Auth error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong during Google authentication",
+      details: error.message,
     });
   }
 };

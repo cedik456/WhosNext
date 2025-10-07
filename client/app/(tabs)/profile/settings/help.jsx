@@ -84,7 +84,7 @@ const Help = () => {
           Beta version
         </Text>
         <Text className="text-base text-gray-600 dark:text-gray-400">
-          Created with anger.
+          Created with passion.
         </Text>
       </View>
     </SafeAreaView>

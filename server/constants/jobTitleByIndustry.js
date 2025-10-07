@@ -1,24 +1,6 @@
-export const JOB_TITLES_BY_INDUSTRY = {
-  General: [
-    "Project Manager",
-    "Operations Manager",
-    "Business Analyst",
-    "Administrative Assistant",
-    "Entrepreneur",
-    "Consultant",
-    "Customer Support Specialist",
-    "Executive Assistant",
-    "Office Administrator",
-    "Data Entry Clerk",
-    "Virtual Assistant",
-    "Coordinator",
-    "Team Leader",
-    "Supervisor",
-  ],
-
+const JOB_TITLES_BY_INDUSTRY = {
   "Information Technology": [
     "Software Engineer",
-    "Web Developer",
     "Frontend Developer",
     "Backend Developer",
     "Full Stack Developer",
@@ -31,7 +13,6 @@ export const JOB_TITLES_BY_INDUSTRY = {
     "Cybersecurity Specialist",
     "QA Engineer",
     "UI/UX Designer",
-    "BlockChain Developer",
     "Product Manager",
     "IT Support Specialist",
   ],
@@ -210,4 +191,8 @@ export const JOB_TITLES_BY_INDUSTRY = {
     "Data Scientist",
     "Postdoctoral Researcher",
   ],
+};
+
+exports.module = {
+  JOB_TITLES_BY_INDUSTRY,
 };

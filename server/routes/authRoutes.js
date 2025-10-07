@@ -8,6 +8,7 @@ const {
   me,
   verifyEmailCode,
   sendEmailCode,
+  googleAuth,
 } = require("../controllers/authController");
 const auth = require("../middlewares/authMiddleware");
 
@@ -25,6 +26,8 @@ router.post("/login", validate(loginSchema), login);
 router.post("/verify", auth, verifyEmailCode);
 
 router.post("/phone", phoneAuth);
+
+router.post("/google", googleAuth);
 
 router.get("/", (req, res) => {
   res.send("This is the auth ");

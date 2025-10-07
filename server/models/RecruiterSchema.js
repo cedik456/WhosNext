@@ -59,7 +59,7 @@ const RecruiterSchema = new Schema({
     filterExperienceLevel: String,
     filterWorkEnvironment: {
       type: String,
-      enum: ["On-Site", "Remote", "Hybrid"],
+      enum: ["On-site", "Remote", "Hybrid"],
     },
     filterWorkType: {
       type: String,

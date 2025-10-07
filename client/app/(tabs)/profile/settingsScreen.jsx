@@ -16,11 +16,7 @@ const SettingsScreen = () => {
     <SafeAreaView
       className={`flex-1 ${colorScheme === "dark" ? " bg-black" : ""}`}
     >
-      <View
-        className={`${
-          colorScheme === "dark" ? "bg-black" : ""
-        } text-2xl  font-poppins-600 `}
-      >
+      <View>
         <View className="relative flex-row items-center justify-center px-6 mt-5">
           <Pressable
             onPress={() => router.replace("/profile")}
@@ -116,7 +112,7 @@ const SettingsScreen = () => {
           Beta version
         </Text>
         <Text className="text-base text-gray-600 dark:text-gray-400">
-          Created with anger.
+          Created with passion.
         </Text>
       </View>
     </SafeAreaView>

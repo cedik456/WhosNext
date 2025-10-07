@@ -146,7 +146,7 @@ const Login = () => {
                 Remember me
               </Text>
             </Pressable>
-            <Pressable onPress={() => router.replace("/forgotPassword")}>
+            <Pressable onPress={() => {}}>
               <Text className="text-sm text-blue-500 font-poppins-500">
                 Forgot password?
               </Text>
