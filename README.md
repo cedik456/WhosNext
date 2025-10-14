@@ -35,19 +35,6 @@ CLOUDINARY_API_KEY=<Your Cloudinary API key>
 CLOUDINARY_API_SECRET=<Your Cloudinary API secret>
 ```
 
-**Example:**
-
-```properties
-PORT=3000
-MONGO_URI=mongodb+srv://07211816:NrusLM09xWo8OjzT@cluster0.hxwl8hn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-JWT_SECRET=incremental_progress
-
-CLOUDINARY_CLOUD_NAME=datadgjo1
-CLOUDINARY_API_KEY=332934745469552
-CLOUDINARY_API_SECRET=ML0BQVBQv508Sdb50SjDndL6_dg
-
-```
-
 ## 4. Start the server
 
 ```bash
