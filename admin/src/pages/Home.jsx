@@ -9,20 +9,25 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import UsersList from "../components/UsersList";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
 import { FaRegCalendar } from "react-icons/fa";
-import { useState } from "react";
 
 const Home = () => {
   const [series, setSeries] = useState([]);
+  const [stats, setStats] = useState([
+    { label: "Users", value: 0, icon: <FaUser /> },
+    { label: "Job Seeker", value: 0, icon: <FaUserTie /> },
+    { label: "Recruiter", value: 0, icon: <FaBriefcase /> },
+  ]);
+  const [period, setPeriod] = useState("week");
 
   useEffect(() => {
+    const days = period === "week" ? 7 : period === "month" ? 30 : 365;
     (async () => {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          "http://localhost:3000/api/admin/metrics/matches",
+          `http://localhost:3000/api/admin/metrics/matches?days=${days}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const json = await res.json();
@@ -31,13 +36,7 @@ const Home = () => {
         console.error("Failed to load matches series", error);
       }
     })();
-  }, []);
-
-  const [stats, setStats] = useState([
-    { label: "Users", value: 0, icon: <FaUser /> },
-    { label: "Job Seeker", value: 0, icon: <FaUserTie /> },
-    { label: "Recruiter", value: 0, icon: <FaBriefcase /> },
-  ]);
+  }, [period]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -46,7 +45,6 @@ const Home = () => {
         const res = await fetch("http://localhost:3000/api/admin/stats", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         const json = await res.json();
         if (json.success) {
           setStats([
@@ -75,6 +73,27 @@ const Home = () => {
     month: "long",
     year: "numeric",
   });
+
+  // derive chartData: daily series or aggregated months
+  const chartData = useMemo(() => {
+    if (period !== "year") return series;
+    const now = new Date();
+    const months = Array.from({ length: 12 }, (_, i) =>
+      new Date(now.getFullYear(), now.getMonth() - 11 + i, 1)
+    );
+    return months.map((d) => {
+      const label = d.toLocaleDateString(undefined, {
+        month: "short",
+        year: "numeric",
+      });
+      const prefix = d.toISOString().slice(0, 7); // "YYYY-MM"
+      const count = series.reduce(
+        (sum, s) => sum + (s.date.startsWith(prefix) ? s.matched : 0),
+        0
+      );
+      return { date: label, matched: count };
+    });
+  }, [series, period]);
 
   return (
     <div className="flex flex-col justify-between h-screen gap-12 px-6 py-8 border-r border-gray-200 ">
@@ -109,15 +128,45 @@ const Home = () => {
       </div>
 
       <div className="h-[350px]">
-        <h2 className="mb-3 font-semibold">Matches</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Matches Over Time
+          </h2>
+          <select
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+            className="px-2 py-1 border border-gray-300 rounded"
+          >
+            <option value="week">Last 7 days</option>
+            <option value="month">Last 30 days</option>
+            <option value="year">Last 12 months</option>
+          </select>
+        </div>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={series}>
+          <LineChart
+            data={chartData}
+            margin={{ top: 5, right: 20, bottom: 30, left: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="name" />
-            <YAxis allowDecimals={false} />
+            <XAxis
+              dataKey="date"
+              label={{ value: "Date", position: "insideBottom", offset: -20 }}
+              tickFormatter={(iso) =>
+                period === "year"
+                  ? iso
+                  : new Date(iso).toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+              }
+            />
+            <YAxis
+              allowDecimals={false}
+              label={{ value: "Matches", angle: -90, position: "insideLeft" }}
+            />
             <Tooltip />
             <Line type="monotone" dataKey="matched" stroke="#3b82f6" />
-            {/* <Line type="monotone" dataKey="recruiters" stroke="#ef4444" /> */}
           </LineChart>
         </ResponsiveContainer>
       </div>

@@ -8,6 +8,8 @@ const {
   getUsers,
   deleteUser,
   getMatchesTimeseries,
+  getRecruiters,
+  getJobSeekers,
 } = require("../controllers/adminController");
 
 router.get("/ping", auth, isAdmin, (req, res) => {
@@ -16,6 +18,9 @@ router.get("/ping", auth, isAdmin, (req, res) => {
 
 router.get("/stats", auth, isAdmin, getStats);
 router.get("/users", auth, isAdmin, getUsers);
+router.get("/recruiters", auth, isAdmin, getRecruiters);
+router.get("/jobseekers", auth, isAdmin, getJobSeekers);
+
 router.delete("/users/:id", auth, isAdmin, deleteUser);
 router.get("/metrics/matches", auth, isAdmin, getMatchesTimeseries);
 
